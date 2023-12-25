@@ -30,10 +30,10 @@ class ErrorBoundary extends Component<React.PropsWithChildren, State> {
    public render() {
       if (this.state.hasError) {
          return (
-            <Box className='flex items-stretch space-x-6'>
-               <Icon name='AlertTriangle' />
+            <Box className='flex h-full items-start space-x-6'>
+               <Icon name='AlertTriangle' size={48} className='text-destructive' />
                <Box>
-                  <Typography variant='heading4' className='mb-6'>
+                  <Typography variant='heading6' className='mb-2'>
                      Something went wrong
                   </Typography>
                   <details className='whitespace-pre-wrap'>

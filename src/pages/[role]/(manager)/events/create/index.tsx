@@ -1,7 +1,6 @@
-import Editor from '@/components/ui/@tiny-mce'
-import { Box, Button, Card, CardContent, CardDescription, CardHeader, Input, InputFieldControl, Typography } from '@/components/ui'
-// import Editor from '@/components/ui/@lexical'
-import React from 'react'
+// import Editor from '@/components/ui/@tiny-mce'
+import { Box, Button, Card, CardContent, CardDescription, CardHeader, Input, Typography } from '@/components/ui'
+import Editor from '@/components/ui/@lexical'
 
 type Props = {}
 

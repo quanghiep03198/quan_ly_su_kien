@@ -94,12 +94,13 @@ const EventList: React.FunctionComponent = () => {
             columns={columns}
             data={data?.docs!}
             loading={isFetching}
+            manualPagination={true}
             paginationState={{
                ...pagination,
                hasNextPage: data?.hasNextPage!,
                hasPrevPage: data?.hasPrevPage!,
-               pagingCounter: data?.pagingCounter!,
-               totalPage: data?.totalPage!,
+               // pagingCounter: data?.pagingCounter!,
+               totalPages: data?.totalPages!,
                totalDocs: data?.totalDocs!
             }}
             onManualPaginate={handlePaginate}

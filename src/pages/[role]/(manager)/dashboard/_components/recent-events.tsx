@@ -1,12 +1,12 @@
 import { EventStatus } from '@/common/constants/enums'
 import { EventType } from '@/common/types/entities'
-import { Badge, Card, CardContent, CardHeader } from '@/components/ui'
+import { Badge, Card, CardContent, CardHeader, CardTitle } from '@/components/ui'
 import { useGetEventsQuery } from '@/redux/apis/event.api'
 
 const EventItem: React.FC<{ data: EventType }> = ({ data }) => {
    return (
       <div className='flex items-center'>
-         <div className='ml-4 space-y-1'>
+         <div className='space-y-1'>
             <p className='text-sm font-medium leading-none'>{data?.name}</p>
             <p className='text-sm text-muted-foreground'>
                {data?.start_time.toString()} - {data?.end_time?.toString()}
@@ -23,7 +23,9 @@ export const RecentEvents: React.FunctionComponent = () => {
    const { data } = useGetEventsQuery({ page: 1, limit: 100 })
    return (
       <Card>
-         <CardHeader>Sự kiện gần đây</CardHeader>
+         <CardHeader className=''>
+            <CardTitle>Sự kiện gần đây</CardTitle>
+         </CardHeader>
          <CardContent>
             <div className='space-y-8'>
                {Array.isArray(data?.docs) &&

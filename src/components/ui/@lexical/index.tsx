@@ -26,18 +26,20 @@ export default function Editor() {
    }
 
    return (
-      <LexicalComposer initialConfig={initialConfig}>
-         <ToolbarPlugin />
-         <Box className='relative'>
-            <PlainTextPlugin
-               contentEditable={<ContentEditable className='relative min-h-[50vh] rounded-lg border p-4 py-20 focus:border-primary focus:outline-none' />}
-               placeholder={<Typography className='absolute left-6 top-20 font-normal text-muted-foreground'>Enter some text ...</Typography>}
-               ErrorBoundary={LexicalErrorBoundary}
-            />
-         </Box>
-         <HistoryPlugin />
+      <div>
+         <LexicalComposer initialConfig={initialConfig}>
+            <ToolbarPlugin />
+            <Box className='relative'>
+               <PlainTextPlugin
+                  contentEditable={<ContentEditable className='relative min-h-[50vh] rounded-lg border p-4 py-20 focus:border-primary focus:outline-none' />}
+                  placeholder={<Typography className='absolute left-6 top-20 font-normal text-muted-foreground'>Enter some text ...</Typography>}
+                  ErrorBoundary={LexicalErrorBoundary}
+               />
+            </Box>
+            <HistoryPlugin />
 
-         {/* <MyCustomAutoFocusPlugin /> */}
-      </LexicalComposer>
+            {/* <MyCustomAutoFocusPlugin /> */}
+         </LexicalComposer>
+      </div>
    )
 }
