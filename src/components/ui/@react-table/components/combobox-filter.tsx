@@ -1,18 +1,23 @@
-import { cn } from '@/common/utils/cn'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
-import { useState } from 'react'
-import { Button, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Popover, PopoverContent, PopoverTrigger, ScrollArea } from '..'
+import { Button, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Popover, PopoverContent, PopoverTrigger, ScrollArea } from '@/components/ui'
+import { cn } from '@/common/utils/cn'
+import { useContext, useEffect, useState } from 'react'
+import { ComboboxProps } from '../../@shadcn/combobox'
+import { TableContext } from '../context/table.context'
 
-export interface ComboboxProps {
-   placeholder?: string
-   className?: string
-   options: Array<Record<'label' | 'value', any>>
-   onChange: (value: string | number) => void
+interface ComboboxFilterProps extends ComboboxProps {
+   forceClose: boolean
+   areAllFiltersCleared: boolean
 }
 
-export const Combobox: React.FC<ComboboxProps> = ({ options, placeholder, className, onChange }) => {
+export const ComboboxFilter: React.FC<ComboboxFilterProps> = ({ options, placeholder, className, onChange, forceClose, areAllFiltersCleared }) => {
    const [open, setOpen] = useState(false)
    const [value, setValue] = useState('')
+   // console.log('areAllFiltersCleared', areAllFiltersCleared)
+   useEffect(() => {
+      if (forceClose === true) setOpen(false)
+      if (areAllFiltersCleared) setValue(placeholder!)
+   }, [forceClose, areAllFiltersCleared])
 
    return (
       <Popover open={open} onOpenChange={setOpen}>
@@ -30,7 +35,7 @@ export const Combobox: React.FC<ComboboxProps> = ({ options, placeholder, classN
                   className
                )}
             >
-               {options.find((option) => option.value === value)?.label ?? placeholder}
+               <span className='line-clamp-1'>{value || placeholder}</span>
                <CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />
             </Button>
          </PopoverTrigger>
@@ -62,6 +67,6 @@ export const Combobox: React.FC<ComboboxProps> = ({ options, placeholder, classN
    )
 }
 
-Combobox.defaultProps = {
+ComboboxFilter.defaultProps = {
    placeholder: 'Search ...'
 }

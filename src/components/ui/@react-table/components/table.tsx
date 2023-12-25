@@ -1,18 +1,22 @@
 import { Table as TableType, flexRender } from '@tanstack/react-table'
-import { Box, ScrollArea, ScrollBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../..'
+import { useContext } from 'react'
+import tw from 'tailwind-styled-components'
 import { DataTableProps } from '.'
+import { ScrollArea, ScrollBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../..'
+import { TableContext } from '../context/table.context'
 import { TableBodyLoading } from './table-body-loading'
 import { TableCellHead } from './table-cell-head'
-import tw from 'tailwind-styled-components'
 
 interface TableProps<TData, TValue> extends Omit<DataTableProps<TData, TValue>, 'data'>, React.AllHTMLAttributes<HTMLTableElement> {
    table: TableType<TData>
 }
 
-export default function DataTable<TData, TValue>({ table, columns, loading, ...props }: TableProps<TData, TValue>) {
+export default function TableDataGrid<TData, TValue>({ table, columns, loading, ...props }: TableProps<TData, TValue>) {
+   const { handleScroll } = useContext(TableContext)
+
    return (
-      <TableWrapper>
-         <ScrollArea className='max-h-[65vh]'>
+      <TableWrapper className='group'>
+         <ScrollArea className='h-[60vh]' onWheel={handleScroll}>
             <Table {...props}>
                <TableHeader className='!sticky top-0'>
                   {table.getHeaderGroups().map((headerGroup) => (
@@ -39,12 +43,12 @@ export default function DataTable<TData, TValue>({ table, columns, loading, ...p
                   )}
                </TableBody>
             </Table>
-            <ScrollBar hidden={!table.getRowModel().rows?.length} orientation='horizontal' />
+            <ScrollBar orientation='horizontal' />
          </ScrollArea>
       </TableWrapper>
    )
 }
 
-const TableWrapper = tw.div`relative flex flex-col items-stretch border rounded-md divide-y divide-border overflow-clip h-full`
+const TableWrapper = tw.div`relative flex flex-col items-stretch h-full max-w-full mx-auto overflow-clip rounded-lg border`
 
-DataTable.displayName = 'DataTable'
+TableDataGrid.displayName = 'DataTable'

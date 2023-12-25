@@ -29,9 +29,9 @@ declare global {
       hasPrevPage: boolean
       limit: number
       page: number
-      pagingCounter: number
       totalDocs: number
-      totalPage: number
+      totalPages: number
+      // pagingCounter: number
    }
    interface Document {
       documentMode?: unknown

@@ -14,8 +14,9 @@ import {
 } from '@tanstack/react-table'
 import { useState } from 'react'
 import { Box } from '../..'
+import { TableProvider } from '../context/table.context'
 import { fuzzyFilter } from '../utils/fuzzy-filter.util'
-import Table from './table'
+import TableDataGrid from './table'
 import TablePagination from './table-pagination'
 import TableToolbar from './table-toolbar'
 
@@ -32,7 +33,7 @@ export function DataTable<TData, TValue>({ data, columns, loading, manualPaginat
    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
    const [sorting, setSorting] = useState<SortingState>([])
    const [globalFilter, setGlobalFilter] = useState<string>('')
-   console.log(data)
+
    const table = useReactTable({
       data: data ?? [],
       columns,
@@ -61,16 +62,18 @@ export function DataTable<TData, TValue>({ data, columns, loading, manualPaginat
    }
 
    return (
-      <Box className='flex h-full flex-col items-stretch gap-y-4'>
-         <TableToolbar
-            table={table}
-            isFiltered={globalFilter.length === 0 && columnFilters.length === 0}
-            globalFilter={globalFilter}
-            onGlobalFilterChange={setGlobalFilter}
-            onClearAllFilters={clearAllFilter}
-         />
-         <Table table={table} columns={columns} loading={loading} />
-         <TablePagination table={table} manualPagination={Boolean(manualPagination)} onManualPaginate={onManualPaginate} {...paginationState} />
-      </Box>
+      <TableProvider areAllFiltersCleared={columnFilters.length === 0 && globalFilter.length === 0}>
+         <Box className='flex h-full flex-col items-stretch gap-y-4'>
+            <TableToolbar
+               table={table}
+               isFiltered={globalFilter.length === 0 && columnFilters.length === 0}
+               globalFilter={globalFilter}
+               onGlobalFilterChange={setGlobalFilter}
+               onClearAllFilters={clearAllFilter}
+            />
+            <TableDataGrid table={table} columns={columns} loading={loading} />
+            <TablePagination table={table} manualPagination={Boolean(manualPagination)} onManualPaginate={onManualPaginate} {...paginationState} />
+         </Box>
+      </TableProvider>
    )
 }

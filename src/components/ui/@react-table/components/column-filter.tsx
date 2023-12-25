@@ -1,14 +1,18 @@
+import { cn } from '@/common/utils/cn'
 import { Column } from '@tanstack/react-table'
-import { useMemo } from 'react'
-import { Box, DropdownSelect } from '../..'
-import { Combobox } from '../../@shadcn/combobox'
+import { useContext, useMemo } from 'react'
+import { Box, DropdownSelect, buttonVariants } from '../..'
+import { TableContext } from '../context/table.context'
 import { DebouncedInput } from './debounced-input'
+import { ComboboxFilter } from './combobox-filter'
 
 type ColumnFilterProps<TData, TValue> = {
    column: Column<TData, TValue>
 }
 
 export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData, TValue>) {
+   const { isScrolling, areAllFiltersCleared } = useContext(TableContext)
+
    const filterType = column.columnDef.filterFn
    const columnFilterValue = column.getFilterValue()
 
@@ -26,19 +30,19 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
                <Box className='flex items-stretch'>
                   <DebouncedInput
                      type='number'
-                     className='rounded-none border-none text-xs focus:border-none '
+                     className={cn(buttonVariants({ variant: 'ghost' }), 'rounded-none border-none text-xs')}
                      min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
                      max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
-                     value={(columnFilterValue as [number, number])?.[0] ?? ''}
+                     value={(areAllFiltersCleared ? '' : (columnFilterValue as [number, number]))?.[0] ?? ''}
                      onChange={(value) => column.setFilterValue((old: [number, number]) => [value, old?.[1]])}
                      placeholder={`Min ${column.getFacetedMinMaxValues()?.[0] ? `(${column.getFacetedMinMaxValues()?.[0]})` : ''}`}
                   />
                   <DebouncedInput
                      type='number'
-                     className='rounded-none border-none text-xs focus:border-none '
+                     className={cn(buttonVariants({ variant: 'ghost' }), 'rounded-none border-none text-xs')}
                      min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
                      max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
-                     value={(columnFilterValue as [number, number])?.[1] ?? ''}
+                     value={(areAllFiltersCleared ? '' : (columnFilterValue as [number, number]))?.[1] ?? ''}
                      onChange={(value) => column.setFilterValue((old: [number, number]) => [old?.[0], value])}
                      placeholder={`Max ${column.getFacetedMinMaxValues()?.[1] ? `(${column.getFacetedMinMaxValues()?.[1]})` : ''}`}
                   />
@@ -61,7 +65,10 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
 
       default:
          return (
-            <Combobox
+            <ComboboxFilter
+               areAllFiltersCleared={areAllFiltersCleared}
+               placeholder='Tìm kiếm trong cột ...'
+               forceClose={isScrolling}
                options={sortedUniqueValues.slice(0, 1000).map((value: any) => ({
                   label: value,
                   value: value

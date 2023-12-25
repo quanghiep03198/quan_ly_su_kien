@@ -1,6 +1,7 @@
 import { Table } from '@tanstack/react-table'
 import { Box, Button, Icon, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../..'
 import { PaginationActions, PaginationHandler } from '@/common/hooks/use-server-pagination'
+import { useSearchParams } from 'react-router-dom'
 
 type DataTablePaginationProps<TData> = {
    table: Table<TData>
@@ -15,39 +16,65 @@ export default function TablePagination<TData>({
    hasNextPage,
    hasPrevPage,
    page,
-   pagingCounter
+   totalPages,
+   limit
 }: DataTablePaginationProps<TData>) {
    const canNextPage = manualPagination ? hasNextPage : table.getCanNextPage()
    const canPreviousPage = manualPagination ? hasPrevPage : table.getCanPreviousPage()
+   const pageCount = manualPagination ? totalPages : table.getPageCount()
+   const pageSize = manualPagination ? limit : table.getState().pagination.pageSize
+   const currentPage = manualPagination ? page : table.getState().pagination.pageIndex + 1
+   const [_, setParams] = useSearchParams()
 
    const gotoFirstPage = () => {
-      manualPagination && dispatch ? dispatch({ type: PaginationActions.GO_TO_FIRST_PAGE }) : table.setPageIndex(0)
+      manualPagination ? dispatch!({ type: PaginationActions.GO_TO_FIRST_PAGE }) : table.setPageIndex(0)
+      setParams((params) => {
+         params.set('page', '1')
+         return params
+      })
    }
    const gotoPreviousPage = () => {
-      manualPagination && dispatch ? dispatch({ type: PaginationActions.GO_TO_PREV_PAGE }) : table.previousPage()
+      manualPagination ? dispatch!({ type: PaginationActions.GO_TO_PREV_PAGE }) : table.previousPage()
+      setParams((params) => {
+         params.set('page', String(currentPage! - 1))
+         return params
+      })
    }
    const gotoNextPage = () => {
-      manualPagination && dispatch ? dispatch({ type: PaginationActions.GO_TO_NEXT_PAGE }) : table.nextPage()
+      manualPagination ? dispatch!({ type: PaginationActions.GO_TO_NEXT_PAGE }) : table.nextPage()
+      setParams((params) => {
+         params.set('page', String(currentPage! + 1))
+         return params
+      })
    }
    const gotoLastPage = () => {
-      manualPagination && dispatch
-         ? dispatch({
+      manualPagination
+         ? dispatch!({
               type: PaginationActions.GO_TO_LAST_PAGE,
-              payload: pagingCounter as number
+              payload: totalPages
            })
          : table.setPageIndex(table.getPageCount() - 1)
+      setParams((params) => {
+         params.set('page', String(pageCount))
+         return params
+      })
    }
    const changePageSize = (value: number) => {
-      if (manualPagination && page && pagingCounter && dispatch) {
-         if (page >= pagingCounter) gotoPreviousPage()
-         dispatch({
+      setParams((params) => {
+         params.set('limit', value?.toString()!)
+         return params
+      })
+      if (manualPagination) {
+         if (currentPage! > pageCount!) gotoPreviousPage()
+
+         dispatch!({
             type: PaginationActions.CHANGE_PAGE_SIZE,
             payload: value
          })
          return
+      } else {
+         table.setPageSize(value)
       }
-
-      table.setPageSize(value)
    }
 
    return (
@@ -59,13 +86,13 @@ export default function TablePagination<TData>({
             <Box className='flex items-center space-x-2'>
                <p className='text-sm font-medium'>Hiển thị</p>
                <Select
-                  value={`${table.getState().pagination.pageSize}`}
+                  value={pageSize?.toString()}
                   onValueChange={(value) => {
                      changePageSize(+value)
                   }}
                >
                   <SelectTrigger className='h-8 w-[70px]'>
-                     <SelectValue placeholder={table.getState().pagination.pageSize} />
+                     <SelectValue placeholder={pageSize} />
                   </SelectTrigger>
                   <SelectContent side='top'>
                      {[10, 20, 30, 40, 50].map((pageSize) => (
@@ -77,23 +104,19 @@ export default function TablePagination<TData>({
                </Select>
             </Box>
             <Box className='flex w-[100px] items-center justify-center text-sm font-medium'>
-               Trang {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
+               Trang {currentPage} / {pageCount}
             </Box>
             <Box className='flex items-center space-x-2'>
-               <Button variant='outline' className='hidden h-8 w-8 p-0 lg:flex' onClick={gotoFirstPage} disabled={!canPreviousPage}>
-                  <span className='sr-only'>Go to first page</span>
+               <Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoFirstPage} disabled={!canPreviousPage}>
                   <Icon name='ChevronsLeft' />
                </Button>
-               <Button variant='outline' className='h-8 w-8 p-0' onClick={gotoLastPage} disabled={!canPreviousPage}>
-                  <span className='sr-only'>Go to previous page</span>
+               <Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoPreviousPage} disabled={!canPreviousPage}>
                   <Icon name='ChevronLeft' />
                </Button>
-               <Button variant='outline' className='h-8 w-8 p-0' onClick={gotoNextPage} disabled={!canNextPage}>
-                  <span className='sr-only'>Go to next page</span>
+               <Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoNextPage} disabled={!canNextPage}>
                   <Icon name='ChevronRight' />
                </Button>
-               <Button variant='outline' className='hidden h-8 w-8 p-0 lg:flex' onClick={gotoLastPage} disabled={!canNextPage}>
-                  <span className='sr-only'>Go to last page</span>
+               <Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoLastPage} disabled={!canNextPage}>
                   <Icon name='ChevronsRight' />
                </Button>
             </Box>
