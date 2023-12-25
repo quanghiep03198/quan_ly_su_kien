@@ -1,30 +1,53 @@
-# React + TypeScript + Vite
+# Quản lý sự kiện FPT Polytechnic
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Event Management System of FPT Polytechnic College
 
-Currently, two official plugins are available:
+## Introduction
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project is a web-based event management system developed for FPT Polytechnic to facilitate the management of events. The system is built using React, TypeScript, ShadcnUI, Redux, and other technologies. The folder structure is inspired by the folder structure of Next.js.
 
-## Expanding the ESLint configuration
+The Event Management System provides a comprehensive solution for managing events, including event registration, venue management, event assignment, evaluation, and reporting. It aims to streamline the event management process and improve efficiency for both organizers and participants.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Technologies Used
 
-- Configure the top-level `parserOptions` property like this:
+-  React: JavaScript library for building user interfaces.
+-  TypeScript: Typed superset of JavaScript.
+-  ShadcnUI: UI library for styling the application.
+-  Redux: State management library.
+-  Other libraries and tools: React Router, Axios, etc.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## Installation and Setup
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+1. Clone the repository:
+
+   ```
+   git clone https://github.com/PeoScouser98/quan_ly_su_kien.git <your_folder_name>
+   ```
+
+2. Navigate to the project directory:
+
+   ```
+   cd <your_folder_name>
+   ```
+
+3. Install the dependencies:
+
+   ```
+   npm install
+   ```
+
+4. Start the development server:
+
+   ```
+   npm run dev
+   ```
+
+5. Open your web browser and visit `http://localhost:3000` to access the application.
+
+## Contributing
+
+We welcome contributions to the Internship Management System project. If you find any issues or have suggestions for improvement, please feel free to open an issue or submit a pull request on GitHub.
+
+## License
+
+This project is licensed under the MIT License.
