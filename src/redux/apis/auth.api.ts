@@ -1,15 +1,18 @@
-import { User } from '@/common/types/entities'
+import { UserType } from '@/common/types/entities'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import axiosBaseQuery from '../helper'
 
-type SigninMetadata = Omit<User, 'password'> & { token: string }
-type SigninPayload = Pick<User, 'email' | 'password'>
-type SignupPayload = Omit<User, 'id'>
-type SignupMetadata = Omit<User, 'password'>
+type SigninMetadata = Omit<UserType, 'password'> & { token: string }
+type SigninPayload = Pick<UserType, 'email' | 'password'>
+type SignupPayload = Pick<UserType, 'email' | 'name' | 'phone' | 'password'>
+type SignupMetadata = Omit<UserType, 'password'>
 
-const authApi = createApi({
-   reducerPath: 'auth_api',
-   tagTypes: ['Auth'],
+const reducerPath = 'auth/api' as const
+const tagTypes = ['Auth'] as const
+
+export const authApi = createApi({
+   reducerPath,
+   tagTypes,
    baseQuery: axiosBaseQuery(),
    endpoints: (build) => {
       return {
@@ -30,4 +33,4 @@ const authApi = createApi({
 
 const { useSigninMutation, useSignupMutation } = authApi
 
-export { authApi as default, useSigninMutation, useSignupMutation }
+export { useSigninMutation, useSignupMutation }

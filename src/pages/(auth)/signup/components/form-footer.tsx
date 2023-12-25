@@ -1,15 +1,18 @@
-import { AUTH_PATHS } from '@/common/constants/pathnames'
+import { Paths } from '@/common/constants/pathnames'
 import { Link } from 'react-router-dom'
 import { Paragraph } from './styled'
-
+import { Divider } from './styled'
 const FormFooter: React.FunctionComponent = () => {
    return (
-      <Paragraph>
-         Đã có tài khoản?{' '}
-         <Link to={AUTH_PATHS.SIGNIN} className='font-medium text-primary'>
-            Đăng nhập
-         </Link>
-      </Paragraph>
+      <>
+         <Divider>hoặc</Divider>
+         <Paragraph className='text-center'>
+            Đã có tài khoản?{' '}
+            <Link to={Paths.SIGNIN} className='font-medium text-primary'>
+               Đăng nhập
+            </Link>
+         </Paragraph>
+      </>
    )
 }
 

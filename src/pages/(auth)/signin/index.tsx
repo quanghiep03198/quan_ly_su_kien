@@ -1,42 +1,46 @@
 import { Theme } from '@/common/constants/enums'
-import { AUTH_PATHS } from '@/common/constants/pathnames'
+import { Paths } from '@/common/constants/pathnames'
 import useTheme from '@/common/hooks/use-theme'
-import { toast } from '@/common/hooks/use-toast'
-import { User } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
 import ThemeSelect from '@/components/shared/theme-select'
 import { Box, Button, Checkbox, Form, FormLabel, Icon, InputFieldControl, Typography } from '@/components/ui'
 import { useSigninMutation } from '@/redux/apis/auth.api'
-import { signinSchema } from '@/schemas/auth.schema'
+import { SigninSchema } from '@/schemas/auth.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
+import { z } from 'zod'
 import { Image, Paragraph, StyledForm } from './components/styled'
+import { toast } from 'sonner'
+import { buttonVariants } from '@/components/ui/@shadcn/button'
 
-type FormValues = Pick<User, 'email' | 'password'>
+type FormValue = z.infer<typeof SigninSchema>
 const Signin: React.FunctionComponent = () => {
-   const form = useForm<FormValues>({
-      resolver: zodResolver(signinSchema)
+   const form = useForm<FormValue>({
+      resolver: zodResolver(SigninSchema)
    })
    const { theme } = useTheme()
    const [mutate, { isLoading }] = useSigninMutation()
    const navigate = useNavigate()
 
-   const handleSignin = async (data: FormValues) => {
+   const handleSignin = async (data: FormValue) => {
       try {
          const response = await mutate(data).unwrap()
-         toast({ description: response.message })
-         navigate('/')
+         toast.success(response.message)
+         navigate(Paths.REDIRECT)
       } catch (error) {
          const errorResponse = error as ErrorResponse
-         toast({ variant: 'destructive', title: 'Đăng nhập không thành công', description: errorResponse.data.message })
+         toast.error(errorResponse.data.message)
       }
    }
 
    return (
       <>
          <Box className=' flex h-screen w-full items-center justify-center overflow-hidden bg-background'>
-            <Box className='fixed right-1 top-1'>
+            <Box className='fixed left-auto right-auto top-0 flex w-full items-center justify-between gap-x-2 p-2'>
+               <Link className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'gap-x-2')} to='/'>
+                  <Icon name='ArrowLeft' /> Trang chủ
+               </Link>
                <ThemeSelect />
             </Box>
             <Box className='flex flex-col items-center justify-center gap-10'>
@@ -46,7 +50,7 @@ const Signin: React.FunctionComponent = () => {
                   <Form {...form}>
                      <StyledForm onSubmit={form.handleSubmit(handleSignin)}>
                         <InputFieldControl
-                           name='email'
+                           name={'email'}
                            type='email'
                            placeholder='user@fpt.edu.vn'
                            label='Email'
@@ -59,7 +63,7 @@ const Signin: React.FunctionComponent = () => {
                               <Checkbox id='remember-checkbox' />
                               <FormLabel htmlFor='rememeber-checkbox'>Ghi nhớ tôi</FormLabel>
                            </Box>
-                           <Link to={AUTH_PATHS.RECOVER_PASSOWRD} className='font-medium text-primary'>
+                           <Link to={Paths.RECOVER_PASSOWRD} className='font-medium text-primary'>
                               Quên mật khẩu?
                            </Link>
                         </Box>
@@ -72,7 +76,7 @@ const Signin: React.FunctionComponent = () => {
                </Box>
                <Paragraph>
                   Chưa có tài khoản?{' '}
-                  <Link className={cn('font-medium text-primary')} to={AUTH_PATHS.SIGNUP}>
+                  <Link className={cn('font-medium text-primary')} to={Paths.SIGNUP}>
                      Đăng ký ngay
                   </Link>
                </Paragraph>

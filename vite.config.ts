@@ -11,6 +11,9 @@ export default defineConfig({
          find: '@'
       }
    },
+   esbuild: {
+      drop: ['console', 'debugger']
+   },
    server: {
       port: 5000
    }

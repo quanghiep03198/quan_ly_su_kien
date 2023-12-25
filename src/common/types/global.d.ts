@@ -20,4 +20,24 @@ declare global {
       name: string
       path: string
    }
+
+   declare type AnonymousFunction = (...args: any[]) => any
+
+   declare type Pagination<T> = {
+      docs: Array<T>
+      hasNextPage: boolean
+      hasPrevPage: boolean
+      limit: number
+      page: number
+      pagingCounter: number
+      totalDocs: number
+      totalPage: number
+   }
+   interface Document {
+      documentMode?: unknown
+   }
+
+   interface Window {
+      MSStream?: unknown
+   }
 }

@@ -1,7 +1,7 @@
-import { COMMON_PATHS } from '@/common/constants/pathnames'
+import { Paths } from '@/common/constants/pathnames'
 import { Button, Icon } from '@/components/ui'
-import { Box } from '@/components/ui/box'
-import { Typography } from '@/components/ui/typography'
+import { Box } from '@/components/ui/@custom/box'
+import { Typography } from '@/components/ui/@custom/typography'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import tw from 'tailwind-styled-components'
@@ -15,13 +15,13 @@ const PermissionDenied: React.FunctionComponent = () => {
          </Typography>
          <Paragraph>Xin lỗi, trang bạn truy cập yêu cầu được cấp quyền.</Paragraph>
          <Box className='flex items-center justify-center space-x-1'>
-            <Link to={COMMON_PATHS.DEFAULT}>
+            <Link to={Paths.DEFAULT}>
                <Button variant='default' className='inline-flex items-center gap-x-2'>
                   <Icon name='Home' />
                   Về trang chủ
                </Button>
             </Link>
-            <Link to={COMMON_PATHS.DEFAULT}>
+            <Link to={Paths.DEFAULT}>
                <Button variant='ghost' className='inline-flex items-center gap-x-2'>
                   <Icon name='ArrowRight' />
                   Liên hệ hỗ trợ

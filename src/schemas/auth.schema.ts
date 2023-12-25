@@ -1,26 +1,28 @@
 import Regex from '@/common/constants/regex'
 import * as z from 'zod'
 
-export const signinSchema = z.object({
-   email: z.string().min(1, 'Vui lòng nhập email').email('Email không đúng định dạng'),
-   password: z.string().min(1, 'Vui lòng nhập mật khẩu')
+export const SigninSchema = z.object({
+   email: z.string({ required_error: 'Vui lòng nhập email' }).email('Email không đúng định dạng'),
+   password: z.string({ required_error: 'Vui lòng nhập mật khẩu' })
 })
 
-export const registerSchema = z
+export const RegisterSchema = z
    .object({
-      name: z.string().min(1, 'Vui lòng nhập tên của bạn'),
-      email: z.string().min(1, 'Vui lòng nhập email').email('Email không đúng định dạng'),
-      password: z.string().min(1, 'Vui lòng nhập mật khẩu'),
-      confirmPassword: z.string().min(1, 'Vui lòng nhập mật khẩu xác thực'),
-      phone: z.string().min(1, 'Vui lòng nhập số điện thoại').max(10).regex(Regex.phone, { message: 'Số điện thoại không hợp lệ' })
+      name: z.string({ required_error: 'Vui lòng nhập tên của bạn' }),
+      email: z
+         .string({ required_error: 'Vui lòng nhập email' })
+         .email('Email không đúng định dạng')
+         .regex(Regex.email, { message: 'Email phải có định dạng xxx@gmail.com / xxx@fpt.edu.vn' }),
+      password: z.string({ required_error: 'Vui lòng nhập mật khẩu' }).min(6, 'Mật khẩu phải có tối thiểu 6 ký tự'),
+      confirmPassword: z.string({ required_error: 'Vui lòng nhập mật khẩu xác thực' }),
+      phone: z.string({ required_error: 'Vui lòng nhập số điện thoại' }).regex(Regex.phone, { message: 'Số điện thoại không hợp lệ' })
    })
    .refine(
-      (schema) => {
-         console.log('schema', schema)
-         return schema.password === schema.confirmPassword
+      (values) => {
+         return values.password === values.confirmPassword
       },
       {
-         message: 'Mật khẩu xác thực không khớp',
+         message: 'Passwords must match!',
          path: ['confirmPassword']
       }
    )

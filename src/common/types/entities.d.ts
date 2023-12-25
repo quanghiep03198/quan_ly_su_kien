@@ -1,6 +1,6 @@
 import { UserRoleEnum } from '../constants/enums'
 
-export type User = {
+export type UserType = {
    id: number
    name: string
    password?: string
@@ -10,17 +10,17 @@ export type User = {
    role: UserRoleEnum
 }
 
-export type Event = {
+export type EventType = {
    attendances_count: number
    banner: string
    contact: string
-   created_at: Date
-   end_time: Date
+   end_time: Date | string
    id: number
    location: string
    name: string
-   start_time: Date
+   start_time: Date | string
    status: any
-   updated_at: Date
+   created_at: Date | string
+   updated_at: Date | string
    user_id: number
 }

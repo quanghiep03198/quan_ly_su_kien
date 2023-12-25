@@ -1,30 +1,29 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import axiosBaseQuery from '../helper'
 
-const TagTypes = ['Event', 'EventStatistics'] as const
+const tagTypes = ['Event', 'EventStatistics'] as const
+const reducerPath: string = 'event_api' as const
 
-const attendanceApi = createApi({
-   reducerPath: 'event_api',
-   tagTypes: TagTypes,
+export const attendanceApi = createApi({
+   reducerPath,
+   tagTypes,
    baseQuery: axiosBaseQuery(),
    endpoints: (build) => {
       return {
          getAttendanceByEvent: build.query({
             query: ({ eventId, userId }) => ({ url: `/attendances/join/${eventId}/${userId}`, method: 'GET' }),
-            providesTags: TagTypes
+            providesTags: tagTypes
          }),
          addAttendance: build.mutation({
             query: (payload) => ({ url: '/attendances/add', method: 'POST', data: payload }),
-            invalidatesTags: TagTypes
+            invalidatesTags: tagTypes
          }),
          getAttendanceInfo: build.mutation({
-            query: (id) => ({ url: `/attendances/${id}` + id, method: 'GET' }),
-            invalidatesTags: TagTypes
+            query: (id) => ({ url: `/attendances/${id}`, method: 'GET' }),
+            invalidatesTags: tagTypes
          })
       }
    }
 })
 
-const { useAddAttendanceMutation, useGetAttendanceInfoMutation, useGetAttendanceByEventQuery } = attendanceApi
-
-export { attendanceApi as default, useAddAttendanceMutation, useGetAttendanceInfoMutation, useGetAttendanceByEventQuery }
+export const { useAddAttendanceMutation, useGetAttendanceInfoMutation, useGetAttendanceByEventQuery } = attendanceApi

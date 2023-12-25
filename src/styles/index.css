@@ -15,6 +15,8 @@
       --primary-foreground: 60 9.1% 97.8%;
       --secondary: 60 4.8% 95.9%;
       --secondary-foreground: 24 9.8% 10%;
+      --success: 142 69% 58%;
+      --success-foreground: 60 9.1% 97.8%;
       --muted: 60 4.8% 95.9%;
       --muted-foreground: 25 5.3% 44.7%;
       --accent: 60 4.8% 95.9%;
@@ -38,6 +40,8 @@
       --primary-foreground: 60 9.1% 97.8%;
       --secondary: 12 6.5% 15.1%;
       --secondary-foreground: 60 9.1% 97.8%;
+      --success: 142 69% 58%;
+      --success-foreground: 60 9.1% 97.8%;
       --muted: 12 6.5% 15.1%;
       --muted-foreground: 24 5.4% 63.9%;
       --accent: 12 6.5% 15.1%;
@@ -56,5 +60,13 @@
    }
    body {
       @apply bg-background text-foreground;
+   }
+   input[type='file'] {
+      @apply text-xs file:h-full file:-translate-x-1.5 file:rounded file:border-0 file:bg-primary file:px-3 file:text-xs file:font-medium file:text-primary-foreground placeholder:text-muted-foreground file:hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50;
+   }
+
+   input[type='number']::-webkit-outer-spin-button,
+   ::-webkit-inner-spin-button {
+      @apply m-0 hidden;
    }
 }

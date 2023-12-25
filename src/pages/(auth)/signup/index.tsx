@@ -3,20 +3,18 @@ import { Box } from '@/components/ui'
 import Banner from './components/banner'
 import FormFooter from './components/form-footer'
 import FormHeader from './components/form-header'
-import SignupForm from './components/signup-form'
-import { Divider as FormDivider } from './components/styled'
+import FormBody from './components/form-body'
 
 const Signup: React.FunctionComponent = () => {
    return (
-      <Box className='relative flex h-fit w-full items-stretch scrollbar-none'>
+      <Box className='relative flex h-screen w-full items-stretch overflow-hidden scrollbar-none'>
          <Box className='fixed right-2 top-2'>
             <ThemeSelect />
          </Box>
          <Banner />
-         <Box className='flex min-h-fit w-full basis-1/2 flex-col items-center justify-center gap-10 scrollbar-none sm:basis-full sm:p-3 md:basis-full md:p-10 lg:basis-full lg:p-10'>
+         <Box className='flex h-full w-full basis-1/2 flex-col gap-10 overflow-y-auto py-10 scrollbar-none sm:basis-full sm:p-3 md:basis-full md:p-10 lg:basis-full lg:p-10'>
             <FormHeader />
-            <SignupForm />
-            <FormDivider>hoặc</FormDivider>
+            <FormBody />
             <FormFooter />
          </Box>
       </Box>

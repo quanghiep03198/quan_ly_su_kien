@@ -1,12 +1,14 @@
-import { COMMON_PATHS } from '@/common/constants/pathnames'
+import { Paths } from '@/common/constants/pathnames'
 import { Button, Icon } from '@/components/ui'
-import { Box } from '@/components/ui/box'
-import { Typography } from '@/components/ui/typography'
+import { Box } from '@/components/ui/@custom/box'
+import { Typography } from '@/components/ui/@custom/typography'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import tw from 'tailwind-styled-components'
 
 const NotFound: React.FunctionComponent = () => {
+   const navigate = useNavigate()
+
    return (
       <Box className='relative mx-auto flex h-screen w-full max-w-full flex-col items-center justify-center gap-y-6'>
          <Code>404</Code>
@@ -15,18 +17,17 @@ const NotFound: React.FunctionComponent = () => {
          </Typography>
          <Paragraph>Xin lỗi, chúng tôi không tìm thấy trang bạn yêu cầu.</Paragraph>
          <Box className='flex items-center justify-center space-x-1'>
-            <Link to={COMMON_PATHS.DEFAULT}>
-               <Button variant='default' className='inline-flex items-center gap-x-2'>
+            <Button asChild variant='default' className='gap-x-2'>
+               <Link to={Paths.REDIRECT}>
                   <Icon name='Home' />
                   Về trang chủ
-               </Button>
-            </Link>
-            <Link to={COMMON_PATHS.DEFAULT}>
-               <Button variant='ghost' className='inline-flex items-center gap-x-2'>
-                  <Icon name='ArrowRight' />
-                  Liên hệ hỗ trợ
-               </Button>
-            </Link>
+               </Link>
+            </Button>
+
+            <Button variant='ghost' className=' gap-x-2'>
+               <Icon name='ArrowRight' />
+               Liên hệ hỗ trợ
+            </Button>
          </Box>
       </Box>
    )

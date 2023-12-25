@@ -1,30 +1,35 @@
-import { MANAGER_PATHS } from '@/common/constants/pathnames'
+import { Paths } from '@/common/constants/pathnames'
 
 export const ManagerNavigation: Array<MenuNavigationItem> = [
    {
+      icon: 'LayoutDashboard',
+      name: 'Màn hình chính',
+      path: Paths.MANAGER_DASHBOARD
+   },
+   {
       icon: 'CalendarCheck2',
-      name: 'Danh sách sự kiện',
-      path: MANAGER_PATHS.EVENTS_MANAGEMENT
+      name: 'Sự kiện',
+      path: Paths.EVENTS_LIST
    },
 
    {
       icon: 'Users',
-      name: 'Danh sách nhân viên',
-      path: MANAGER_PATHS.STAFFS_MANAGEMENT
+      name: 'Nhân viên',
+      path: Paths.STAFFS_MANAGEMENT
    },
    {
-      icon: 'Users',
-      name: 'Sinh viên tham gia sự kiện',
-      path: MANAGER_PATHS.ATENDEES
+      icon: 'UsersRound',
+      name: 'Sinh viên',
+      path: Paths.ATENDEES_MANAGEMENTS
    },
    {
       icon: 'BarChart4',
       name: 'Thống kê',
-      path: MANAGER_PATHS.STATISTICS
+      path: Paths.STATISTICS_MANAGEMENT
    },
    {
       icon: 'BellRing',
       name: 'Cài đặt thông báo',
-      path: MANAGER_PATHS.EVENTS_MANAGEMENT
+      path: Paths.NOTIFICATION_SETTINGS
    }
 ]

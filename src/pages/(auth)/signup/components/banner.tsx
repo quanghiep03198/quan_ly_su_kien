@@ -8,7 +8,7 @@ const Banner: React.FunctionComponent = () => {
          <Image src={BannerImage} alt='banner' />
          <Logo src='/logo.webp' />
          <Typography variant='heading3' className='translate-y-1/3 justify-self-start !leading-[4rem] text-white'>
-            Đăng ký tài khoản để tham gia những sự kiện vô cùng hấp dẫn ngay bây giờ.
+            Đăng ký để tham gia những sự kiện vô cùng hấp dẫn ngay bây giờ.
          </Typography>
          <Description className='text-white'>©2023 FPT Polytechic College, Inc. All rights reserved.</Description>
       </Box>

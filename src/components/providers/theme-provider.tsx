@@ -1,11 +1,10 @@
+import { Theme } from '@/common/constants/enums'
 import { useLocalStorage } from '@/common/hooks/use-storage'
+import _ from 'lodash'
 import React, { createContext, useContext, useEffect } from 'react'
-
-declare type Theme = 'dark' | 'light' | 'system'
 
 declare type ThemeProviderProps = {
    children: React.ReactNode
-   defaultTheme?: Theme
 }
 
 declare type ThemeProviderState = {
@@ -14,13 +13,18 @@ declare type ThemeProviderState = {
 }
 
 const initialState: ThemeProviderState = {
-   theme: 'system',
+   theme: Theme.SYSTEM,
    setTheme: function () {}
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
-const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, defaultTheme = 'system', ...props }: ThemeProviderProps) => {
+const defaultTheme = (() => {
+   const currentTheme = localStorage.getItem('theme')
+   return !_.isNil(currentTheme) ? JSON.parse(currentTheme) : Theme.SYSTEM
+})()
+
+const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, ...props }: ThemeProviderProps) => {
    const [theme, setTheme] = useLocalStorage<Theme>('theme', defaultTheme)
 
    useEffect(() => {

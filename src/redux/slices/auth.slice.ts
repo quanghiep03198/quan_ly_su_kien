@@ -1,19 +1,19 @@
-import { User } from '@/common/types/entities'
+import { UserType } from '@/common/types/entities'
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import authApi from '../apis/auth.api'
+import { authApi } from '../apis/auth.api'
 import * as _ from 'lodash'
 import generatePicture from '@/common/utils/generate-picture'
 
 type AuthSliceState = {
-   user: Omit<User, 'password'> | null
+   user: Omit<UserType, 'password'> | null
    authenticated: boolean
 }
 
-type SigninResponseData = HttpResponse<Omit<User, 'password'> & { token: string }>
+type SigninResponseData = HttpResponse<Omit<UserType, 'password'> & { token: string }>
 
 const initialState: AuthSliceState = { user: null, authenticated: false }
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
    name: 'auth',
    initialState,
    reducers: {
@@ -21,7 +21,7 @@ const authSlice = createSlice({
    },
    extraReducers: (build) => {
       build.addMatcher(authApi.endpoints.signin.matchFulfilled, (state: AuthSliceState, action: PayloadAction<SigninResponseData>) => {
-         const payload = _.pick(action.payload?.metadata, ['id', 'email', 'name', 'phone', 'role']) as Omit<User, 'password'>
+         const payload = _.pick(action.payload?.metadata, ['id', 'email', 'name', 'phone', 'role']) as Omit<UserType, 'password'>
          state.user = { ...payload, picture: generatePicture(payload?.name) }
          state.authenticated = true
          return state
@@ -29,6 +29,7 @@ const authSlice = createSlice({
    }
 })
 
-const { signout } = authSlice.actions
-
-export { authSlice as default, signout }
+/**
+ * Redux actions
+ */
+export const { signout } = authSlice.actions

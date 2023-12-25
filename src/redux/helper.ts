@@ -14,7 +14,7 @@ const axiosBaseQuery =
    async ({ url, method, data, params, headers }) => {
       try {
          const response = await axiosInstance.request({
-            url: url,
+            url,
             method,
             data,
             params,

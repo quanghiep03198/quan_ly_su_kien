@@ -9,3 +9,8 @@ export enum Theme {
    DARK = 'dark',
    SYSTEM = 'system'
 }
+
+export enum EventStatus {
+   ACTIVE = 'Đang diễn ra',
+   INACTIVE = 'Đã kết thúc'
+}
