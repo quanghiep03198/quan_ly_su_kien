@@ -16,7 +16,7 @@ export default function TablePagination<TData>({
    hasNextPage,
    hasPrevPage,
    page,
-   totalPages,
+   totalPages = 1,
    limit
 }: DataTablePaginationProps<TData>) {
    const canNextPage = manualPagination ? hasNextPage : table.getCanNextPage()

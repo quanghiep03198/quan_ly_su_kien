@@ -21,7 +21,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
       [column.getFacetedUniqueValues()]
    )
 
-   if (!column.columnDef.enableColumnFilter) return <Box className='h-9 w-full' />
+   if (!column.columnDef.enableColumnFilter) return null
 
    switch (filterType) {
       case 'inNumberRange':
@@ -30,7 +30,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
                <Box className='flex items-stretch'>
                   <DebouncedInput
                      type='number'
-                     className={cn(buttonVariants({ variant: 'ghost' }), 'rounded-none border-none text-xs')}
+                     className={cn(buttonVariants({ variant: 'ghost' }), 'rounded-none border-none pl-2 text-xs')}
                      min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
                      max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
                      value={(areAllFiltersCleared ? '' : (columnFilterValue as [number, number]))?.[0] ?? ''}
@@ -39,7 +39,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
                   />
                   <DebouncedInput
                      type='number'
-                     className={cn(buttonVariants({ variant: 'ghost' }), 'rounded-none border-none text-xs')}
+                     className={cn(buttonVariants({ variant: 'ghost' }), 'rounded-none border-none pl-2 text-xs')}
                      min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
                      max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
                      value={(areAllFiltersCleared ? '' : (columnFilterValue as [number, number]))?.[1] ?? ''}
@@ -73,7 +73,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
                   label: value,
                   value: value
                }))}
-               className='w-56 rounded-none border-none text-xs shadow-none'
+               className='h-full w-56 rounded-none border-none pl-2 text-xs shadow-none'
                onChange={(value) => column.setFilterValue(value)}
             />
          )

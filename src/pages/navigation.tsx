@@ -11,7 +11,7 @@ const Navigation = () => {
    useEffect(() => {
       switch (user?.role) {
          case UserRoleEnum.STUDENT:
-            navigate(Paths.SIGNIN)
+            navigate(Paths.DEFAULT)
             break
          case UserRoleEnum.STAFF:
             navigate(Paths.SIGNIN)

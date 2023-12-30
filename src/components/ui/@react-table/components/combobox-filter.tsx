@@ -28,10 +28,8 @@ export const ComboboxFilter: React.FC<ComboboxFilterProps> = ({ options, placeho
                aria-expanded={open}
                onClick={() => setOpen(true)}
                className={cn(
-                  'justify-between',
-                  {
-                     'text-muted-foreground/50': !value
-                  },
+                  'justify-between text-muted-foreground/50',
+
                   className
                )}
             >

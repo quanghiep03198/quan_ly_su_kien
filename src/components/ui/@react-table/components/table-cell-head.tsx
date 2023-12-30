@@ -2,6 +2,8 @@ import { Header, SortDirection, Table, flexRender } from '@tanstack/react-table'
 import { Box, Icon } from '../..'
 import { cn } from '@/common/utils/cn'
 import { ColumnFilter } from './column-filter'
+import { useContext } from 'react'
+import { TableContext } from '../context/table.context'
 
 type TableCellHeadProps<TData, TValue> = {
    header: Header<TData, TValue>
@@ -11,9 +13,9 @@ type ColumnSortingProps = { isSorted: false | SortDirection; enableSorting?: boo
 
 function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TValue>) {
    return (
-      <Box className='flex flex-col items-stretch border-b-[0.25px]'>
+      <Box className={cn('grid grid-flow-col grid-rows-2 flex-col items-stretch')}>
          <Box
-            className={cn('inline-flex cursor-auto select-none items-center gap-x-2 border-b p-2')}
+            className={cn('inline-flex cursor-auto select-none items-center gap-x-2 p-2')}
             onClick={() => {
                if (header.column.columnDef.enableSorting) {
                   header.column.toggleSorting(header.column.getIsSorted() === 'asc')

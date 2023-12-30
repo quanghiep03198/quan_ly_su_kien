@@ -15,10 +15,10 @@ export const metadata = {
    [Paths.MANAGER + '/' + Paths.MANAGER_DASHBOARD]: 'Màn hình chính',
    [Paths.MANAGER + '/' + Paths.EVENTS_LIST]: 'Sự kiện',
    [Paths.MANAGER + '/' + Paths.EVENTS_CREATE]: 'Thêm sự kiện',
-   [Paths.MANAGER + '/' + Paths.STAFFS_MANAGEMENT]: 'Nhân viên',
-   [Paths.MANAGER + '/' + Paths.PARTICIPANTS_MANAGEMENT]: 'Sinh viên',
+   [Paths.MANAGER + '/' + Paths.PARTICIPANTS_LIST]: 'Cộng tác viên',
+   // [Paths.MANAGER + '/' + Paths.PARTICIPANTS_MANAGEMENT]: 'Sinh viên',
    [Paths.MANAGER + '/' + Paths.STATISTICS_MANAGEMENT]: 'Thống kê',
-   [Paths.MANAGER + '/' + Paths.ATENDEES_MANAGEMENTS]: '',
+   [Paths.MANAGER + '/' + Paths.ATENDEES_LIST]: '',
 
    /* NAVIGATION */
    [Paths.REDIRECT]: 'Đang chuyển hướng ...'

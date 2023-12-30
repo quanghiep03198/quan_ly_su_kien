@@ -1,18 +1,24 @@
-import { Theme } from '@/common/constants/enums'
+import { Theme, UserRoleEnum } from '@/common/constants/enums'
 import { Paths } from '@/common/constants/pathnames'
 import useTheme from '@/common/hooks/use-theme'
 import { cn } from '@/common/utils/cn'
 import ThemeSelect from '@/components/shared/theme-select'
 import { Box, Button, Checkbox, Form, FormLabel, Icon, InputFieldControl, Typography } from '@/components/ui'
+import { GoogleIcon } from '@/components/ui/@custom/icons'
+import { buttonVariants } from '@/components/ui/@shadcn/button'
 import { useSigninMutation } from '@/redux/apis/auth.api'
+import { useAppDispatch } from '@/redux/hook'
+import { signinWithGoogle } from '@/redux/slices/auth.slice'
 import { SigninSchema } from '@/schemas/auth.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useGoogleLogin } from '@react-oauth/google'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { z } from 'zod'
-import { Image, Paragraph, StyledForm } from './components/styled'
 import { toast } from 'sonner'
-import { buttonVariants } from '@/components/ui/@shadcn/button'
+import { z } from 'zod'
+import { Divider } from '../../../components/ui/@custom/divider'
+import { Image, Paragraph, StyledForm } from './components/styled'
+import axiosInstance from '@/configs/axios.config'
 
 type FormValue = z.infer<typeof SigninSchema>
 const Signin: React.FunctionComponent = () => {
@@ -21,7 +27,21 @@ const Signin: React.FunctionComponent = () => {
    })
    const { theme } = useTheme()
    const [mutate, { isLoading }] = useSigninMutation()
+   const dispatch = useAppDispatch()
    const navigate = useNavigate()
+   const login = useGoogleLogin({
+      onSuccess: async (response) => {
+         try {
+            const data = (await dispatch(signinWithGoogle(`${response.token_type} ${response.access_token}`)).unwrap()) as unknown as HttpResponse<any>
+            window.localStorage.setItem('access_token', `Bearer ${data?.metadata?.access_token}`)
+            toast.success('Đăng nhập thành công')
+            navigate(Paths.REDIRECT)
+         } catch (error) {
+            toast.error('Failed to login!')
+         }
+      },
+      onError: () => toast.error('Đăng nhập thất bại')
+   })
 
    const handleSignin = async (data: FormValue) => {
       try {
@@ -46,7 +66,7 @@ const Signin: React.FunctionComponent = () => {
             <Box className='flex flex-col items-center justify-center gap-10'>
                <Image src={theme === Theme.LIGHT ? '/logo.png' : 'logo.webp'} />
                <Typography variant='heading5'>Đăng nhập vào tài khoản</Typography>
-               <Box className='w-full rounded-xl border bg-background p-8'>
+               <Box className='flex w-full flex-col items-stretch gap-y-6 rounded-xl border bg-background p-8'>
                   <Form {...form}>
                      <StyledForm onSubmit={form.handleSubmit(handleSignin)}>
                         <InputFieldControl
@@ -67,12 +87,17 @@ const Signin: React.FunctionComponent = () => {
                               Quên mật khẩu?
                            </Link>
                         </Box>
-                        <Button type='submit' variant='default' className='inline-flex items-center gap-x-3' disabled={isLoading}>
+                        <Button type='submit' variant='outline' className='inline-flex items-center gap-x-3' disabled={isLoading}>
                            <Icon name='LogIn' />
                            Đăng nhập
                         </Button>
                      </StyledForm>
-                  </Form>
+                  </Form>{' '}
+                  <Divider>hoặc đăng nhập với</Divider>
+                  <Button variant='default' className='w-full gap-x-2' onClick={() => login()}>
+                     <GoogleIcon />
+                     Google
+                  </Button>
                </Box>
                <Paragraph>
                   Chưa có tài khoản?{' '}

@@ -52,3 +52,5 @@ export function DatePickerFieldControl<T extends FieldValues>(props: DatePickerF
       />
    )
 }
+
+DatePickerFieldControl.displayName = 'DatePickerFieldControl'

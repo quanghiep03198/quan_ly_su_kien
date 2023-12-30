@@ -18,10 +18,9 @@ export const Paths = {
    EVENTS_LIST: 'events',
    EVENTS_CREATE: 'create-event',
    EVENTS_UPDATE: 'events:id',
-   STAFFS_MANAGEMENT: 'staffs',
-   STAFFS_CREATE: 'add-staffs',
-   ATENDEES_MANAGEMENTS: 'attendees-management',
+   PARTICIPANTS_LIST: 'participants',
+   PARTICIPANTS_CREATE: 'add-participants',
+   ATENDEES_LIST: 'attendees',
    STATISTICS_MANAGEMENT: 'statistics',
-   PARTICIPANTS_MANAGEMENT: 'participants',
    NOTIFICATION_SETTINGS: 'notification-settings'
 } as const

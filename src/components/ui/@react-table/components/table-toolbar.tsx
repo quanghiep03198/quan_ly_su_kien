@@ -17,9 +17,8 @@ type TableToolbarProps<TData> = {
 export function TableToolbar<TData>({ table, globalFilter, isFiltered, onGlobalFilterChange, onClearAllFilters }: TableToolbarProps<TData>) {
    return (
       <Box className='flex items-center justify-between'>
-         <Box className='flex items-center gap-x-2'>
-            <GlobalFilter table={table} globalFilter={globalFilter} onGlobalFilterChange={onGlobalFilterChange} />
-         </Box>
+         <GlobalFilter table={table} globalFilter={globalFilter} onGlobalFilterChange={onGlobalFilterChange} />
+
          <Box className='flex items-center gap-x-2'>
             <Tooltip content='Xóa lọc'>
                <Button variant='outline' size='sm' onClick={onClearAllFilters} className={cn('inline-flex items-center gap-x-2', { hidden: isFiltered })}>

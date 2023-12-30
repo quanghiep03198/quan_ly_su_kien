@@ -1,7 +1,7 @@
 import { Theme } from '@/common/constants/enums'
 import { useLocalStorage } from '@/common/hooks/use-storage'
 import _ from 'lodash'
-import React, { createContext, useContext, useEffect } from 'react'
+import React, { createContext, useEffect } from 'react'
 
 declare type ThemeProviderProps = {
    children: React.ReactNode
@@ -29,16 +29,12 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, ...props }: The
 
    useEffect(() => {
       const root = window.document.documentElement
-
       root.classList.remove('light', 'dark')
-
       if (theme === 'system') {
          const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-
          root.classList.add(systemTheme)
          return
       }
-
       root.classList.add(theme as Theme)
    }, [theme])
 
@@ -57,4 +53,4 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children, ...props }: The
    )
 }
 
-export { ThemeProviderContext, ThemeProvider }
+export { ThemeProvider, ThemeProviderContext }

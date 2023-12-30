@@ -13,6 +13,7 @@ type TableContext = {
 
 export const TableContext = createContext<TableContext>({
    isScrolling: false,
+
    areAllFiltersCleared: false,
    handleScroll: () => {}
 })

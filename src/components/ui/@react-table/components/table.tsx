@@ -15,10 +15,10 @@ export default function TableDataGrid<TData, TValue>({ table, columns, loading, 
    const { handleScroll } = useContext(TableContext)
 
    return (
-      <TableWrapper className='group'>
+      <TableWrapper className='group w-full shadow'>
          <ScrollArea className='h-[60vh]' onWheel={handleScroll}>
             <Table {...props}>
-               <TableHeader className='!sticky top-0'>
+               <TableHeader className='!sticky top-0 z-50'>
                   {table.getHeaderGroups().map((headerGroup) => (
                      <TableRow key={headerGroup.id} className='sticky top-0 hover:bg-background'>
                         {headerGroup.headers.map((header) => (

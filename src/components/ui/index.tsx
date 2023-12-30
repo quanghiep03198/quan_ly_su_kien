@@ -116,3 +116,7 @@ export { Pagination, PaginationContent, PaginationLink, PaginationItem, Paginati
 export { DropdownSelect } from './@override/dropdown-select'
 export { Toggle, toggleVariants } from './@shadcn/toggle'
 export { ToggleGroup, ToggleGroupItem } from './@shadcn/toggle-group'
+export { Image } from './@custom/image'
+export { Label } from './@shadcn/label'
+export { Textarea } from './@shadcn/textarea'
+export { ForwardedRefTextareaFieldControl as TextareaFieldControl } from './@hook-form/textarea-control'

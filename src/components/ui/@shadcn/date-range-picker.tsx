@@ -2,21 +2,18 @@
 
 import { cn } from '@/common/utils/cn'
 import { CalendarIcon } from '@radix-ui/react-icons'
-import { addDays, format } from 'date-fns'
+import { format } from 'date-fns'
 import * as React from 'react'
 import { DateRange, SelectRangeEventHandler } from 'react-day-picker'
 import { Button, Calendar, Popover, PopoverContent, PopoverTrigger } from '..'
-import { CalendarProps } from './calendar'
 
 type DateRangePickerProps = {
    onSelect?: (value: DateRange | undefined) => void
    align?: React.ComponentProps<typeof PopoverContent>['align']
 } & React.HTMLAttributes<HTMLDivElement>
+
 export const DateRangePicker: React.FC<DateRangePickerProps> = ({ className, align = 'center', onSelect }) => {
-   const [date, setDate] = React.useState<DateRange | undefined>({
-      from: new Date(2022, 0, 20),
-      to: addDays(new Date(2022, 0, 20), 20)
-   })
+   const [date, setDate] = React.useState<DateRange | undefined>()
 
    const handleSelectDateRange: SelectRangeEventHandler = (from, to) => {
       setDate({ from, to } as DateRange)

@@ -1,7 +1,8 @@
 import { Paths } from '@/common/constants/pathnames'
 import { Link } from 'react-router-dom'
 import { Paragraph } from './styled'
-import { Divider } from './styled'
+import { Divider } from '../../../../components/ui/@custom/divider'
+
 const FormFooter: React.FunctionComponent = () => {
    return (
       <>

@@ -5,7 +5,7 @@ import { cn } from '@/common/utils/cn'
 import ThemeSelect from '@/components/shared/theme-select'
 import { Box, Icon, buttonVariants } from '@/components/ui'
 import Tooltip from '@/components/ui/@override/tooltip'
-import UserActions from '@/pages/_components/user-actions'
+import UserActions from '@/pages/components/user-actions'
 import { useAppSelector } from '@/redux/hook'
 import { Link } from 'react-router-dom'
 import tw from 'tailwind-styled-components'
@@ -47,6 +47,6 @@ const Header: React.FunctionComponent = () => {
    )
 }
 
-const Image = tw.img`max-w-[10rem] object-cover object-center`
+const Image = tw.img`max-w-[10rem] object-cover object-center sm:max-w-[8rem]`
 
 export default Header

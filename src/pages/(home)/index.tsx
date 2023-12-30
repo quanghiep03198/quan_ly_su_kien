@@ -1,13 +1,13 @@
 import { Box } from '@/components/ui'
-import Header from './components/header'
+import EventsBoard from './components/events-board'
 import Footer from './components/footer'
-import EventsBoard from './components/main-events-board'
+import Header from './components/header'
 
 const Home: React.FunctionComponent = () => {
    return (
-      <Box className='item-stretch flex flex-col' as='main'>
+      <Box className='item-stretch flex min-h-screen flex-col' as='main'>
          <Header />
-         <Box>
+         <Box className='h-full flex-1'>
             <EventsBoard />
          </Box>
          <Footer />

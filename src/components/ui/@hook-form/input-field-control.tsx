@@ -38,7 +38,7 @@ export function InputFieldControl<T extends FieldValues>(
          render={({ field }) => {
             return (
                <FormItem>
-                  <FormLabel htmlFor={id}>{label}</FormLabel>
+                  {label && <FormLabel htmlFor={id}>{label}</FormLabel>}
                   <FormControl>
                      <Input
                         {...field}

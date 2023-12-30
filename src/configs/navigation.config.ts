@@ -2,32 +2,28 @@ import { Paths } from '@/common/constants/pathnames'
 
 export const ManagerNavigation: Array<MenuNavigationItem> = [
    {
+      id: '1',
       icon: 'LayoutDashboard',
       name: 'Màn hình chính',
       path: Paths.MANAGER_DASHBOARD
    },
    {
+      id: '2',
       icon: 'CalendarCheck2',
       name: 'Sự kiện',
       path: Paths.EVENTS_LIST
    },
 
    {
+      id: '3',
       icon: 'Users',
-      name: 'Nhân viên',
-      path: Paths.STAFFS_MANAGEMENT
+      name: 'Cộng tác viên',
+      path: Paths.PARTICIPANTS_LIST
    },
+   { id: '4', icon: 'UsersRound', name: 'Sinh viên', path: Paths.ATENDEES_LIST },
+
    {
-      icon: 'UsersRound',
-      name: 'Sinh viên',
-      path: Paths.ATENDEES_MANAGEMENTS
-   },
-   {
-      icon: 'BarChart4',
-      name: 'Thống kê',
-      path: Paths.STATISTICS_MANAGEMENT
-   },
-   {
+      id: '5',
       icon: 'BellRing',
       name: 'Cài đặt thông báo',
       path: Paths.NOTIFICATION_SETTINGS

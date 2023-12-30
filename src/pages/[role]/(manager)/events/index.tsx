@@ -8,6 +8,7 @@ import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import React, { useCallback, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
+import _ from 'lodash'
 
 const EventList: React.FunctionComponent = () => {
    const [pagination, handlePaginate] = useServerPagination()
@@ -80,9 +81,7 @@ const EventList: React.FunctionComponent = () => {
    return (
       <Box className='flex h-full flex-col space-y-4'>
          <Box className='mb-4 flex items-center justify-between'>
-            <Typography variant='heading6' className='inline-flex items-center gap-x-2'>
-               <Icon name='List' size={20} /> Danh sách sự kiện
-            </Typography>
+            <Typography variant='heading6'>Danh sách sự kiện</Typography>
             <Link to={`${Paths.MANAGER}/${Paths.EVENTS_CREATE}`}>
                <Button variant='outline' className='gap-x-2'>
                   <Icon name='PlusCircle' />
@@ -97,11 +96,7 @@ const EventList: React.FunctionComponent = () => {
             manualPagination={true}
             paginationState={{
                ...pagination,
-               hasNextPage: data?.hasNextPage!,
-               hasPrevPage: data?.hasPrevPage!,
-               // pagingCounter: data?.pagingCounter!,
-               totalPages: data?.totalPages!,
-               totalDocs: data?.totalDocs!
+               ..._.omit(data, ['docs'])
             }}
             onManualPaginate={handlePaginate}
          />

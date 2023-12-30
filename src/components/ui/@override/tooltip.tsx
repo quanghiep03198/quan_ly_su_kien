@@ -1,13 +1,15 @@
 import { Tooltip as TooltipWrapper, TooltipContent, TooltipProvider, TooltipTrigger } from '..'
 
-type TooltipProps = { content: string } & React.PropsWithChildren
+type TooltipProps = { content: string; dir?: 'top'; asChild?: boolean } & React.PropsWithChildren
 
 const Tooltip: React.FC<TooltipProps> = (props) => {
    return (
-      <TooltipProvider>
+      <TooltipProvider delayDuration={0}>
          <TooltipWrapper>
-            <TooltipTrigger asChild>{props.children}</TooltipTrigger>
-            <TooltipContent>{props.content}</TooltipContent>
+            <TooltipTrigger asChild={props.asChild} type='button'>
+               {props.children}
+            </TooltipTrigger>
+            <TooltipContent dir=''>{props.content}</TooltipContent>
          </TooltipWrapper>
       </TooltipProvider>
    )

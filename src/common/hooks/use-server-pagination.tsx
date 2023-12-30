@@ -2,6 +2,7 @@ import { useEffect, useReducer } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 
 export enum PaginationActions {
+   GO_TO_PAGE = 'GO_TO_PAGE',
    GO_TO_NEXT_PAGE = 'GO_TO_NEXT_PAGE',
    GO_TO_PREV_PAGE = 'GO_TO_PREV_PAGE',
    GO_TO_FIRST_PAGE = 'GO_TO_FIRST_PAGE',
@@ -25,6 +26,8 @@ const intialState: PaginationStateType = {
 
 const reducer = (state: any, action: PaginationActionType) => {
    switch (action.type) {
+      case PaginationActions.GO_TO_PAGE:
+         return { ...state, page: action.payload }
       case PaginationActions.GO_TO_NEXT_PAGE:
          return { ...state, page: state.page + 1 }
       case PaginationActions.GO_TO_PREV_PAGE:

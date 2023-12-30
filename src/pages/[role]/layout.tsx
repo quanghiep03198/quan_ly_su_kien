@@ -6,9 +6,9 @@ import { ManagerNavigation } from '@/configs/navigation.config'
 import { useAppSelector } from '@/redux/hook'
 import { Suspense, useMemo, useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import NavHeader from './_components/nav-header'
-import DrawerNavSidebar from './_components/nav-sidebar/drawer-nav-sidebar'
-import StaticNavSidebar from './_components/nav-sidebar/static-nav-sidebar'
+import NavHeader from './components/nav-header'
+import DrawerNavSidebar from './components/nav-sidebar/drawer-nav-sidebar'
+import StaticNavSidebar from './components/nav-sidebar/static-nav-sidebar'
 
 const AppLayout: React.FunctionComponent = () => {
    const [open, setOpen] = useState<boolean>(false)
@@ -21,7 +21,7 @@ const AppLayout: React.FunctionComponent = () => {
          case UserRoleEnum.STAFF:
             return []
          case UserRoleEnum.STUDENT:
-            return []
+            return ManagerNavigation
          default:
             return ManagerNavigation
       }

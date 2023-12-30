@@ -5,7 +5,7 @@ export type UserType = {
    name: string
    password?: string
    email: string
-   picture?: string
+   avatar?: string
    phone: string
    role: UserRoleEnum
 }
@@ -19,6 +19,8 @@ export type EventType = {
    location: string
    name: string
    start_time: Date | string
+   description: string
+   content: string
    status: any
    created_at: Date | string
    updated_at: Date | string

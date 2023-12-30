@@ -25,6 +25,7 @@ export interface DataTableProps<TData, TValue> {
    columns: Array<ColumnDef<TData, TValue>>
    loading: boolean
    manualPagination?: boolean
+   manualFilter?: boolean
    paginationState?: Omit<Pagination<TData>, 'docs'>
    onManualPaginate?: PaginationHandler
 }

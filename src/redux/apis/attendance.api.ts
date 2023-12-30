@@ -16,14 +16,14 @@ export const attendanceApi = createApi({
          }),
          addAttendance: build.mutation({
             query: (payload) => ({ url: '/attendances/add', method: 'POST', data: payload }),
-            invalidatesTags: tagTypes
+            invalidatesTags: (_, error) => (error ? [] : tagTypes)
          }),
-         getAttendanceInfo: build.mutation({
+         getAttendanceInfo: build.query({
             query: (id) => ({ url: `/attendances/${id}`, method: 'GET' }),
-            invalidatesTags: tagTypes
+            providesTags: tagTypes
          })
       }
    }
 })
 
-export const { useAddAttendanceMutation, useGetAttendanceInfoMutation, useGetAttendanceByEventQuery } = attendanceApi
+export const { useAddAttendanceMutation, useGetAttendanceInfoQuery, useGetAttendanceByEventQuery } = attendanceApi

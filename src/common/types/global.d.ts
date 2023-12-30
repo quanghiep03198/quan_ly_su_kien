@@ -16,9 +16,13 @@ declare global {
    }
 
    declare type MenuNavigationItem = {
+      id: string
       icon?: keyof typeof icons
       name: string
       path: string
+      parentId?: string
+      visible?: boolean
+      // breadcrunbs: Array<{ path: string; name: string }>
    }
 
    declare type AnonymousFunction = (...args: any[]) => any
