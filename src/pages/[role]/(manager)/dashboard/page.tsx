@@ -1,10 +1,8 @@
-// import React from 'react'
-
 import { Box, Typography } from '@/components/ui'
-import { Overview } from './_components/overview'
-import { RecentEvents } from './_components/recent-events'
+import { Overview } from './components/overview'
+import { RecentEvents } from './components/recent-events'
 import { DateRangePicker } from '@/components/ui/@shadcn/date-range-picker'
-import Statistics from './_components/statistics'
+import Statistics from './components/statistics'
 
 const Dashboard: React.FunctionComponent = () => {
    return (

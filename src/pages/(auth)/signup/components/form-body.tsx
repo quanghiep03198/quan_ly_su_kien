@@ -22,7 +22,7 @@ const SignupForm: React.FunctionComponent = () => {
       try {
          const payload = _.omit(data, ['confirmPassword']) as Omit<FormValue, 'confirmPassword'>
          const response = await mutateAsync(payload).unwrap()
-         toast.success(response.message)
+         if (response) toast.success('Đăng ký thành công')
       } catch (error) {
          const errorResponse = error as ErrorResponse
          toast.error(errorResponse.data?.message)

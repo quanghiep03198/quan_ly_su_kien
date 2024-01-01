@@ -1,28 +1,36 @@
-import { BubbleMenu, EditorContent, useEditor } from '@tiptap/react'
-import { Box } from '..'
+import { EditorContent, useEditor } from '@tiptap/react'
+import { Box, ScrollArea } from '..'
+import BubbleMenu from './components/bubble-menu'
 import Toolbar from './components/toolbar'
 import { extensions } from './extensions'
+import React from 'react'
 
-type EditorProps = {
-   onChange?: (value: string) => void
-   defaultValue?: string
+export interface EditorProps {
+   onEditorStateChange: React.Dispatch<React.SetStateAction<{ value: string; isEmpty: boolean }>>
+   id?: string
+   name?: string
+   content?: string
    disabled?: boolean
 }
 
-const Editor: React.FC<EditorProps> = ({ defaultValue, disabled, onChange }) => {
-   const editor = useEditor({
-      content: defaultValue,
-      extensions,
-      editorProps: {
-         attributes: {
-            class: 'p-4 rounded-lg max-w-full overflow-auto border-none outline-none focus:outline-none focus:border-none min-h-[50vh] text-foreground bg-background prose prose-li:p-0'
+const Editor: React.FC<EditorProps> = ({ content, id, disabled, name, onEditorStateChange }) => {
+   const editor = useEditor(
+      {
+         content,
+         extensions,
+         editorProps: {
+            attributes: {
+               class: 'p-4 rounded-lg max-w-full max-h-full overflow-auto border-none outline-none focus:outline-none focus:border-none min-h-[50vh] text-foreground bg-background prose prose-li:p-0'
+            }
+         },
+         enableCoreExtensions: true,
+         editable: !Boolean(disabled),
+         onUpdate: ({ editor }) => {
+            if (onEditorStateChange) onEditorStateChange({ value: editor.getHTML(), isEmpty: editor.isEmpty })
          }
       },
-      editable: !Boolean(disabled),
-      onUpdate: ({ editor }) => {
-         if (onChange) onChange(editor.getHTML())
-      }
-   })
+      [content]
+   )
 
    if (!editor) {
       return null
@@ -31,15 +39,18 @@ const Editor: React.FC<EditorProps> = ({ defaultValue, disabled, onChange }) => 
    return (
       <Box className='flex w-full max-w-full flex-col items-stretch divide-y divide-border rounded-lg border shadow'>
          <Toolbar editor={editor} />
-         <EditorContent editor={editor} />
+         <ScrollArea className='h-[75vh] w-full max-w-full overflow-auto'>
+            <EditorContent id={id} editor={editor} name={name} controls={true} content={content} />
+         </ScrollArea>
+         <BubbleMenu editor={editor} />
          {/* <FloatingMenu editor={editor}>This is the floating menu</FloatingMenu> */}
       </Box>
    )
 }
 
 Editor.defaultProps = {
-   defaultValue: '',
-   disabled: false
+   content: '',
+   id: 'editor'
 }
 
 export default Editor

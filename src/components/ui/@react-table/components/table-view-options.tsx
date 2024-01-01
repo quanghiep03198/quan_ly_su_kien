@@ -13,7 +13,7 @@ export function TableViewOptions<TData>({ table }: DataTableViewOptionsProps<TDa
          <DropdownMenuTrigger asChild>
             <Button variant='outline' size='sm' className='inline-flex items-center gap-x-2'>
                <Icon name='SlidersHorizontal' />
-               View
+               Chế độ xem
             </Button>
          </DropdownMenuTrigger>
          <DropdownMenuContent align='end'>

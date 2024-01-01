@@ -1,9 +1,9 @@
-import { Header, SortDirection, Table, flexRender } from '@tanstack/react-table'
-import { Box, Icon } from '../..'
 import { cn } from '@/common/utils/cn'
-import { ColumnFilter } from './column-filter'
+import { Header, SortDirection, Table, flexRender } from '@tanstack/react-table'
 import { useContext } from 'react'
+import { Box, Collapsible, CollapsibleContent, Icon } from '../..'
 import { TableContext } from '../context/table.context'
+import { ColumnFilter } from './column-filter'
 
 type TableCellHeadProps<TData, TValue> = {
    header: Header<TData, TValue>
@@ -12,8 +12,10 @@ type TableCellHeadProps<TData, TValue> = {
 type ColumnSortingProps = { isSorted: false | SortDirection; enableSorting?: boolean }
 
 function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TValue>) {
+   const { isFilterOpened: isFilterCollapsed, setIsFilterOpened: setIsFilterCollapsed } = useContext(TableContext)
+
    return (
-      <Box className={cn('grid grid-flow-col grid-rows-2 flex-col items-stretch')}>
+      <Collapsible open={isFilterCollapsed} onOpenChange={setIsFilterCollapsed} className='flex flex-col items-stretch divide-y divide-border'>
          <Box
             className={cn('inline-flex cursor-auto select-none items-center gap-x-2 p-2')}
             onClick={() => {
@@ -25,8 +27,10 @@ function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TVal
             {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
             <SortStatus enableSorting={header.column.columnDef.enableSorting} isSorted={header.column.getIsSorted()} />
          </Box>
-         <ColumnFilter column={header.column} />
-      </Box>
+         <CollapsibleContent>
+            <ColumnFilter column={header.column} />
+         </CollapsibleContent>
+      </Collapsible>
    )
 }
 

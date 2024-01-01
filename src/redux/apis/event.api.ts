@@ -6,7 +6,7 @@ import axiosBaseQuery from '../helper'
 import { PaginationStateType } from '@/common/hooks/use-server-pagination'
 
 const reducerPath = 'event/api' as const
-const tagTypes = ['Event', 'EventStatistics'] as const
+const tagTypes = ['Event'] as const
 
 export const eventApi = createApi({
    reducerPath,
@@ -14,8 +14,12 @@ export const eventApi = createApi({
    baseQuery: axiosBaseQuery(),
    endpoints: (build) => {
       return {
-         getEvents: build.query<Pagination<EventType>, PaginationStateType>({
-            query: ({ page, limit }) => ({ url: '/event', method: 'GET', params: { page, limit } }),
+         getEvents: build.query<Pagination<EventType>, PaginationStateType & { search?: string }>({
+            query: ({ page, limit, search }) => {
+               page ??= 1
+               limit ??= 20
+               return { url: '/event', method: 'GET', params: { page, limit, search } }
+            },
             providesTags: tagTypes,
             transformResponse: (response: HttpResponse<Pagination<EventType>>) => {
                return {
@@ -28,6 +32,21 @@ export const eventApi = createApi({
                   }))
                } as Pagination<EventType>
             }
+         }),
+         getRecentEvents: build.query<EventType[], void>({
+            query: () => ({ url: '/getNearstEvent', method: 'GET' }),
+            providesTags: tagTypes
+         }),
+         participateInEvent: build.mutation<unknown, { user_id: number; event_id: number }>({
+            query: (payload) => ({ url: '/attendances', method: 'POST', data: payload }),
+            invalidatesTags: tagTypes
+         }),
+         getEventDetails: build.query<EventType, string>({
+            query: (id) => ({ url: `/event/${id}`, method: 'GET' }),
+            transformResponse: (response: HttpResponse<EventType>) => {
+               return response.metadata as EventType
+            },
+            providesTags: (result, _error, _arg) => (result ? [{ type: 'Event' as const, id: result?.id }] : tagTypes)
          }),
          createEvent: build.mutation({
             query: (payload) => ({ url: '/event', method: 'POST', data: payload }),
@@ -49,6 +68,15 @@ export const eventApi = createApi({
    }
 })
 
-const { useGetEventsQuery, useCreateEventMutation, useGetEventStatisticsQuery, useUpdateEventMutation, useDeleteEventMutation } = eventApi
+export const {
+   useGetEventsQuery,
+   useCreateEventMutation,
+   useGetEventStatisticsQuery,
+   useUpdateEventMutation,
+   useGetEventDetailsQuery,
+   useDeleteEventMutation,
+   useGetRecentEventsQuery,
+   useParticipateInEventMutation
+} = eventApi
 
-export { useCreateEventMutation, useDeleteEventMutation, useGetEventStatisticsQuery, useGetEventsQuery, useUpdateEventMutation }
+//  { useCreateEventMutation, useDeleteEventMutation, useGetEventStatisticsQuery, useGetEventsQuery, useUpdateEventMutation }

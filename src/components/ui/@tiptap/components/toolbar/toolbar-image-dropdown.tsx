@@ -1,5 +1,9 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Editor } from '@tiptap/react'
-import React, { useCallback, useId, useState } from 'react'
+import React, { useId, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import tw from 'tailwind-styled-components'
+import { z } from 'zod'
 import {
    Button,
    Dialog,
@@ -14,15 +18,6 @@ import {
    InputFieldControl
 } from '../../..'
 import Tooltip from '../../../@override/tooltip'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import tw from 'tailwind-styled-components'
-
-enum ActionType {
-   UPLOAD = 'UPLOAD',
-   PASTE_URL = 'PASTE_URL'
-}
 
 const UploadSchema = z.object({
    url: z.string().url('URL ảnh không hợp lệ').optional()
@@ -38,6 +33,13 @@ const ImageDropdown: React.FC<{ editor: Editor }> = ({ editor }) => {
    const id = useId()
    const handleInsertImageURL = ({ url }: FormValue) => {
       if (url) editor.commands.setImage({ src: url, alt: 'Image' })
+      form.reset()
+      setOpen(false)
+   }
+
+   const handleInsertImageFromDevice = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const url = URL.createObjectURL(e.target.files?.[0]!)
+      editor.commands.setImage({ src: url })
    }
 
    if (!editor) {
@@ -65,7 +67,7 @@ const ImageDropdown: React.FC<{ editor: Editor }> = ({ editor }) => {
                </DropdownMenuItem>
             </DropdownMenuContent>
          </DropdownMenu>
-         <input type='file' className='hidden' id={id} />
+         <input type='file' className='hidden' id={id} onChange={handleInsertImageFromDevice} />
          <Dialog open={open} onOpenChange={setOpen} defaultOpen={false}>
             <DialogContent className='items-stretch'>
                <DialogHeader className='text-left'>Chèn hình ảnh</DialogHeader>

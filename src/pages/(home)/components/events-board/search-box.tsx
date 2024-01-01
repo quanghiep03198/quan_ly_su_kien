@@ -1,12 +1,21 @@
-import { Badge, Box, Button, DropdownSelect, Form, Icon, Input, Typography } from '@/components/ui'
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import tw from 'tailwind-styled-components'
+import { Badge, Box, DropdownSelect, Icon, Input, Typography } from '@/components/ui'
+import { debounce } from 'lodash'
+import { toast } from 'sonner'
+
+type SearchBoxProps = {
+   onSearchValueChange: React.Dispatch<React.SetStateAction<string>>
+}
 
 const locationOptions: Record<'label' | 'value', string>[] = [
    { label: 'Hà Nội', value: 'Hà Nội' },
    { label: 'Hải Phòng', value: 'Hải Phòng' },
+   { label: 'Thái Nguyên', value: 'Thái Nguyên' },
+   { label: 'Hà Nam', value: 'Hà Nam' },
+   { label: 'Thanh Hoá', value: 'Thanh Hoá' },
+   { label: 'Quy Nhơn', value: 'Quy Nhơn' },
    { label: 'Đà Nẵng', value: 'Đà Nẵng' },
+   { label: 'Tây Nguyên', value: 'Tây Nguyên' },
+   { label: 'Đồng Nai', value: 'Đồng Nai' },
    { label: 'Hồ Chí Minh', value: 'Hồ Chí Minh' },
    { label: 'Cần Thơ', value: 'Cần Thơ' }
 ]
@@ -17,16 +26,29 @@ const postedTimeOptions: Record<'label' | 'value', string>[] = [
 ]
 
 const keywords = ['Happy Bee', 'Hackathon', 'Poly Microsoft Office', 'Poly Running']
-const SearchBox = () => {
+
+const SearchBox: React.FC<SearchBoxProps> = ({ onSearchValueChange }) => {
+   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => debounce(() => onSearchValueChange(e.target.value))
+
    return (
       <Box className='space-y-6'>
          <Box className='grid grid-cols-4 gap-4'>
-            <Box className='relative col-span-2 sm:col-span-4'>
-               <Input className='pl-8' placeholder='Tên sự kiện ...' />
+            <Box className='relative sm:col-span-4'>
+               <Input className='pl-8' placeholder='Tên sự kiện ...' onChange={handleSearch} />
                <Icon name='Search' className='absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground/50' />
             </Box>
-            <DropdownSelect className='sm:col-span-2' options={locationOptions} placeholder='Địa điểm' />
-            <DropdownSelect className='sm:col-span-2' options={postedTimeOptions} placeholder='Ngày đăng' />
+            <DropdownSelect
+               className='sm:col-span-2'
+               options={locationOptions}
+               placeholder='Địa điểm'
+               onChange={() => toast.info('Chức năng hiện đang được cập nhật')}
+            />
+            <DropdownSelect
+               className='sm:col-span-2'
+               options={postedTimeOptions}
+               placeholder='Ngày đăng'
+               onChange={() => toast.info('Chức năng hiện đang được cập nhật')}
+            />
          </Box>
          <Box className='flex items-center gap-4 sm:flex-col sm:items-start md:flex-col md:items-start'>
             <Typography variant='heading6' className='text-base'>

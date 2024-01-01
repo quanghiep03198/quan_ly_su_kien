@@ -15,9 +15,8 @@ type DateRangePickerProps = {
 export const DateRangePicker: React.FC<DateRangePickerProps> = ({ className, align = 'center', onSelect }) => {
    const [date, setDate] = React.useState<DateRange | undefined>()
 
-   const handleSelectDateRange: SelectRangeEventHandler = (from, to) => {
+   const handleSelectDateRange = (from: Date, to: Date) => {
       setDate({ from, to } as DateRange)
-      // onSelect({ from, to } as DateRange)
    }
 
    return (
@@ -29,7 +28,7 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({ className, ali
                   {date?.from ? (
                      date.to ? (
                         <>
-                           {format(date.from, 'LLL dd, y')} - {format(date.to, 'LLL dd, y')}
+                           {format(date?.from, 'LLL dd, y')} - {format(date?.to, 'LLL dd, y')}
                         </>
                      ) : (
                         format(date.from, 'LLL dd, y')
@@ -40,7 +39,16 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({ className, ali
                </Button>
             </PopoverTrigger>
             <PopoverContent className='w-auto p-0' align={align}>
-               <Calendar initialFocus mode='range' defaultMonth={date?.from} selected={date} onSelect={handleSelectDateRange} numberOfMonths={2} />
+               <Calendar
+                  initialFocus
+                  mode='range'
+                  defaultMonth={date?.from}
+                  selected={date}
+                  onSelect={(range, selectedDay) => {
+                     handleSelectDateRange(range?.from!, selectedDay)
+                  }}
+                  numberOfMonths={2}
+               />
             </PopoverContent>
          </Popover>
       </div>

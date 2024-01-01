@@ -22,7 +22,7 @@ export default function TableDataGrid<TData, TValue>({ table, columns, loading, 
                   {table.getHeaderGroups().map((headerGroup) => (
                      <TableRow key={headerGroup.id} className='sticky top-0 hover:bg-background'>
                         {headerGroup.headers.map((header) => (
-                           <TableHead className='border-collapse whitespace-nowrap p-0' key={header.id} colSpan={header.colSpan}>
+                           <TableHead className='border-collapse whitespace-nowrap border-b p-0' key={header.id} colSpan={header.colSpan}>
                               <TableCellHead table={table} header={header} />
                            </TableHead>
                         ))}

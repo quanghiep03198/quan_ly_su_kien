@@ -22,7 +22,7 @@ declare global {
       path: string
       parentId?: string
       visible?: boolean
-      // breadcrunbs: Array<{ path: string; name: string }>
+      breadcrunbs?: Array<{ path: string; name: string }>
    }
 
    declare type AnonymousFunction = (...args: any[]) => any
@@ -36,12 +36,5 @@ declare global {
       totalDocs: number
       totalPages: number
       // pagingCounter: number
-   }
-   interface Document {
-      documentMode?: unknown
-   }
-
-   interface Window {
-      MSStream?: unknown
    }
 }

@@ -11,13 +11,13 @@ const Navigation = () => {
    useEffect(() => {
       switch (user?.role) {
          case UserRoleEnum.STUDENT:
-            navigate(Paths.DEFAULT)
+            navigate(Paths.HOME)
             break
          case UserRoleEnum.STAFF:
             navigate(Paths.SIGNIN)
             break
          case UserRoleEnum.MANAGER:
-            navigate(Paths.MANAGER + '/' + Paths.MANAGER_DASHBOARD)
+            navigate(Paths.MANAGER_DASHBOARD)
             break
          default:
             navigate(Paths.SIGNIN)

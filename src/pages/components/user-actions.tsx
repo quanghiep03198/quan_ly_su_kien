@@ -31,7 +31,7 @@ const UserActions: React.FunctionComponent = () => {
       <DropdownMenu>
          <DropdownMenuTrigger className='flex items-center space-x-2 focus:border-none focus:outline-none sm:space-x-1'>
             <Avatar className='sm:hidden'>
-               <AvatarImage src={user?.avatar} className='w-full max-w-[3.5rem]' />
+               <AvatarImage src={user?.avatar} className='max-w-[3rem]' />
                <AvatarFallback>A</AvatarFallback>
             </Avatar>
             <span className='line-clamp-1 max-w-[128px] pl-1 pr-2 text-left text-sm font-normal'>{user?.name}</span>

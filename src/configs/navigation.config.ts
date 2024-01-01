@@ -20,7 +20,7 @@ export const ManagerNavigation: Array<MenuNavigationItem> = [
       name: 'Cộng tác viên',
       path: Paths.PARTICIPANTS_LIST
    },
-   { id: '4', icon: 'UsersRound', name: 'Sinh viên', path: Paths.ATENDEES_LIST },
+   { id: '4', icon: 'UsersRound', name: 'Sinh viên', path: Paths.STUDENTS_LIST },
 
    {
       id: '5',

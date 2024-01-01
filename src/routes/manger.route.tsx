@@ -1,30 +1,68 @@
+import { UserRoleEnum } from '@/common/constants/enums'
 import { Paths } from '@/common/constants/pathnames'
-import AuthGuard from '@/guard/auth.guard'
-import AppLayout from '@/pages/[role]/layout'
+import RoleGuard from '@/guard/role.guard'
 import { lazy } from 'react'
 import { RouteObject } from 'react-router-dom'
 
-const Dashboard = lazy(() => import('@/pages/[role]/(manager)/dashboard'))
-const EventList = lazy(() => import('@/pages/[role]/(manager)/events'))
-const CreateEvent = lazy(() => import('@/pages/[role]/(manager)/events/create'))
-const StaffList = lazy(() => import('@/pages/[role]/(manager)/participants'))
-const NotificationSettings = lazy(() => import('@/pages/[role]/(manager)/notification-settings'))
+const Dashboard = lazy(() => import('@/pages/[role]/(manager)/dashboard/page'))
+const EventList = lazy(() => import('@/pages/[role]/(manager)/events/page'))
+const CreateEvent = lazy(() => import('@/pages/[role]/(manager)/events/create-event/page'))
+const UpdateEvent = lazy(() => import('@/pages/[role]/(manager)/events/update-event/page'))
+const StaffList = lazy(() => import('@/pages/[role]/(manager)/participants/page'))
+const NotificationSettings = lazy(() => import('@/pages/[role]/(manager)/notification-settings/page'))
+const EventDetails = lazy(() => import('@/pages/[role]/(manager)/events/[id]/page'))
 
-const managerRoutes: RouteObject = {
-   path: Paths.MANAGER,
-   element: (
-      <AuthGuard>
-         <AppLayout />
-      </AuthGuard>
-   ),
-   children: [
-      { path: Paths.MANAGER_DASHBOARD, element: <Dashboard /> },
-      { path: Paths.EVENTS_LIST, element: <EventList /> },
-      { path: Paths.EVENTS_CREATE, element: <CreateEvent /> },
-      { path: Paths.PARTICIPANTS_LIST, element: <StaffList /> },
-      { path: Paths.STATISTICS_MANAGEMENT, element: <></> },
-      { path: Paths.NOTIFICATION_SETTINGS, element: <NotificationSettings /> }
-   ]
-}
+const managerRoutes: RouteObject[] = [
+   {
+      path: Paths.MANAGER_DASHBOARD,
+      element: (
+         <RoleGuard roles={[UserRoleEnum.MANAGER]}>
+            <Dashboard />
+         </RoleGuard>
+      )
+   },
+   {
+      path: Paths.EVENTS_LIST,
+      element: (
+         <RoleGuard roles={[UserRoleEnum.MANAGER, UserRoleEnum.STAFF]}>
+            <EventList />
+         </RoleGuard>
+      )
+   },
+
+   {
+      path: Paths.EVENTS_CREATE,
+      element: (
+         <RoleGuard roles={[UserRoleEnum.MANAGER, UserRoleEnum.STAFF]}>
+            <CreateEvent />
+         </RoleGuard>
+      )
+   },
+   {
+      path: Paths.EVENT_STATISTICS_DETAILS,
+      element: (
+         <RoleGuard roles={[UserRoleEnum.MANAGER, UserRoleEnum.STAFF]}>
+            <EventDetails />
+         </RoleGuard>
+      )
+   },
+   {
+      path: Paths.EVENTS_UPDATE,
+      element: (
+         <RoleGuard roles={[UserRoleEnum.MANAGER, UserRoleEnum.STAFF]}>
+            <UpdateEvent />
+         </RoleGuard>
+      )
+   },
+   {
+      path: Paths.PARTICIPANTS_LIST,
+      element: (
+         <RoleGuard roles={[UserRoleEnum.MANAGER]}>
+            <StaffList />
+         </RoleGuard>
+      )
+   },
+   { path: Paths.NOTIFICATION_SETTINGS, element: <NotificationSettings /> }
+]
 
 export default managerRoutes

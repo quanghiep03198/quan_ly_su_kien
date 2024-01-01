@@ -9,6 +9,7 @@ export type SelectFieldControlProps<T extends FieldValues> = {
    options: Array<Record<'label' | 'value', string>>
    description?: string
    control: Control<T>
+   className?: string
 } & React.ComponentProps<typeof Select>
 
 export function SelectFieldControl<T extends FieldValues>(props: SelectFieldControlProps<T>) {

@@ -1,6 +1,6 @@
 import { Tooltip as TooltipWrapper, TooltipContent, TooltipProvider, TooltipTrigger } from '..'
 
-type TooltipProps = { content: string; dir?: 'top'; asChild?: boolean } & React.PropsWithChildren
+type TooltipProps = { content: string; dir?: 'top'; asChild?: boolean; side?: 'top' | 'bottom' | 'right' | 'left' } & React.PropsWithChildren
 
 const Tooltip: React.FC<TooltipProps> = (props) => {
    return (
@@ -9,10 +9,16 @@ const Tooltip: React.FC<TooltipProps> = (props) => {
             <TooltipTrigger asChild={props.asChild} type='button'>
                {props.children}
             </TooltipTrigger>
-            <TooltipContent dir=''>{props.content}</TooltipContent>
+            <TooltipContent side={props.side} dir=''>
+               {props.content}
+            </TooltipContent>
          </TooltipWrapper>
       </TooltipProvider>
    )
+}
+
+Tooltip.defaultProps = {
+   side: 'top'
 }
 
 export default Tooltip

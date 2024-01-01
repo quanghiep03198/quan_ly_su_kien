@@ -8,9 +8,9 @@ type EventCardProps = {
 
 const EventCard: React.FC<EventCardProps> = ({ data }) => {
    return (
-      <Card className='max-w-[288px] overflow-clip transition-transform duration-200 ease-in-out hover:-translate-y-2 hover:shadow-lg'>
-         <CardHeader className='flex h-52 items-center justify-center bg-secondary p-0 text-muted-foreground/50'>
-            <Image src={data?.banner} height={208} width='100%' className='aspect-[16/9] max-w-full object-cover' />
+      <Card className='w-[288px] overflow-clip transition-transform duration-200 ease-in-out hover:-translate-y-2 hover:shadow-lg'>
+         <CardHeader className='h-52 space-y-0 p-2'>
+            <Image src={data?.banner} height={208} width='100%' className='aspect-[16/9] h-full max-w-full rounded-lg object-cover' />
          </CardHeader>
          <CardContent className='flex flex-col gap-y-2 px-3 py-2'>
             <Link className='line-clamp-1 font-medium' to='#'>
@@ -22,18 +22,15 @@ const EventCard: React.FC<EventCardProps> = ({ data }) => {
                   {data?.start_time?.toString()} - {data?.end_time?.toString()}
                </time>
             </CardDescription>
-            <CardDescription className='mb-1 line-clamp-3'>
-               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quos repudiandae quaerat aperiam. Voluptate sapiente esse nobis atque, tempora numquam
-               eaque, ipsa quaerat magni beatae sed debitis eum voluptas expedita tempore.
-            </CardDescription>
+            <CardDescription className='mb-1 line-clamp-3 min-h-[64px]'>{data?.description}</CardDescription>
             <CardDescription className='mb-2 inline-flex items-center space-x-2'>
                <Icon name='User' />
-               <span>John Wick</span>
+               <span>{data?.user?.name}</span>
             </CardDescription>
          </CardContent>
          <CardFooter className='mt-2 justify-center px-3'>
             <Button asChild size='sm' variant='default' className='w-full'>
-               <Link to=''>Chi tiết</Link>
+               <Link to={`/${data.id}`}>Chi tiết</Link>
             </Button>
          </CardFooter>
       </Card>

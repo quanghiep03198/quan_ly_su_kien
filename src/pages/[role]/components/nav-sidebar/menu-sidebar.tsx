@@ -1,18 +1,17 @@
 import { cn } from '@/common/utils/cn'
 import { Icon, buttonVariants } from '@/components/ui'
-import { breadcrumbs } from '@/configs/breadcrumbs'
+import { breadcrumbs } from '@/configs/breadcrumbs.config'
 import React from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, matchPath, useLocation } from 'react-router-dom'
 import tw from 'tailwind-styled-components'
 
 const SidebarMenu: React.FC<{ navigation: Array<MenuNavigationItem> }> = ({ navigation }) => {
    const { pathname } = useLocation()
-   console.log('first', breadcrumbs[pathname])
    return (
       <Menu className='mt-10'>
          <Menu>
             {navigation.map((item) => {
-               const isAlsoActive = !!breadcrumbs[pathname].find(({ path }) => path.includes(item.path))
+               const isAlsoActive = !!breadcrumbs[matchPath(item.path, pathname) as unknown as keyof typeof breadcrumbs]
                return (
                   <MenuItem key={item.id}>
                      <NavLink

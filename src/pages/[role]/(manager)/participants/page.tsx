@@ -7,8 +7,8 @@ import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import * as _ from 'lodash'
 import React, { useCallback, useState } from 'react'
 import { toast } from 'sonner'
-import CreateFormModal from './create-form-modal'
-import UpdateFormModal from './update-form-modal'
+import CreateFormModal from './components/create-form-modal'
+import UpdateFormModal from './components/update-form-modal'
 import { useAppSelector } from '@/redux/hook'
 
 const StaffsList: React.FunctionComponent = () => {
@@ -66,7 +66,7 @@ const StaffsList: React.FunctionComponent = () => {
          enableColumnFilter: true,
          filterFn: 'equals',
          cell: (metadata) => (
-            <Badge variant='secondary' className='whitespace-nowrap capitalize'>
+            <Badge variant='outline' className='whitespace-nowrap capitalize'>
                {UserRoleValues.get(metadata.getValue())}
             </Badge>
          )

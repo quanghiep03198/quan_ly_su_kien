@@ -18,7 +18,7 @@ import {
    Label,
    buttonVariants
 } from '../../..'
-import { PresetColors } from './preset-colors'
+import { PresetColors } from '@/common/constants/constants'
 
 type ColorPickerProps = {
    label: string
@@ -32,9 +32,6 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ editor, label, icon, type }) 
    const [currentColor, setCurrentColor] = useState<string>()
 
    useEffect(() => {
-      // const textStyleAttributes = editor.getAttributes('textStyle')
-      console.log(editor.getAttributes('highlight'))
-
       setCurrentColor(editor.getAttributes(type).color ?? 'transparent')
    }, [editor.getAttributes('textStyle')])
 

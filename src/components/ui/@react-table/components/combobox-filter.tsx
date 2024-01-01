@@ -1,9 +1,8 @@
-import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
-import { Button, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Popover, PopoverContent, PopoverTrigger, ScrollArea } from '@/components/ui'
 import { cn } from '@/common/utils/cn'
-import { useContext, useEffect, useState } from 'react'
+import { Button, Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Popover, PopoverContent, PopoverTrigger, ScrollArea } from '@/components/ui'
+import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
+import { useEffect, useState } from 'react'
 import { ComboboxProps } from '../../@shadcn/combobox'
-import { TableContext } from '../context/table.context'
 
 interface ComboboxFilterProps extends ComboboxProps {
    forceClose: boolean
@@ -13,7 +12,6 @@ interface ComboboxFilterProps extends ComboboxProps {
 export const ComboboxFilter: React.FC<ComboboxFilterProps> = ({ options, placeholder, className, onChange, forceClose, areAllFiltersCleared }) => {
    const [open, setOpen] = useState(false)
    const [value, setValue] = useState('')
-   // console.log('areAllFiltersCleared', areAllFiltersCleared)
    useEffect(() => {
       if (forceClose === true) setOpen(false)
       if (areAllFiltersCleared) setValue(placeholder!)

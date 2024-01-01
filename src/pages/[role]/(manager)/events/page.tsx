@@ -1,14 +1,15 @@
+import { EventStatus } from '@/common/constants/enums'
 import { Paths } from '@/common/constants/pathnames'
 import useServerPagination from '@/common/hooks/use-server-pagination'
 import { EventType } from '@/common/types/entities'
-import { Box, Button, DataTable, DataTableRowActions, Icon, Typography } from '@/components/ui'
+import { Badge, Box, Button, DataTable, DataTableRowActions, Icon, Typography } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { useDeleteEventMutation, useGetEventsQuery } from '@/redux/apis/event.api'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
-import React, { useCallback, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { toast } from 'sonner'
 import _ from 'lodash'
+import React, { useCallback, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 const EventList: React.FunctionComponent = () => {
    const [pagination, handlePaginate] = useServerPagination()
@@ -16,14 +17,12 @@ const EventList: React.FunctionComponent = () => {
    const [deleteEvent] = useDeleteEventMutation()
    const [selectedRowId, setSelectedRowId] = useState<number | null>(null)
    const [confirmDialogOpenState, setConfirmDialogOpenState] = useState<boolean>(false)
-   const columnHelper = createColumnHelper<EventType>()
-   const { pathname } = useLocation()
    const navigate = useNavigate()
 
-   const handleDeleteButtonClick = useCallback((id: number) => {
+   const handleDeleteButtonClick = (id: number) => {
       setConfirmDialogOpenState(true)
       setSelectedRowId(id)
-   }, [])
+   }
 
    const handleDeleteEvent = useCallback(async () => {
       try {
@@ -35,7 +34,9 @@ const EventList: React.FunctionComponent = () => {
       } finally {
          setSelectedRowId(null)
       }
-   }, [])
+   }, [selectedRowId])
+
+   const columnHelper = createColumnHelper<EventType>()
 
    const columns = [
       columnHelper.accessor('name', {
@@ -67,13 +68,30 @@ const EventList: React.FunctionComponent = () => {
       columnHelper.accessor('status', {
          header: 'Trạng thái',
          enableColumnFilter: true,
-         filterFn: 'equals'
+         filterFn: 'equals',
+         cell: ({ getValue }) => {
+            const value = getValue()
+            return (
+               <Badge className='whitespace-nowrap' variant={value === EventStatus.ACTIVE ? 'success' : 'destructive'}>
+                  {value}
+               </Badge>
+            )
+         }
       }),
       columnHelper.accessor('id', {
          header: 'Thao tác',
          cell: ({ cell }) => {
             const id = cell.getValue()
-            return <DataTableRowActions canEdit canDelete onEdit={() => navigate(`${pathname}/${id}`)} onDelete={() => handleDeleteButtonClick(id)} />
+            return (
+               <DataTableRowActions
+                  canViewDetails={true}
+                  canEdit={true}
+                  canDelete={true}
+                  onViewDetails={() => navigate(Paths.EVENT_STATISTICS_DETAILS.replace(':id', id))}
+                  onEdit={() => navigate(Paths.EVENTS_UPDATE.replace(':id', id))}
+                  onDelete={() => handleDeleteButtonClick(id)}
+               />
+            )
          }
       })
    ] as ColumnDef<EventType, any>[]
@@ -82,7 +100,7 @@ const EventList: React.FunctionComponent = () => {
       <Box className='flex h-full flex-col space-y-4'>
          <Box className='mb-4 flex items-center justify-between'>
             <Typography variant='heading6'>Danh sách sự kiện</Typography>
-            <Link to={`${Paths.MANAGER}/${Paths.EVENTS_CREATE}`}>
+            <Link to={Paths.EVENTS_CREATE}>
                <Button variant='outline' className='gap-x-2'>
                   <Icon name='PlusCircle' />
                   Thêm mới

@@ -1,14 +1,16 @@
-import { Editor } from '@tiptap/react'
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import tw from 'tailwind-styled-components'
-import { Box, Button, Form, Icon, InputFieldControl, Label, Popover, PopoverContent, PopoverTrigger, Typography } from '../../..'
+import Tooltip from '@/components/ui/@override/tooltip'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Editor } from '@tiptap/react'
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { Box, Button, Form, Icon, InputFieldControl, Popover, PopoverContent, PopoverTrigger, Typography } from '../../..'
 
 const UrlSchema = z.object({ url: z.string().url({ message: 'URL không hợp lệ' }).optional() })
 
 export const LinkPopover: React.FC<{ editor: Editor }> = ({ editor }) => {
+   const [open, setOpen] = useState<boolean>(false)
+
    const form = useForm<z.infer<typeof UrlSchema>>({
       resolver: zodResolver(UrlSchema)
    })
@@ -22,15 +24,19 @@ export const LinkPopover: React.FC<{ editor: Editor }> = ({ editor }) => {
       }
       // update link
       editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
+      form.reset()
+      setOpen(false)
    }
 
    return (
-      <Popover>
-         <PopoverTrigger asChild>
-            <Button variant='outline' size='icon' className='aspect-square h-8 w-8'>
-               <Icon name='Link' />
-            </Button>
-         </PopoverTrigger>
+      <Popover open={open} onOpenChange={setOpen}>
+         <Tooltip content='Chèn link'>
+            <PopoverTrigger asChild>
+               <Button variant='outline' size='icon' className='aspect-square h-8 w-8'>
+                  <Icon name='Link' />
+               </Button>
+            </PopoverTrigger>
+         </Tooltip>
          <PopoverContent className='w-80'>
             <Box className='grid gap-4'>
                <Box className='space-y-2'>
@@ -48,5 +54,3 @@ export const LinkPopover: React.FC<{ editor: Editor }> = ({ editor }) => {
       </Popover>
    )
 }
-
-const StyledForm = tw.form`grid gap-2`

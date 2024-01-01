@@ -1,7 +1,7 @@
 import { EventStatus } from '@/common/constants/enums'
 import { EventType } from '@/common/types/entities'
 import { Badge, Card, CardContent, CardHeader, CardTitle } from '@/components/ui'
-import { useGetEventsQuery } from '@/redux/apis/event.api'
+import { useGetEventsQuery, useGetRecentEventsQuery } from '@/redux/apis/event.api'
 
 const EventItem: React.FC<{ data: EventType }> = ({ data }) => {
    return (
@@ -20,20 +20,14 @@ const EventItem: React.FC<{ data: EventType }> = ({ data }) => {
 }
 
 export const RecentEvents: React.FunctionComponent = () => {
-   const { data } = useGetEventsQuery({ page: 1, limit: 100 })
+   const { data } = useGetRecentEventsQuery()
    return (
       <Card>
-         <CardHeader className=''>
+         <CardHeader>
             <CardTitle>Sự kiện gần đây</CardTitle>
          </CardHeader>
          <CardContent>
-            <div className='space-y-8'>
-               {Array.isArray(data?.docs) &&
-                  data?.docs
-                     .filter((item) => item.status === EventStatus.ACTIVE)
-                     .slice(0, 5)
-                     .map((item) => <EventItem key={item.id} data={item} />)}
-            </div>
+            <div className='space-y-8'>{Array.isArray(data) && data.map((item) => <EventItem key={item.id} data={item} />)}</div>
          </CardContent>
       </Card>
    )

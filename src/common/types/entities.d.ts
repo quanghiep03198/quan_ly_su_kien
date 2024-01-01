@@ -25,4 +25,18 @@ export type EventType = {
    created_at: Date | string
    updated_at: Date | string
    user_id: number
+   user?: Partial<UserType>
+}
+
+export type StatisticsType = {
+   eventInLastMonth: number
+   eventInCurrentMonth: number
+   percentInEvent: number
+   joinEventInCurrentMonth: number
+   joinEventInLastMonth: number
+   percentInJoinEvent: number
+   userInRoleStaff: number
+   feedBackInCurrentMonth: number
+   feedBackInLastMonth: number
+   percentInFeedBack: number
 }

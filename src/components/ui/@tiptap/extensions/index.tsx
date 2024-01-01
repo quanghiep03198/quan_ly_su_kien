@@ -54,7 +54,8 @@ export const extensions = [
    }),
    Highlight.configure({ multicolor: true }),
    Link.configure({
-      openOnClick: true,
+      openOnClick: false,
+
       HTMLAttributes: {
          class: 'text-sky-400 font-normal'
       }

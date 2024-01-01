@@ -2,6 +2,7 @@ import { Table } from '@tanstack/react-table'
 import { Box, Button, Icon, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../..'
 import { PaginationActions, PaginationHandler } from '@/common/hooks/use-server-pagination'
 import { useSearchParams } from 'react-router-dom'
+import Tooltip from '../../@override/tooltip'
 
 type DataTablePaginationProps<TData> = {
    table: Table<TData>
@@ -80,7 +81,7 @@ export default function TablePagination<TData>({
    return (
       <Box className='flex items-center justify-between py-2'>
          <Box className='flex-1 text-sm text-muted-foreground'>
-            {table.getFilteredSelectedRowModel().rows.length} / {table.getFilteredRowModel().rows.length} hàng được chọn.
+            {/* {table.getFilteredSelectedRowModel().rows.length} / {table.getFilteredRowModel().rows.length} hàng được chọn. */}
          </Box>
          <Box className='flex items-center space-x-6 lg:space-x-8'>
             <Box className='flex items-center space-x-2'>
@@ -106,19 +107,27 @@ export default function TablePagination<TData>({
             <Box className='flex w-[100px] items-center justify-center text-sm font-medium'>
                Trang {currentPage} / {pageCount}
             </Box>
-            <Box className='flex items-center space-x-2'>
-               <Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoFirstPage} disabled={!canPreviousPage}>
-                  <Icon name='ChevronsLeft' />
-               </Button>
-               <Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoPreviousPage} disabled={!canPreviousPage}>
-                  <Icon name='ChevronLeft' />
-               </Button>
-               <Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoNextPage} disabled={!canNextPage}>
-                  <Icon name='ChevronRight' />
-               </Button>
-               <Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoLastPage} disabled={!canNextPage}>
-                  <Icon name='ChevronsRight' />
-               </Button>
+            <Box className='flex items-center space-x-1'>
+               <Tooltip content='Trang đầu'>
+                  <Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoFirstPage} disabled={!canPreviousPage}>
+                     <Icon name='ChevronsLeft' />
+                  </Button>
+               </Tooltip>
+               <Tooltip content='Trang trước'>
+                  <Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoPreviousPage} disabled={!canPreviousPage}>
+                     <Icon name='ChevronLeft' />
+                  </Button>
+               </Tooltip>
+               <Tooltip content='Trang tiếp'>
+                  <Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoNextPage} disabled={!canNextPage}>
+                     <Icon name='ChevronRight' />
+                  </Button>
+               </Tooltip>
+               <Tooltip content='Trang cuối'>
+                  <Button variant='outline' size='icon' className='h-8 w-8' onClick={gotoLastPage} disabled={!canNextPage}>
+                     <Icon name='ChevronsRight' />
+                  </Button>
+               </Tooltip>
             </Box>
          </Box>
       </Box>

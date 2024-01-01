@@ -3,7 +3,7 @@ import LoadingProgressBar from '@/components/shared/loading-progress-bar'
 import { metadata } from '@/configs/metadata.config'
 import { useAppSelector } from '@/redux/hook'
 import React, { Suspense, useEffect } from 'react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, matchPath, useLocation, useNavigate } from 'react-router-dom'
 
 const RootLayout: React.FunctionComponent = () => {
    const { pathname } = useLocation()
@@ -12,7 +12,8 @@ const RootLayout: React.FunctionComponent = () => {
 
    useEffect(() => {
       if (authenticated && ([Paths.SIGNIN, Paths.SIGNUP] as Array<string>).includes(pathname)) navigate(-1)
-      document.title = metadata[pathname as keyof typeof metadata]
+      const currentPath = Object.keys(metadata).find((path) => !!matchPath(path, pathname))
+      document.title = metadata[currentPath as keyof typeof metadata]
    }, [pathname])
 
    return (

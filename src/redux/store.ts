@@ -5,6 +5,7 @@ import rootReducer from './root.reducer'
 import { authApi } from './apis/auth.api'
 import { eventApi } from './apis/event.api'
 import { participantApi } from './apis/participant.api'
+import { statisticApi } from './apis/statistics.api'
 
 const persistConfig = {
    key: 'root',
@@ -20,7 +21,7 @@ const store = configureStore({
          serializableCheck: {
             ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
          }
-      }).concat([authApi.middleware, eventApi.middleware, participantApi.middleware])
+      }).concat([authApi.middleware, eventApi.middleware, participantApi.middleware, statisticApi.middleware])
 })
 
 const persistor = persistStore(store)
