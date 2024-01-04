@@ -12,7 +12,7 @@ type PaginationProps = Pick<Pagination<EventType>, 'page' | 'totalPages' | 'hasN
 const Pagination: React.FC<PaginationProps> = ({ page, totalPages, hasNextPage, hasPrevPage, onPrefetch }) => {
    const navigate = useNavigate()
    const [params] = useSearchParams()
-   const currentPage = Boolean(params.get('page')) ? Number(params.get('page')) : 1
+   const currentPage = params.get('page') ? Number(params.get('page')) : 1
 
    const paginationRange = calculatePaginationRange(page, totalPages)
 

@@ -1,7 +1,6 @@
 import { cn } from '@/common/utils/cn'
 import { Icon, buttonVariants } from '@/components/ui'
 import Tooltip from '@/components/ui/@override/tooltip'
-import { breadcrumbs } from '@/configs/breadcrumbs.config'
 import React from 'react'
 import { NavLink, matchPath, useLocation } from 'react-router-dom'
 import tw from 'tailwind-styled-components'

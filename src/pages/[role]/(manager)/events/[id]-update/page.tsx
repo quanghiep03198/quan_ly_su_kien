@@ -5,24 +5,23 @@ import {
    Box,
    Button,
    DatePickerFieldControl,
+   Editor,
    Form,
+   FormItem,
+   FormMessage,
    Icon,
    InputFieldControl,
    Label,
    SelectFieldControl,
    TextareaFieldControl,
-   Typography,
-   Editor,
-   FormMessage,
-   FormItem
+   Typography
 } from '@/components/ui'
-import { EditorFieldControl } from '@/components/ui/@hook-form/edior-field-control'
 import { useGetEventDetailsQuery, useUpdateEventMutation } from '@/redux/apis/event.api'
 import { useGetParticipantsQuery } from '@/redux/apis/participant.api'
 import { EventSchema } from '@/schemas/event.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import { toast } from 'sonner'

@@ -4,7 +4,7 @@ import { cn } from '@/common/utils/cn'
 import { CalendarIcon } from '@radix-ui/react-icons'
 import { format } from 'date-fns'
 import * as React from 'react'
-import { DateRange, SelectRangeEventHandler } from 'react-day-picker'
+import { DateRange } from 'react-day-picker'
 import { Button, Calendar, Popover, PopoverContent, PopoverTrigger } from '..'
 
 type DateRangePickerProps = {
@@ -12,7 +12,7 @@ type DateRangePickerProps = {
    align?: React.ComponentProps<typeof PopoverContent>['align']
 } & React.HTMLAttributes<HTMLDivElement>
 
-export const DateRangePicker: React.FC<DateRangePickerProps> = ({ className, align = 'center', onSelect }) => {
+export const DateRangePicker: React.FC<DateRangePickerProps> = ({ className, align = 'center' }) => {
    const [date, setDate] = React.useState<DateRange | undefined>()
 
    const handleSelectDateRange = (from: Date, to: Date) => {

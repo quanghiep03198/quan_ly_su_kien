@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import useQueryParams from '@/common/hooks/use-query-params'
 import { EventType } from '@/common/types/entities'
 import { Box, Icon, Typography } from '@/components/ui'
@@ -5,16 +7,15 @@ import Pagination from '@/components/ui/@custom/pagination'
 import { useGetEventsQuery, usePrefetch } from '@/redux/apis/event.api'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
-import EventCard from '../components/shared/event-card'
-import SearchBox from '../components/shared/search-box'
-import Loading from '../components/shared/loading'
 import { EmptySection, EventList } from '../components/shared/list-sections'
+import Loading from '../components/shared/loading'
+import SearchBox from '../components/shared/search-box'
 
 const EventsBoard: React.FunctionComponent = () => {
    const [searchValue, setSearchValue] = useState<string>('')
    const [sortValue, setSortValue] = useState<string>('')
    const params = useQueryParams('page')
-   const currentPage = useMemo(() => (Boolean(params.page) ? Number(params.page) : 1), [params])
+   const currentPage = useMemo(() => (params.page ? Number(params.page) : 1), [params])
    const { data, isLoading } = useGetEventsQuery({
       page: currentPage,
       limit: 12,

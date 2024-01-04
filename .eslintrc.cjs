@@ -6,28 +6,25 @@ module.exports = {
    parser: '@typescript-eslint/parser',
    plugins: ['react-refresh'],
    rules: {
+      'no-unused-vars': 'off',
+      'react/jsx-uses-react': 'off',
+      'react/jsx-uses-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/ban-types': 'off',
+      'prefer-spread': 'off',
+      'no-sparse-arrays': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
+      'no-unsafe-optional-chaining': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      'react-hooks/exhaustive-deps': 'off',
+      '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       '@typescript-eslint/no-restricted-imports': [
-         'warn',
+         'off',
          {
             name: 'react-redux',
             importNames: ['useSelector', 'useDispatch'],
             message: 'Use typed hooks `useAppDispatch` and `useAppSelector` instead.'
-         }
-      ],
-      'prettier/prettier': [
-         'warn',
-         {
-            arrowParens: 'always',
-            semi: false,
-            trailingComma: 'none',
-            tabWidth: 3,
-            endOfLine: 'auto',
-            bracketSameLine: false,
-            useTabs: false,
-            singleQuote: true,
-            printWidth: 160,
-            jsxSingleQuote: true
          }
       ]
    }

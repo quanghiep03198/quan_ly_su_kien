@@ -1,15 +1,16 @@
+/* eslint-disable */
+
 import './styles/index.css'
 
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { Toaster } from 'sonner'
+import { Theme } from './common/constants/enums'
 import { ThemeProvider } from './components/providers/theme-provider'
 import { persistor, store } from './redux/store'
 import Router from './routes'
-import { GoogleOAuthProvider } from '@react-oauth/google'
-import { Theme } from './common/constants/enums'
-import { buttonVariants } from './components/ui'
 
 const theme = (localStorage.getItem('theme') ?? 'system') as Theme
 

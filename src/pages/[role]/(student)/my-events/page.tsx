@@ -1,20 +1,20 @@
+/* eslint-disable */
+
 import useQueryParams from '@/common/hooks/use-query-params'
 import { EventType } from '@/common/types/entities'
 import { Box, Icon, Typography } from '@/components/ui'
 import Pagination from '@/components/ui/@custom/pagination'
 import { useGetEventsQuery, usePrefetch } from '@/redux/apis/event.api'
 import _ from 'lodash'
-import React, { useCallback, useMemo, useState } from 'react'
-import Loading from '../components/shared/loading'
+import { useCallback, useMemo, useState } from 'react'
 import { EmptySection, EventList } from '../components/shared/list-sections'
+import Loading from '../components/shared/loading'
 
-type Props = {}
-
-const MyEvents = (props: Props) => {
-   const [searchValue, setSearchValue] = useState<string>('')
-   const [sortValue, setSortValue] = useState<string>('')
+const MyEvents = () => {
+   const [searchValue] = useState<string>('')
+   const [sortValue] = useState<string>('')
    const params = useQueryParams('page')
-   const currentPage = useMemo(() => (Boolean(params.page) ? Number(params.page) : 1), [params])
+   const currentPage = useMemo(() => (params.page ? Number(params.page) : 1), [params])
    const { data, isLoading } = useGetEventsQuery({
       page: currentPage,
       limit: 12,

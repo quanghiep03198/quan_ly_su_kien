@@ -48,7 +48,7 @@ export function InputFieldControl<T extends FieldValues>(
                         placeholder={placeholder}
                         ref={(e) => {
                            field.ref(e)
-                           if (!!resolvedRef) resolvedRef.current = e
+                           if (resolvedRef) resolvedRef.current = e
                         }}
                         disabled={disabled}
                         type={type}

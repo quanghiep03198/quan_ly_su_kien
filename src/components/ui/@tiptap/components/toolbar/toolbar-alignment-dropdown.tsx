@@ -1,11 +1,9 @@
-import React from 'react'
-import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger, Icon, buttonVariants } from '../../..'
-import Tooltip from '../../../@override/tooltip'
-import { Editor } from '@tiptap/react'
-import { IconProps } from '../../../@shadcn/icon'
 import { cn } from '@/common/utils/cn'
-
-type Props = {}
+import { Editor } from '@tiptap/react'
+import React from 'react'
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger, Icon } from '../../..'
+import Tooltip from '../../../@override/tooltip'
+import { IconProps } from '../../../@shadcn/icon'
 
 type AlignmentOption = {
    icon: IconProps['name']

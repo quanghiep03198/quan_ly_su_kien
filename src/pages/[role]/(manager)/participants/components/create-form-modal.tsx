@@ -1,23 +1,10 @@
 import { UserRoleValues } from '@/common/constants/constants'
 import ErrorBoundary from '@/components/exceptions/error-boundary'
-import {
-   Box,
-   Button,
-   Dialog,
-   DialogContent,
-   DialogDescription,
-   DialogFooter,
-   DialogHeader,
-   Form,
-   Input,
-   InputFieldControl,
-   SelectFieldControl
-} from '@/components/ui'
-import { useCreateEventMutation } from '@/redux/apis/event.api'
+import { Box, Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, Form, InputFieldControl, SelectFieldControl } from '@/components/ui'
 import { useAddParticipantMutation } from '@/redux/apis/participant.api'
 import { UserSchema } from '@/schemas/user.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useRef } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'

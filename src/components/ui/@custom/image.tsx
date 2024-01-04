@@ -29,7 +29,7 @@ export const Image: React.FC<ImageProps> = (props) => {
             width={props.width}
             height={props.height}
          />
-         {!Boolean(props.fallback) && (
+         {!props.fallback && (
             <div
                className='!m-0 items-center justify-center rounded-lg bg-accent/50'
                style={{ width: props.width, height: props.height, display: error ? 'flex' : 'none' }}

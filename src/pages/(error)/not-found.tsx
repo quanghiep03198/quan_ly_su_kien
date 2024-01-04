@@ -1,14 +1,14 @@
+/* eslint-disable */
+
 import { Paths } from '@/common/constants/pathnames'
 import { Button, Icon } from '@/components/ui'
 import { Box } from '@/components/ui/@custom/box'
 import { Typography } from '@/components/ui/@custom/typography'
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import tw from 'tailwind-styled-components'
 
 const NotFound: React.FunctionComponent = () => {
-   const navigate = useNavigate()
-
    return (
       <Box className='relative mx-auto flex h-screen w-full max-w-full flex-col items-center justify-center gap-y-6'>
          <Code>404</Code>

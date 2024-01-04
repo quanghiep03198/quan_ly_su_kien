@@ -23,7 +23,7 @@ const AddAttendeeFormModal: React.FC<AddAttendeeFormModalProps> = (props) => {
 
    const handleAddAttendee = async (data: FormValue) => {
       try {
-         await addAttendee({ ...data, event_id: id }).unwrap()
+         await addAttendee({ ...data, event_id: id! }).unwrap()
          toast.success('Add sinh viên tham gia thành công')
       } catch (error) {
          const errorResponse = error as ErrorResponse

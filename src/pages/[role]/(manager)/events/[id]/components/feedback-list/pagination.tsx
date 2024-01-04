@@ -6,7 +6,7 @@ import * as qs from 'qs'
 const FeedbackListPagination: React.FC<Pick<Pagination<FeedbackType>, 'hasNextPage' | 'hasPrevPage' | 'totalPages' | 'totalDocs'>> = (props) => {
    const [params] = useSearchParams()
    const navigate = useNavigate()
-   const currentPage = Boolean(params.get('page')) ? Number(params.get('page')) : 1
+   const currentPage = params.get('page') ? Number(params.get('page')) : 1
    return (
       <Box className='flex items-center gap-x-4 text-xs'>
          {currentPage}/{props.totalPages ?? 1} trong tổng số {new Intl.NumberFormat().format(props.totalDocs || 0)}

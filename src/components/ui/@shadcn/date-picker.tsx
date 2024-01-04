@@ -6,7 +6,7 @@ import { Calendar } from '@/components/ui/@shadcn/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '..'
 import { useState } from 'react'
 
-export const DatePicker = ({ className, onSelect }: { className: string; onSelect?: any }) => {
+export const DatePicker = ({ className }: { className: string; onSelect?: any }) => {
    const [date, setDate] = useState<Date>()
 
    return (

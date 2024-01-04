@@ -69,11 +69,11 @@ export const eventApi = createApi({
          }),
          createEvent: build.mutation({
             query: (payload) => ({ url: '/event', method: 'POST', data: payload }),
-            invalidatesTags: (_result, error, _arg) => (!!error ? [] : tagTypes)
+            invalidatesTags: (_result, error, _arg) => (error ? [] : tagTypes)
          }),
          updateEvent: build.mutation({
             query: ({ id, payload }) => ({ url: '/event/' + id, method: 'PUT', data: payload }),
-            invalidatesTags: (_result, error, _arg) => (!!error ? [] : tagTypes)
+            invalidatesTags: (_result, error, _arg) => (error ? [] : tagTypes)
          }),
          getEventStatistics: build.query({
             query: () => ({ url: '/eventStatistics', method: 'GET' }),
@@ -81,7 +81,7 @@ export const eventApi = createApi({
          }),
          deleteEvent: build.mutation({
             query: (id) => ({ url: '/event/' + id, method: 'DELETE' }),
-            invalidatesTags: (_result, error) => (!!error ? [] : tagTypes)
+            invalidatesTags: (_result, error) => (error ? [] : tagTypes)
          })
       }
    }

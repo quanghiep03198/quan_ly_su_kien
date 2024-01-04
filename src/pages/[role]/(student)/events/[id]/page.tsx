@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Paths } from '@/common/constants/pathnames'
 import { Badge, Box, Button, Icon } from '@/components/ui'
 import { useGetAttendeeInfoQuery } from '@/redux/apis/attendance.api'
@@ -16,9 +18,9 @@ import { UserType } from '@/common/types/entities'
 
 const EventDetails: React.FunctionComponent = () => {
    const { id } = useParams()
-   const { data: eventDetails, isLoading } = useGetEventDetailsQuery(id!)
+   const { data: eventDetails } = useGetEventDetailsQuery(id!)
    const { user, authenticated } = useAppSelector((state) => state.auth)
-   const [participateInEvent, { isSuccess }] = useParticipateInEventMutation()
+   const [participateInEvent] = useParticipateInEventMutation()
    const { data: attendeeInfo } = useGetAttendeeInfoQuery(id!, { skip: !authenticated })
    const [openFeedbackFormState, setOpenFeedbackFormState] = useState<boolean>(false)
 
@@ -49,7 +51,7 @@ const EventDetails: React.FunctionComponent = () => {
                         <Icon name='Reply' /> Feedback
                      </Button>
                   )}
-                  {Boolean(attendeeInfo) ? (
+                  {attendeeInfo ? (
                      <Badge variant='success' className='h-9 gap-x-2'>
                         <Icon name='CheckCircle' /> Đã đăng ký
                      </Badge>

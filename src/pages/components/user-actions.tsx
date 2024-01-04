@@ -13,7 +13,6 @@ import {
 } from '@/components/ui'
 import { useAppDispatch, useAppSelector } from '@/redux/hook'
 import { signout } from '@/redux/slices/auth.slice'
-import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
 const UserActions: React.FunctionComponent = () => {

@@ -21,7 +21,7 @@ export const feedbackApi = createApi({
       }),
       createFeedback: build.mutation<unknown, { event_id: string | number; content: string }>({
          query: (payload) => ({ url: '/feedback', method: 'POST', data: payload }),
-         invalidatesTags: (_result, error, _args) => (Boolean(error) ? [] : tagTypes)
+         invalidatesTags: (_result, error, _args) => (error ? [] : tagTypes)
       })
    })
 })

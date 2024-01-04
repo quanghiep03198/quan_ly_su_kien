@@ -1,10 +1,11 @@
+/* eslint-disable */
+
 import { EditorContent, useEditor } from '@tiptap/react'
+import React, { memo } from 'react'
 import { Box, ScrollArea } from '..'
 import BubbleMenu from './components/bubble-menu'
 import Toolbar from './components/toolbar'
 import { extensions } from './extensions'
-import React, { memo, useCallback, useEffect, useRef } from 'react'
-import { debounce } from 'lodash'
 
 export interface EditorProps {
    onUpdate: React.Dispatch<React.SetStateAction<{ value: string; isEmpty: boolean }>>
@@ -25,7 +26,7 @@ export const Editor: React.FC<EditorProps> = memo(({ content, id, disabled, name
             }
          },
          enableCoreExtensions: true,
-         editable: !Boolean(disabled),
+         editable: !disabled,
          onUpdate: ({ editor }) => {
             if (handleUpdate) handleUpdate({ value: editor.getHTML(), isEmpty: editor.isEmpty })
          }

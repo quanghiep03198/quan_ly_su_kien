@@ -1,4 +1,4 @@
-import { Box, Button, DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, Icon } from '@/components/ui'
+import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger, Icon } from '@/components/ui'
 import React from 'react'
 
 const Notification: React.FunctionComponent = () => {
@@ -15,10 +15,6 @@ const Notification: React.FunctionComponent = () => {
          </DropdownMenuContent>
       </DropdownMenu>
    )
-}
-
-const NotificationItem: React.FC<any> = () => {
-   return <Box></Box>
 }
 
 export default Notification

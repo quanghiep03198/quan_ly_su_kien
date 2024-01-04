@@ -49,8 +49,8 @@ export default function useServerPagination(): [PaginationStateType, PaginationH
    const limit = params.get('limit')
 
    const initialState: PaginationStateType = {
-      page: Boolean(page) ? Number(params.get('page')) : 1,
-      limit: Boolean(limit) ? Number(params.get('limit')) : 10
+      page: page ? Number(params.get('page')) : 1,
+      limit: limit ? Number(params.get('limit')) : 10
    }
 
    const [paginationState, dispatch] = useReducer(reducer, initialState)

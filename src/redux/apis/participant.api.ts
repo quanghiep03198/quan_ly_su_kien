@@ -1,9 +1,8 @@
-import { createApi } from '@reduxjs/toolkit/query/react'
-import axiosBaseQuery from '../helper'
-import { UserType } from '@/common/types/entities'
 import { PaginationStateType } from '@/common/hooks/use-server-pagination'
-import { DefaultPaginationData } from '@/common/constants/constants'
+import { UserType } from '@/common/types/entities'
+import { createApi } from '@reduxjs/toolkit/query/react'
 import _ from 'lodash'
+import axiosBaseQuery from '../helper'
 
 type Participant = Omit<UserType, 'password'>
 type CreateParticipantPayload = Omit<UserType, 'id' | 'password'>

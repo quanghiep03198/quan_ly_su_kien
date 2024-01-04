@@ -20,7 +20,7 @@ export const attendanceApi = createApi({
                return { ...response.metadata, docs: response.metadata?.docs?.map((doc) => doc.user) } as Pagination<UserType>
             },
             providesTags: (result, _error, _arg) => {
-               return !!result ? [...result.docs?.map(({ id }) => ({ type: 'Attendance' as const, id }))] : tagTypes
+               return result ? [...result.docs?.map(({ id }) => ({ type: 'Attendance' as const, id }))] : tagTypes
             }
          }),
          addAttendance: build.mutation<unknown, { email: string; event_id: string | number }>({

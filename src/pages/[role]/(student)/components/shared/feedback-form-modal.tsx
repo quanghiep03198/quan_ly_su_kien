@@ -1,12 +1,10 @@
 import { UserType } from '@/common/types/entities'
 import {
-   AlertDialogHeader,
    Box,
    Button,
    Dialog,
    DialogContent,
    DialogDescription,
-   DialogFooter,
    DialogHeader,
    DialogTitle,
    Form,

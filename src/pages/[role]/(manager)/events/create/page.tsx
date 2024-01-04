@@ -1,3 +1,4 @@
+import { UserType } from '@/common/types/entities'
 import { createFormData } from '@/common/utils/formdata'
 import {
    Box,
@@ -32,7 +33,7 @@ const CreateEvent = () => {
    const [editorState, setEditorState] = useState<{ value: string; isEmpty: boolean }>({ value: '', isEmpty: true })
 
    const heldersList = useMemo<HelderOptions>(() => {
-      const helders = participants?.docs ?? []
+      const helders = (participants as Pagination<UserType>)?.docs ?? []
       return helders.map((helder) => ({ value: helder?.id, label: helder?.name }))
    }, [participants])
 
