@@ -57,10 +57,7 @@ const Feedback: React.FC<{ data: FeedbackType }> = ({ data }) => {
                {/* <StarRating /> */}
             </CardHeader>
             <CardContent className='spacy-y-0 py-0'>
-               <Paragraph>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime esse harum nostrum rerum suscipit quia debitis quas cupiditate! Esse neque
-                  corrupti quas. Inventore excepturi deserunt id aperiam? Doloremque, totam facere.
-               </Paragraph>{' '}
+               <Paragraph>{data.content}</Paragraph>{' '}
             </CardContent>
          </Card>
       </Link>
