@@ -11,7 +11,7 @@ const Navigation = () => {
    useEffect(() => {
       switch (user?.role) {
          case UserRoleEnum.STUDENT:
-            navigate(Paths.HOME)
+            navigate(Paths.EVENTS_BOARD)
             break
          case UserRoleEnum.STAFF:
             navigate(Paths.SIGNIN)

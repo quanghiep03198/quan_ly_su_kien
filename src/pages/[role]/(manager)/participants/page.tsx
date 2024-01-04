@@ -1,23 +1,26 @@
 import { UserRoleValues } from '@/common/constants/constants'
-import useServerPagination from '@/common/hooks/use-server-pagination'
 import { UserType } from '@/common/types/entities'
 import { Avatar, AvatarFallback, AvatarImage, Badge, Box, Button, DataTable, DataTableRowActions, Icon, Typography } from '@/components/ui'
 import { useDeleteParticipantMutation, useGetParticipantsQuery } from '@/redux/apis/participant.api'
+import { useAppSelector } from '@/redux/hook'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
-import * as _ from 'lodash'
-import React, { useCallback, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import CreateFormModal from './components/create-form-modal'
 import UpdateFormModal from './components/update-form-modal'
-import { useAppSelector } from '@/redux/hook'
+import { UserRoleEnum } from '@/common/constants/enums'
 
 const StaffsList: React.FunctionComponent = () => {
-   const [paginationState, handlePaginate] = useServerPagination()
    const user = useAppSelector((state) => state.auth.user)
-   const { data, isLoading } = useGetParticipantsQuery({ page: paginationState.page, limit: paginationState.limit })
+   const { data, isLoading } = useGetParticipantsQuery({ pagination: false })
    const [createFormOpenState, setCreateFormOpenState] = useState<boolean>(false)
    const [updateFormOpenState, setUpdateFormOpenState] = useState<boolean>(false)
    const [participantToUpdate, setParticipantToUpdate] = useState<Partial<UserType>>({})
+
+   const participants = useMemo(
+      () => (Array.isArray(data) ? data.filter((participant) => participant.role === UserRoleEnum.STAFF && participant.id !== user?.id) : []),
+      [data]
+   )
 
    const [deleteParticipant] = useDeleteParticipantMutation()
    const columnHelper = createColumnHelper<Omit<UserType, 'password'>>()
@@ -98,17 +101,7 @@ const StaffsList: React.FunctionComponent = () => {
                   Thêm mới
                </Button>
             </Box>
-            <DataTable
-               data={data?.docs!?.filter((doc) => doc?.id !== user?.id)}
-               loading={isLoading}
-               columns={columns}
-               manualPagination={true}
-               onManualPaginate={handlePaginate}
-               paginationState={{
-                  ...paginationState,
-                  ..._.omit(data, ['docs'])
-               }}
-            />
+            <DataTable data={participants} loading={isLoading} columns={columns} />
          </Box>
          <CreateFormModal openState={createFormOpenState} onOpenStateChange={setCreateFormOpenState} />
          <UpdateFormModal openState={updateFormOpenState} onOpenStateChange={setUpdateFormOpenState} defaultValue={participantToUpdate} />

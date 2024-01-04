@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react'
+import { useReducer } from 'react'
 import { useLocation, useSearchParams } from 'react-router-dom'
 
 export enum PaginationActions {

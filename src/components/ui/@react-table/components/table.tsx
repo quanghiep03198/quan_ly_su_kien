@@ -2,12 +2,13 @@ import { Table as TableType, flexRender } from '@tanstack/react-table'
 import { useContext } from 'react'
 import tw from 'tailwind-styled-components'
 import { DataTableProps } from '.'
-import { ScrollArea, ScrollBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../..'
+import { Box, Icon, ScrollArea, ScrollBar, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../..'
 import { TableContext } from '../context/table.context'
 import { TableBodyLoading } from './table-body-loading'
 import { TableCellHead } from './table-cell-head'
+import { cn } from '@/common/utils/cn'
 
-interface TableProps<TData, TValue> extends Omit<DataTableProps<TData, TValue>, 'data'>, React.AllHTMLAttributes<HTMLTableElement> {
+interface TableProps<TData, TValue> extends Omit<DataTableProps<TData, TValue>, 'data' | 'slot'>, React.AllHTMLAttributes<HTMLTableElement> {
    table: TableType<TData>
 }
 
@@ -16,9 +17,9 @@ export default function TableDataGrid<TData, TValue>({ table, columns, loading, 
 
    return (
       <TableWrapper className='group w-full shadow'>
-         <ScrollArea className='h-[60vh]' onWheel={handleScroll}>
+         <ScrollArea className={cn({ 'h-[60vh]': table.getRowModel().rows.length > 0 })} onWheel={handleScroll}>
             <Table {...props}>
-               <TableHeader className='!sticky top-0 z-50'>
+               <TableHeader className='!sticky top-0 z-10'>
                   {table.getHeaderGroups().map((headerGroup) => (
                      <TableRow key={headerGroup.id} className='sticky top-0 hover:bg-background'>
                         {headerGroup.headers.map((header) => (
@@ -45,6 +46,13 @@ export default function TableDataGrid<TData, TValue>({ table, columns, loading, 
             </Table>
             <ScrollBar orientation='horizontal' />
          </ScrollArea>
+         {table.getRowModel().rows.length === 0 && (
+            <Box className='flex h-[25vh] w-full items-center justify-center'>
+               <Box className='flex items-center justify-center gap-x-2 text-muted-foreground'>
+                  <Icon name='PackageOpen' strokeWidth={1} size={32} /> Không có dữ liệu
+               </Box>
+            </Box>
+         )}
       </TableWrapper>
    )
 }

@@ -13,18 +13,19 @@ type TableToolbarProps<TData> = {
    isFiltered: boolean
    onGlobalFilterChange: React.Dispatch<React.SetStateAction<string>>
    onClearAllFilters: () => void
+   slot?: React.ReactNode
 }
 
-export function TableToolbar<TData>({ table, globalFilter, isFiltered, onGlobalFilterChange, onClearAllFilters }: TableToolbarProps<TData>) {
+export function TableToolbar<TData>(props: TableToolbarProps<TData>) {
+   const { table, globalFilter, isFiltered, slot, onGlobalFilterChange, onClearAllFilters } = props
    const { isFilterOpened, setIsFilterOpened } = useContext(TableContext)
 
    return (
       <Box className='flex items-center justify-between'>
          <GlobalFilter table={table} globalFilter={globalFilter} onGlobalFilterChange={onGlobalFilterChange} />
-
          <Box className='flex items-center gap-x-2'>
             <Tooltip content='Xóa lọc'>
-               <Button variant='outline' size='sm' onClick={onClearAllFilters} className={cn('inline-flex items-center gap-x-2', { hidden: isFiltered })}>
+               <Button variant='destructive' size='sm' onClick={onClearAllFilters} className={cn('inline-flex items-center gap-x-2', { hidden: isFiltered })}>
                   <Icon name='FilterX' /> Xóa lọc
                </Button>
             </Tooltip>
@@ -40,6 +41,7 @@ export function TableToolbar<TData>({ table, globalFilter, isFiltered, onGlobalF
                </Toggle>
             </Tooltip>
             <TableViewOptions table={table} />
+            {slot}
          </Box>
       </Box>
    )

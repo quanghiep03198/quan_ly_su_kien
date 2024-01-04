@@ -19,7 +19,6 @@ import { toast } from 'sonner'
 const UserActions: React.FunctionComponent = () => {
    const user = useAppSelector((state) => state.auth?.user)
    const dispatch = useAppDispatch()
-   const navigate = useNavigate()
 
    const handleSignout = () => {
       dispatch(signout())
@@ -30,8 +29,8 @@ const UserActions: React.FunctionComponent = () => {
    return (
       <DropdownMenu>
          <DropdownMenuTrigger className='flex items-center space-x-2 focus:border-none focus:outline-none sm:space-x-1'>
-            <Avatar className='sm:hidden'>
-               <AvatarImage src={user?.avatar} className='max-w-[3rem]' />
+            <Avatar className='h-8 w-8 gap-0 sm:hidden'>
+               <AvatarImage src={user?.avatar} className='aspect-square h-8 w-8 rounded-full' width={32} height={32} />
                <AvatarFallback>A</AvatarFallback>
             </Avatar>
             <span className='line-clamp-1 max-w-[128px] pl-1 pr-2 text-left text-sm font-normal'>{user?.name}</span>

@@ -31,10 +31,10 @@ export const Image: React.FC<ImageProps> = (props) => {
          />
          {!Boolean(props.fallback) && (
             <div
-               className='!m-0 items-center justify-center bg-muted-foreground/25'
+               className='!m-0 items-center justify-center rounded-lg bg-accent/50'
                style={{ width: props.width, height: props.height, display: error ? 'flex' : 'none' }}
             >
-               <Icon name='Image' size={24} />
+               <Icon name='Image' size={32} strokeWidth={1} className='text-muted-foreground/50' />
             </div>
          )}
       </>

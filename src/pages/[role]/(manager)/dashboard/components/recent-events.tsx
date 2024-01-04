@@ -1,7 +1,6 @@
-import { EventStatus } from '@/common/constants/enums'
 import { EventType } from '@/common/types/entities'
 import { Badge, Card, CardContent, CardHeader, CardTitle } from '@/components/ui'
-import { useGetEventsQuery, useGetRecentEventsQuery } from '@/redux/apis/event.api'
+import { useGetRecentEventsQuery } from '@/redux/apis/event.api'
 
 const EventItem: React.FC<{ data: EventType }> = ({ data }) => {
    return (

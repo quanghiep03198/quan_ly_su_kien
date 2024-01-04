@@ -1,23 +1,25 @@
 import { EventStatus } from '@/common/constants/enums'
 import { Paths } from '@/common/constants/pathnames'
-import useServerPagination from '@/common/hooks/use-server-pagination'
 import { EventType } from '@/common/types/entities'
 import { Badge, Box, Button, DataTable, DataTableRowActions, Icon, Typography } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import { useDeleteEventMutation, useGetEventsQuery } from '@/redux/apis/event.api'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
-import _ from 'lodash'
-import React, { useCallback, useState } from 'react'
+import { format } from 'date-fns'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 
+type EventListWithoutPagination = Exclude<OptionalPagination<EventType>, Pagination<EventType>>
+
 const EventList: React.FunctionComponent = () => {
-   const [pagination, handlePaginate] = useServerPagination()
-   const { data, isFetching } = useGetEventsQuery({ page: pagination.page, limit: pagination.limit })
+   const { data, isFetching } = useGetEventsQuery({ pagination: false })
    const [deleteEvent] = useDeleteEventMutation()
    const [selectedRowId, setSelectedRowId] = useState<number | null>(null)
    const [confirmDialogOpenState, setConfirmDialogOpenState] = useState<boolean>(false)
    const navigate = useNavigate()
+
+   const eventsList = useMemo(() => data as EventListWithoutPagination, [data])
 
    const handleDeleteButtonClick = (id: number) => {
       setConfirmDialogOpenState(true)
@@ -42,28 +44,37 @@ const EventList: React.FunctionComponent = () => {
       columnHelper.accessor('name', {
          header: 'Tên sự kiện',
          enableSorting: true,
-         enableColumnFilter: true
+         enableColumnFilter: true,
+         size: 160
       }),
       columnHelper.accessor('contact', {
          header: 'Số điện thoại liên hệ',
-         enableColumnFilter: true
+         enableColumnFilter: true,
+         size: 160
       }),
       columnHelper.accessor('location', {
          header: 'Địa điểm',
          enableColumnFilter: true,
-         minSize: 384
+         size: 160
       }),
-      columnHelper.accessor('attendances_count', {
-         header: 'Số người tham gia',
-         enableSorting: true,
-         enableColumnFilter: true,
-         filterFn: 'inNumberRange'
-      }),
+
       columnHelper.accessor('start_time', {
-         header: 'Thời gian bắt đầu'
+         header: 'Thời gian bắt đầu',
+         enableSorting: true,
+         enableMultiSort: true,
+         cell: ({ getValue }) => {
+            const value = getValue()
+            return format(value, 'dd/MM/yyyy')
+         }
       }),
       columnHelper.accessor('end_time', {
-         header: 'Thời gian kết thúc'
+         header: 'Thời gian kết thúc',
+         enableSorting: true,
+         enableMultiSort: true,
+         cell: ({ getValue }) => {
+            const value = getValue()
+            return format(value, 'dd/MM/yyyy')
+         }
       }),
       columnHelper.accessor('status', {
          header: 'Trạng thái',
@@ -71,6 +82,7 @@ const EventList: React.FunctionComponent = () => {
          filterFn: 'equals',
          cell: ({ getValue }) => {
             const value = getValue()
+            console.log(value)
             return (
                <Badge className='whitespace-nowrap' variant={value === EventStatus.ACTIVE ? 'success' : 'destructive'}>
                   {value}
@@ -107,17 +119,7 @@ const EventList: React.FunctionComponent = () => {
                </Button>
             </Link>
          </Box>
-         <DataTable
-            columns={columns}
-            data={data?.docs!}
-            loading={isFetching}
-            manualPagination={true}
-            paginationState={{
-               ...pagination,
-               ..._.omit(data, ['docs'])
-            }}
-            onManualPaginate={handlePaginate}
-         />
+         <DataTable columns={columns} data={eventsList!} loading={isFetching} />
          <ConfirmDialog
             open={confirmDialogOpenState}
             onOpenStateChange={setConfirmDialogOpenState}

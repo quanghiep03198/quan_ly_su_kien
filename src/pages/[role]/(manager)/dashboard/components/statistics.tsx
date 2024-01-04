@@ -1,8 +1,7 @@
 import { Box, Card, CardContent, CardDescription, CardHeader, CardTitle, Icon, Typography } from '@/components/ui'
 import { IconProps } from '@/components/ui/@shadcn/icon'
-import { useGetEventsQuery } from '@/redux/apis/event.api'
 import { useGetStatisticsQuery } from '@/redux/apis/statistics.api'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 type StatisticData = {
    title: string
@@ -14,26 +13,29 @@ type StatisticData = {
 const Statistics: React.FunctionComponent = () => {
    const { data } = useGetStatisticsQuery()
 
-   const statistics: Array<StatisticData> = [
-      {
-         title: 'Sự kiện đã tổ chức',
-         icon: 'CalendarCheck',
-         statisticValue: data?.eventInCurrentMonth ?? 0,
-         growPercentage: data?.percentInEvent ?? 0
-      },
-      {
-         title: 'Sinh viên',
-         icon: 'UsersRound',
-         statisticValue: data?.joinEventInCurrentMonth ?? 0,
-         growPercentage: data?.percentInJoinEvent ?? 0
-      },
-      {
-         title: 'Feedbacks',
-         icon: 'MessageSquare',
-         statisticValue: data?.feedBackInCurrentMonth ?? 0,
-         growPercentage: data?.percentInFeedBack ?? 0
-      }
-   ]
+   const statistics: Array<StatisticData> = useMemo(
+      () => [
+         {
+            title: 'Sự kiện đã tổ chức',
+            icon: 'CalendarCheck',
+            statisticValue: data?.eventInCurrentMonth ?? 0,
+            growPercentage: data?.percentInEvent ?? 0
+         },
+         {
+            title: 'Sinh viên',
+            icon: 'UsersRound',
+            statisticValue: data?.joinEventInCurrentMonth ?? 0,
+            growPercentage: data?.percentInJoinEvent ?? 0
+         },
+         {
+            title: 'Feedbacks',
+            icon: 'MessageSquare',
+            statisticValue: data?.feedBackInCurrentMonth ?? 0,
+            growPercentage: data?.percentInFeedBack ?? 0
+         }
+      ],
+      [data]
+   )
    return (
       <Box className='grid grid-cols-4 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2'>
          {statistics.map((stats, index) => (
@@ -46,7 +48,7 @@ const Statistics: React.FunctionComponent = () => {
                   <Typography variant='heading5' className='font-bold'>
                      {new Intl.NumberFormat().format(stats?.statisticValue)}
                   </Typography>
-                  <CardDescription>{stats?.growPercentage * 100}% so với tháng trước</CardDescription>
+                  <CardDescription>{stats?.growPercentage}% so với tháng trước</CardDescription>
                </CardContent>
             </Card>
          ))}

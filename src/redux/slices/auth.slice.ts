@@ -16,7 +16,8 @@ type SigninResponseData = HttpResponse<Omit<UserType, 'password'> & { token: str
  */
 export const signinWithGoogle = createAsyncThunk('auth/google', async (oauth2Token: string, { rejectWithValue, signal }) => {
    try {
-      const response = await axios.get(import.meta.env.VITE_API_URL + '/auth/google', { headers: { Authorization: oauth2Token }, signal })
+      const BASE_URL = import.meta.env.VITE_API_URL
+      const response = await axios.get(BASE_URL + '/auth/google', { headers: { Authorization: oauth2Token }, signal })
       return response.data
    } catch (error) {
       rejectWithValue(null)
@@ -25,6 +26,8 @@ export const signinWithGoogle = createAsyncThunk('auth/google', async (oauth2Tok
 
 const initialState: AuthSliceState = { user: null, authenticated: false }
 
+const authStateFields = ['id', 'email', 'name', 'phone', 'role', 'avatar'] as const
+
 export const authSlice = createSlice({
    name: 'auth',
    initialState,
@@ -32,12 +35,12 @@ export const authSlice = createSlice({
       signout: () => initialState
    },
    extraReducers: (build) => {
-      build.addCase(signinWithGoogle.fulfilled, (_state, action: PayloadAction<any>) => {
-         const payload = _.pick(action.payload?.metadata?.user, ['id', 'email', 'name', 'phone', 'role', 'avatar']) as Omit<UserType, 'password'>
+      build.addCase(signinWithGoogle.fulfilled, (_state, action: PayloadAction<Record<string, any>>) => {
+         const payload = _.pick(action.payload?.metadata?.user, authStateFields) as Omit<UserType, 'password'>
          return { user: payload, authenticated: true }
       })
       build.addMatcher(authApi.endpoints.signin.matchFulfilled, (_state: AuthSliceState, action: PayloadAction<SigninResponseData>) => {
-         const payload = _.pick(action.payload?.metadata, ['id', 'email', 'name', 'phone', 'role', 'avatar']) as Omit<UserType, 'password'>
+         const payload = _.pick(action.payload?.metadata, authStateFields) as Omit<UserType, 'password'>
          return {
             user: { ...payload, avatar: generatePicture(payload?.name) },
             authenticated: true

@@ -15,12 +15,12 @@ const PermissionDenied: React.FunctionComponent = () => {
          </Typography>
          <Paragraph>Xin lỗi, trang bạn truy cập yêu cầu được cấp quyền.</Paragraph>
          <Box className='flex items-center justify-center space-x-1'>
-            <Link to={Paths.HOME}>
-               <Button variant='default' className='inline-flex items-center gap-x-2'>
+            <Button asChild variant='default' className='inline-flex items-center gap-x-2'>
+               <Link to={Paths.REDIRECT}>
                   <Icon name='Home' />
                   Về trang chủ
-               </Button>
-            </Link>
+               </Link>
+            </Button>
             <Link to={Paths.HOME}>
                <Button variant='ghost' className='inline-flex items-center gap-x-2'>
                   <Icon name='ArrowRight' />

@@ -17,7 +17,9 @@ function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TVal
    return (
       <Collapsible open={isFilterCollapsed} onOpenChange={setIsFilterCollapsed} className='flex flex-col items-stretch divide-y divide-border'>
          <Box
-            className={cn('inline-flex cursor-auto select-none items-center gap-x-2 p-2')}
+            className={cn('inline-flex cursor-auto select-none items-center gap-x-2 p-2', {
+               'cursor-pointer hover:text-foreground': header.column.columnDef.enableSorting
+            })}
             onClick={() => {
                if (header.column.columnDef.enableSorting) {
                   header.column.toggleSorting(header.column.getIsSorted() === 'asc')
@@ -27,7 +29,7 @@ function TableCellHead<TData, TValue>({ header }: TableCellHeadProps<TData, TVal
             {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
             <SortStatus enableSorting={header.column.columnDef.enableSorting} isSorted={header.column.getIsSorted()} />
          </Box>
-         <CollapsibleContent>
+         <CollapsibleContent className='w-full'>
             <ColumnFilter column={header.column} />
          </CollapsibleContent>
       </Collapsible>

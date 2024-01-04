@@ -15,6 +15,11 @@ export enum EventStatus {
    INACTIVE = 'Đã kết thúc'
 }
 
+export enum JoinEventStatus {
+   NOT_YET = 0,
+   ALREADY = 1
+}
+
 export enum BreakPoints {
    SMALL = '(min-width: 320px) and (max-width: 599px)',
    MEDIUM = '(min-width: 600px) and (max-width: 1023px)',

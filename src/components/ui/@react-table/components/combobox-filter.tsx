@@ -26,7 +26,7 @@ export const ComboboxFilter: React.FC<ComboboxFilterProps> = ({ options, placeho
                aria-expanded={open}
                onClick={() => setOpen(true)}
                className={cn(
-                  'justify-between text-muted-foreground/50',
+                  'justify-between text-muted-foreground/50 hover:bg-transparent',
 
                   className
                )}
@@ -35,12 +35,12 @@ export const ComboboxFilter: React.FC<ComboboxFilterProps> = ({ options, placeho
                <CaretSortIcon className='ml-2 h-4 w-4 shrink-0 opacity-50' />
             </Button>
          </PopoverTrigger>
-         <PopoverContent className='w-56 p-0'>
+         <PopoverContent className='w-full p-0' align='start'>
             <Command>
                <CommandInput placeholder={placeholder} className='h-9' />
                <CommandEmpty>Không có kết quả phù hợp</CommandEmpty>
                <CommandGroup>
-                  <ScrollArea className='h-80'>
+                  <ScrollArea className='h-80 w-full'>
                      {options.map((option) => (
                         <CommandItem
                            key={option.value}

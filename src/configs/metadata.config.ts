@@ -1,8 +1,7 @@
 import { Paths } from '@/common/constants/pathnames'
 
 export const metadata = {
-   [Paths.HOME]: 'Trang chủ',
-   [Paths.HOME + '/:id']: 'Sự kiện',
+   [Paths.EVENTS_DETAILS + '/:id']: 'Sự kiện',
    /* AUTH */
    [Paths.SIGNIN]: 'Đăng nhập',
    [Paths.SIGNUP]: 'Đăng ký tài khoản',

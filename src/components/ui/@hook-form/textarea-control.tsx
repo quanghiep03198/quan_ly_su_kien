@@ -31,7 +31,6 @@ function TextareaFieldControl<T extends FieldValues>(
                      {...field}
                      id={id}
                      placeholder={placeholder}
-                     className='resize-none'
                      onChange={(e) => {
                         field.onChange(e)
                         if (onChange) onChange(e)

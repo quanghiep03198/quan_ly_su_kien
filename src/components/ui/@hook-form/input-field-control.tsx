@@ -4,9 +4,9 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Input, InputProps } from '../@shadcn/input'
 
 export interface InputFieldControlProps<T extends FieldValues> extends InputProps {
-   type: HTMLInputTypeAttribute
+   type?: HTMLInputTypeAttribute
    name: Path<T>
-   label: string
+   label?: string
    control: Control<T>
    description?: string
 }
@@ -15,7 +15,7 @@ export function InputFieldControl<T extends FieldValues>(
    props: InputFieldControlProps<T> & React.PropsWithoutRef<T> & React.RefAttributes<T>,
    ref: React.ForwardedRef<HTMLInputElement>
 ) {
-   const { label, name, className, disabled, type, control, placeholder, description, onChange, ...restProps } = props
+   const { label, name, className, disabled, control, placeholder, description, type = 'text', onChange, ...restProps } = props
    const localRef = useRef<typeof Input.prototype>(null)
    const resolvedRef = (ref ?? localRef) as typeof localRef
    const id = useId()
@@ -63,8 +63,7 @@ export function InputFieldControl<T extends FieldValues>(
       />
    )
 }
+
 InputFieldControl.displayName = 'InputFieldControl'
 
-const ForwardedRefInputFieldControl = forwardRef(InputFieldControl)
-
-export { ForwardedRefInputFieldControl }
+export const ForwardedRefInputFieldControl = forwardRef<HTMLInputElement, InputFieldControlProps<any>>(InputFieldControl)

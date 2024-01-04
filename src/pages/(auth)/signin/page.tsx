@@ -1,4 +1,4 @@
-import { Theme, UserRoleEnum } from '@/common/constants/enums'
+import { Theme } from '@/common/constants/enums'
 import { Paths } from '@/common/constants/pathnames'
 import useTheme from '@/common/hooks/use-theme'
 import { cn } from '@/common/utils/cn'
@@ -18,7 +18,6 @@ import { toast } from 'sonner'
 import { z } from 'zod'
 import { Divider } from '../../../components/ui/@custom/divider'
 import { Image, Paragraph, StyledForm } from './components/styled'
-import axiosInstance from '@/configs/axios.config'
 
 type FormValue = z.infer<typeof SigninSchema>
 const Signin: React.FunctionComponent = () => {
@@ -35,7 +34,7 @@ const Signin: React.FunctionComponent = () => {
             const data = (await dispatch(signinWithGoogle(`${response.token_type} ${response.access_token}`)).unwrap()) as unknown as HttpResponse<any>
             window.localStorage.setItem('access_token', `Bearer ${data?.metadata?.access_token}`)
             toast.success('Đăng nhập thành công')
-            navigate(Paths.REDIRECT)
+            navigate(Paths.HOME)
          } catch (error) {
             toast.error('Failed to login!')
          }
@@ -56,14 +55,14 @@ const Signin: React.FunctionComponent = () => {
 
    return (
       <>
-         <Box className=' flex h-screen w-full items-center justify-center overflow-hidden bg-background'>
-            <Box className='fixed left-auto right-auto top-0 flex w-full items-center justify-between gap-x-2 p-2'>
+         <Box className='flex w-full flex-col items-center justify-center overflow-auto bg-background px-4'>
+            <Box className='left-auto right-auto top-0 flex w-full items-center justify-between gap-x-2 py-2'>
                <Link className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'gap-x-2')} to='/'>
                   <Icon name='ArrowLeft' /> Trang chủ
                </Link>
                <ThemeSelect />
             </Box>
-            <Box className='flex flex-col items-center justify-center gap-10'>
+            <Box className='flex flex-col items-center justify-center gap-10 pb-10 sm:w-full md:w-full md:max-w-md'>
                <Image src={theme === Theme.LIGHT ? '/logo.png' : 'logo.webp'} />
                <Typography variant='heading5'>Đăng nhập vào tài khoản</Typography>
                <Box className='flex w-full flex-col items-stretch gap-y-6 rounded-xl border bg-background p-8'>

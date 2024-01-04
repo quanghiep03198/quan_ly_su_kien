@@ -28,9 +28,10 @@ export interface DataTableProps<TData, TValue> {
    manualFilter?: boolean
    paginationState?: Omit<Pagination<TData>, 'docs'>
    onManualPaginate?: PaginationHandler
+   slot?: React.ReactNode
 }
 
-export function DataTable<TData, TValue>({ data, columns, loading, manualPagination, paginationState, onManualPaginate }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ data, columns, loading, manualPagination, slot, paginationState, onManualPaginate }: DataTableProps<TData, TValue>) {
    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
    const [sorting, setSorting] = useState<SortingState>([])
    const [globalFilter, setGlobalFilter] = useState<string>('')
@@ -71,6 +72,7 @@ export function DataTable<TData, TValue>({ data, columns, loading, manualPaginat
                globalFilter={globalFilter}
                onGlobalFilterChange={setGlobalFilter}
                onClearAllFilters={clearAllFilter}
+               slot={slot}
             />
             <TableDataGrid table={table} columns={columns} loading={loading} />
             <TablePagination table={table} manualPagination={Boolean(manualPagination)} onManualPaginate={onManualPaginate} {...paginationState} />

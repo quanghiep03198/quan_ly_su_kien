@@ -8,6 +8,10 @@ import { Color } from '@tiptap/extension-color'
 import TextStyle from '@tiptap/extension-text-style'
 import Highlight from '@tiptap/extension-highlight'
 import Placeholder from '@tiptap/extension-placeholder'
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
 
 export const extensions = [
    StarterKit.configure({
@@ -25,6 +29,9 @@ export const extensions = [
             class: 'my-1'
          }
       },
+      blockquote: {
+         HTMLAttributes: { class: 'text-foreground border-none p-0' }
+      },
       bulletList: {
          HTMLAttributes: {
             class: 'list-disc text-foreground'
@@ -36,26 +43,22 @@ export const extensions = [
          }
       }
    }),
+   Placeholder.configure({
+      placeholder: 'Nhập gì đó ...'
+   }),
    Underline.configure(),
    TextAlign.configure({
       types: ['heading', 'paragraph']
    }),
-   Placeholder.configure({
-      // Use a placeholder:
-      // placeholder: 'Write something …'
-      // Use different placeholders depending on the node type:
-      placeholder: ({ node }) => {
-         if (node.type.name === 'heading') {
-            return 'Tiêu đề ...'
-         }
-
-         return 'Bắt đầu nhập ...'
-      }
+   Table.configure({
+      resizable: true
    }),
+   TableRow.configure(),
+   TableHeader.configure(),
+   TableCell.configure(),
    Highlight.configure({ multicolor: true }),
    Link.configure({
       openOnClick: false,
-
       HTMLAttributes: {
          class: 'text-sky-400 font-normal'
       }
@@ -64,7 +67,6 @@ export const extensions = [
    TextStyle.configure(),
    Color.configure(),
    Image.configure({
-      // inline: false,
       HTMLAttributes: {
          class: 'object-center object-cover max-w-full aspect-[16/9]'
       },

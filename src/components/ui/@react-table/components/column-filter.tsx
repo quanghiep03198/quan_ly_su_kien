@@ -3,8 +3,8 @@ import { Column } from '@tanstack/react-table'
 import { useContext, useMemo } from 'react'
 import { Box, DropdownSelect, buttonVariants } from '../..'
 import { TableContext } from '../context/table.context'
-import { DebouncedInput } from './debounced-input'
 import { ComboboxFilter } from './combobox-filter'
+import { DebouncedInput } from './debounced-input'
 
 type ColumnFilterProps<TData, TValue> = {
    column: Column<TData, TValue>
@@ -21,7 +21,8 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
       [column.getFacetedUniqueValues()]
    )
 
-   if (!column.columnDef.enableColumnFilter) return <Box className='h-9' />
+   if (!column.columnDef.enableColumnFilter)
+      return <Box className='flex h-9 select-none items-center justify-start bg-muted px-2 text-xs font-medium text-muted-foreground/50'></Box>
 
    switch (filterType) {
       case 'inNumberRange':
@@ -30,7 +31,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
                <Box className='flex items-stretch'>
                   <DebouncedInput
                      type='number'
-                     className={cn(buttonVariants({ variant: 'ghost' }), 'h-9 rounded-none border-none pl-2 text-xs')}
+                     className={cn(buttonVariants({ variant: 'ghost' }), 'h-9 rounded-none border-none pl-2 text-xs hover:text-foreground')}
                      min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
                      max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
                      value={(areAllFiltersCleared ? '' : (columnFilterValue as [number, number]))?.[0] ?? ''}
@@ -39,7 +40,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
                   />
                   <DebouncedInput
                      type='number'
-                     className={cn(buttonVariants({ variant: 'ghost' }), 'h-9 rounded-none border-none pl-2 text-xs')}
+                     className={cn(buttonVariants({ variant: 'ghost' }), 'h-9 rounded-none border-none pl-2 text-xs hover:text-foreground')}
                      min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
                      max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
                      value={(areAllFiltersCleared ? '' : (columnFilterValue as [number, number]))?.[1] ?? ''}
@@ -53,7 +54,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
       case 'equals':
          return (
             <DropdownSelect
-               className='h-9 min-w-[8rem] rounded-none border-none text-xs shadow-none focus:border-none'
+               className='h-9 min-w-[8rem] rounded-none border-none text-xs font-medium text-muted-foreground/50 shadow-none hover:text-foreground focus:border-none'
                placeholder='Chọn ...'
                options={sortedUniqueValues.map((value: any) => ({
                   label: value,
@@ -73,7 +74,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
                   label: value,
                   value: value
                }))}
-               className='h-9  w-56 rounded-none border-none pl-2 text-xs shadow-none'
+               className='h-9 w-full rounded-none border-none pl-2 text-xs shadow-none'
                onChange={(value) => column.setFilterValue(value)}
             />
          )

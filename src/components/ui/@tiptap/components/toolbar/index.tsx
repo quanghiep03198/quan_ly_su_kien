@@ -48,6 +48,18 @@ const Toolbar: React.FC<ToolbarPluginProps> = ({ editor }) => {
                   </Toggle>
                </Tooltip>
 
+               {/* Toggle quote */}
+               <Tooltip content='Block quote'>
+                  <Toggle
+                     size='sm'
+                     variant='outline'
+                     pressed={editor.isActive('blockquote')}
+                     onPressedChange={() => editor.chain().focus().toggleBlockquote().run()}
+                  >
+                     <Icon name='Quote' size={14} />
+                  </Toggle>
+               </Tooltip>
+
                {/* Toggle italic */}
                <Tooltip content='Nghiêng'>
                   <Toggle size='sm' variant='outline' pressed={editor.isActive('italic')} onPressedChange={() => editor.chain().focus().toggleItalic().run()}>

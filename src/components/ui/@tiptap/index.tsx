@@ -3,17 +3,18 @@ import { Box, ScrollArea } from '..'
 import BubbleMenu from './components/bubble-menu'
 import Toolbar from './components/toolbar'
 import { extensions } from './extensions'
-import React from 'react'
+import React, { memo, useCallback, useEffect, useRef } from 'react'
+import { debounce } from 'lodash'
 
 export interface EditorProps {
-   onEditorStateChange: React.Dispatch<React.SetStateAction<{ value: string; isEmpty: boolean }>>
+   onUpdate: React.Dispatch<React.SetStateAction<{ value: string; isEmpty: boolean }>>
    id?: string
    name?: string
    content?: string
    disabled?: boolean
 }
 
-const Editor: React.FC<EditorProps> = ({ content, id, disabled, name, onEditorStateChange }) => {
+export const Editor: React.FC<EditorProps> = memo(({ content, id, disabled, name, onUpdate: handleUpdate }) => {
    const editor = useEditor(
       {
          content,
@@ -26,7 +27,7 @@ const Editor: React.FC<EditorProps> = ({ content, id, disabled, name, onEditorSt
          enableCoreExtensions: true,
          editable: !Boolean(disabled),
          onUpdate: ({ editor }) => {
-            if (onEditorStateChange) onEditorStateChange({ value: editor.getHTML(), isEmpty: editor.isEmpty })
+            if (handleUpdate) handleUpdate({ value: editor.getHTML(), isEmpty: editor.isEmpty })
          }
       },
       [content]
@@ -46,11 +47,9 @@ const Editor: React.FC<EditorProps> = ({ content, id, disabled, name, onEditorSt
          {/* <FloatingMenu editor={editor}>This is the floating menu</FloatingMenu> */}
       </Box>
    )
-}
+})
 
 Editor.defaultProps = {
    content: '',
    id: 'editor'
 }
-
-export default Editor

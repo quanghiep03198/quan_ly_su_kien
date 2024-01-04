@@ -37,4 +37,6 @@ declare global {
       totalPages: number
       // pagingCounter: number
    }
+
+   declare type OptionalPagination<T> = Pagination<T> | Array<T>
 }

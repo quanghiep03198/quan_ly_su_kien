@@ -98,3 +98,12 @@ export const PresetColors = [
    '#ddd6fe',
    '#ede9fe'
 ]
+
+export const DefaultPaginationData: Partial<Pagination<unknown>> = {
+   docs: [],
+   hasNextPage: false,
+   hasPrevPage: false,
+   totalDocs: 0,
+   totalPages: 0
+   // pagingCounter: number
+}
