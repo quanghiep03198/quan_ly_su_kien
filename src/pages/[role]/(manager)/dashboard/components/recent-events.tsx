@@ -25,8 +25,12 @@ export const RecentEvents: React.FunctionComponent = () => {
          <CardHeader>
             <CardTitle>Sự kiện gần đây</CardTitle>
          </CardHeader>
-         <CardContent>
-            <div className='space-y-8'>{Array.isArray(data) && data.map((item) => <EventItem key={item.id} data={item} />)}</div>
+         <CardContent className='h-[calc(100%-4rem)]'>
+            {Array.isArray(data) && data.length > 0 ? (
+               <div className='space-y-8'>{Array.isArray(data) && data.map((item) => <EventItem key={item.id} data={item} />)}</div>
+            ) : (
+               <div className='flex h-full items-center justify-center text-muted-foreground'>Chưa có sự kiện nào gần đây</div>
+            )}
          </CardContent>
       </Card>
    )

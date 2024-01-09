@@ -19,7 +19,7 @@ export const Paths = {
    EVENTS_CREATE: '/manager/event/create',
    EVENTS_UPDATE: '/manager/events/:id/update',
    EVENT_STATISTICS_DETAILS: '/manager/events/:id',
-   PARTICIPANTS_LIST: '/manager/participants',
+   STAFFS_LIST: '/manager/participants',
    STUDENTS_LIST: '/manager/student-list',
    NOTIFICATION_SETTINGS: '/manager/notification-settings',
 

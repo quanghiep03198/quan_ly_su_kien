@@ -5,7 +5,7 @@ import { useCallback, useEffect } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import tw from 'tailwind-styled-components'
 import FeedbacksList from './components/feedback-list'
-import ParticipantsList from './components/participants-list'
+import ParticipantsList from './components/attendees-list'
 
 const EventDetails: React.FunctionComponent = () => {
    const { id } = useParams()
@@ -55,7 +55,7 @@ const EventDetails: React.FunctionComponent = () => {
             </TabsList>
          </Box>
          <TabsContent value='participants' className='mt-6 border-none outline-none ring-0'>
-            <ParticipantsList data={data?.attendances ?? []} />
+            <ParticipantsList />
          </TabsContent>
          <TabsContent value='feedback' className='mt-6 border-none outline-none ring-0'>
             <FeedbacksList data={data?.feedback ?? []} />

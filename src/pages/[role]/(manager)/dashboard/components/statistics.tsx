@@ -28,7 +28,7 @@ const Statistics: React.FunctionComponent = () => {
             growPercentage: data?.percentInJoinEvent ?? 0
          },
          {
-            title: 'Feedbacks',
+            title: 'Feedback',
             icon: 'MessageSquare',
             statisticValue: data?.feedBackInCurrentMonth ?? 0,
             growPercentage: data?.percentInFeedBack ?? 0

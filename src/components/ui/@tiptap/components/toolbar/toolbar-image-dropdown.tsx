@@ -18,6 +18,7 @@ import {
    InputFieldControl
 } from '../../..'
 import Tooltip from '../../../@override/tooltip'
+import { convertBase64 } from '@/common/utils/convert-base64'
 
 const UploadSchema = z.object({
    url: z.string().url('URL ảnh không hợp lệ').optional()
@@ -37,8 +38,9 @@ const ImageDropdown: React.FC<{ editor: Editor }> = ({ editor }) => {
       setOpen(false)
    }
 
-   const handleInsertImageFromDevice = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const url = URL.createObjectURL(e.target.files?.[0]!)
+   const handleInsertImageFromDevice = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.files?.[0]) return
+      const url = (await convertBase64(e.target.files?.[0])) as string
       editor.commands.setImage({ src: url })
    }
 

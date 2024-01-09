@@ -8,6 +8,8 @@ export type UserType = {
    avatar?: string
    phone: string
    role: UserRoleEnum
+   created_at: Date
+   updated_at: Date
 }
 
 export type EventType = {

@@ -11,8 +11,8 @@ export enum Theme {
 }
 
 export enum EventStatus {
-   ACTIVE = 'Đang diễn ra',
-   INACTIVE = 'Đã kết thúc'
+   ACTIVE = 1,
+   INACTIVE = 0
 }
 
 export enum JoinEventStatus {

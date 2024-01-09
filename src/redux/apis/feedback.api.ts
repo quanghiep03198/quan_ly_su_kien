@@ -22,8 +22,17 @@ export const feedbackApi = createApi({
       createFeedback: build.mutation<unknown, { event_id: string | number; content: string }>({
          query: (payload) => ({ url: '/feedback', method: 'POST', data: payload }),
          invalidatesTags: (_result, error, _args) => (error ? [] : tagTypes)
+      }),
+      updateFeedback: build.mutation<unknown, { id: number; payload: Partial<FeedbackType> }>({
+         query: ({ id, payload }) => ({ url: `/feedback/${id}`, method: 'PATCH', data: payload }),
+         invalidatesTags: (_result, error, _args) => (error ? [] : tagTypes)
+      }),
+      deleteFeedback: build.mutation<unknown, number>({
+         query: (id) => ({ url: `/feedback/${id}`, method: 'DELETE' }),
+         invalidatesTags: (_result, error, _args) => (error ? [] : tagTypes)
       })
    })
 })
 
-export const { useGetAllFeedbackByEventQuery, useGetFeedbackDetailsQuery, useCreateFeedbackMutation } = feedbackApi
+export const { useGetAllFeedbackByEventQuery, useGetFeedbackDetailsQuery, useCreateFeedbackMutation, useUpdateFeedbackMutation, useDeleteFeedbackMutation } =
+   feedbackApi

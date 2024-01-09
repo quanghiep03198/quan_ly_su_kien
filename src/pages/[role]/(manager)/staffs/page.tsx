@@ -1,41 +1,45 @@
 import { UserRoleValues } from '@/common/constants/constants'
+import { UserRoleEnum } from '@/common/constants/enums'
 import { UserType } from '@/common/types/entities'
 import { Avatar, AvatarFallback, AvatarImage, Badge, Box, Button, DataTable, DataTableRowActions, Icon, Typography } from '@/components/ui'
-import { useDeleteParticipantMutation, useGetParticipantsQuery } from '@/redux/apis/participant.api'
+import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
+import { useDeleteUserMutation, useGetUsersQuery } from '@/redux/apis/user.api'
 import { useAppSelector } from '@/redux/hook'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import React, { useMemo, useState } from 'react'
 import { toast } from 'sonner'
+import UpdateUserFormModal from '../components/shared/update-form-modal'
 import CreateFormModal from './components/create-form-modal'
-import UpdateFormModal from './components/update-form-modal'
-import { UserRoleEnum } from '@/common/constants/enums'
 
 const StaffsList: React.FunctionComponent = () => {
    const user = useAppSelector((state) => state.auth.user)
-   const { data, isLoading } = useGetParticipantsQuery({ pagination: false })
+   const { data, isLoading } = useGetUsersQuery({ pagination: false, role: UserRoleEnum.STAFF })
+   const [openConfirmState, setOpenConfirmState] = useState<boolean>(false)
    const [createFormOpenState, setCreateFormOpenState] = useState<boolean>(false)
    const [updateFormOpenState, setUpdateFormOpenState] = useState<boolean>(false)
-   const [participantToUpdate, setParticipantToUpdate] = useState<Partial<UserType>>({})
+   const [userToUpdate, setUserToUpdate] = useState<Partial<UserType>>({})
+   const [selectedRowId, setSelectedRowId] = useState<number | null>(null)
+   const participants = useMemo(() => (Array.isArray(data) ? data.filter((participant) => participant.id !== user?.id) : []), [data])
 
-   const participants = useMemo(
-      () => (Array.isArray(data) ? data.filter((participant) => participant.role === UserRoleEnum.STAFF && participant.id !== user?.id) : []),
-      [data]
-   )
-
-   const [deleteParticipant] = useDeleteParticipantMutation()
+   const [deleteParticipant] = useDeleteUserMutation()
    const columnHelper = createColumnHelper<Omit<UserType, 'password'>>()
 
-   const handleDeleteParticipant = async (id: number) => {
+   const handleDeleteUser = async () => {
       try {
-         await deleteParticipant(id).unwrap()
-         toast.success('Đã xóa cộng tác viên')
+         if (selectedRowId) {
+            await deleteParticipant(selectedRowId).unwrap()
+            toast.success('Đã xóa cộng tác viên')
+         }
       } catch (error) {
          toast.error('Xóa cộng tác viên thất bại')
+      } finally {
+         setOpenConfirmState(false)
+         setSelectedRowId(null)
       }
    }
 
    const handleUpdateButtonClick = (participant: Partial<UserType>) => {
-      setParticipantToUpdate(participant)
+      setUserToUpdate(participant)
       setUpdateFormOpenState(true)
    }
 
@@ -74,7 +78,6 @@ const StaffsList: React.FunctionComponent = () => {
             </Badge>
          )
       }),
-      ,
       columnHelper.accessor('id', {
          header: 'Thao tác',
          cell: (metadata) => {
@@ -84,7 +87,10 @@ const StaffsList: React.FunctionComponent = () => {
                   canEdit
                   canDelete
                   onEdit={() => handleUpdateButtonClick(metadata.row.original)}
-                  onDelete={() => handleDeleteParticipant(id)}
+                  onDelete={() => {
+                     setOpenConfirmState(true)
+                     setSelectedRowId(id)
+                  }}
                />
             )
          }
@@ -95,7 +101,7 @@ const StaffsList: React.FunctionComponent = () => {
       <>
          <Box className='flex flex-col items-stretch gap-y-6'>
             <Box className='flex items-center justify-between'>
-               <Typography variant='heading6'>Danh sách CTV</Typography>
+               <Typography variant='heading6'>Danh sách cộng tác viên</Typography>
                <Button variant='outline' className='gap-x-2' onClick={() => setCreateFormOpenState(true)}>
                   <Icon name='PlusCircle' />
                   Thêm mới
@@ -103,8 +109,16 @@ const StaffsList: React.FunctionComponent = () => {
             </Box>
             <DataTable data={participants} loading={isLoading} columns={columns} />
          </Box>
+
+         <ConfirmDialog
+            open={openConfirmState}
+            onOpenStateChange={setOpenConfirmState}
+            title='Bạn chắc chắn muốn tiếp tục?'
+            description='Hành động này không thể khôi phục. Người dùng này sẽ bị xóa vĩnh viễn khỏi hệ thống.'
+            onConfirm={handleDeleteUser}
+         />
          <CreateFormModal openState={createFormOpenState} onOpenStateChange={setCreateFormOpenState} />
-         <UpdateFormModal openState={updateFormOpenState} onOpenStateChange={setUpdateFormOpenState} defaultValue={participantToUpdate} />
+         <UpdateUserFormModal openState={updateFormOpenState} onOpenStateChange={setUpdateFormOpenState} defaultValue={userToUpdate} />
       </>
    )
 }

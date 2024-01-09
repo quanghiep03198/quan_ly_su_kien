@@ -10,7 +10,8 @@ const Dashboard = lazy(() => import('@/pages/[role]/(manager)/dashboard/page'))
 const EventList = lazy(() => import('@/pages/[role]/(manager)/events/page'))
 const CreateEvent = lazy(() => import('@/pages/[role]/(manager)/events/create/page'))
 const UpdateEvent = lazy(() => import('@/pages/[role]/(manager)/events/[id]-update/page'))
-const StaffList = lazy(() => import('@/pages/[role]/(manager)/participants/page'))
+const StaffList = lazy(() => import('@/pages/[role]/(manager)/staffs/page'))
+const StudentsList = lazy(() => import('@/pages/[role]/(manager)/students/page'))
 const NotificationSettings = lazy(() => import('@/pages/[role]/(manager)/notification-settings/page'))
 const EventDetails = lazy(() => import('@/pages/[role]/(manager)/events/[id]/page'))
 
@@ -64,10 +65,18 @@ const managerRoutes: RouteObject = {
          )
       },
       {
-         path: Paths.PARTICIPANTS_LIST,
+         path: Paths.STAFFS_LIST,
          element: (
             <RoleGuard roles={[UserRoleEnum.MANAGER]}>
                <StaffList />
+            </RoleGuard>
+         )
+      },
+      {
+         path: Paths.STUDENTS_LIST,
+         element: (
+            <RoleGuard roles={[UserRoleEnum.MANAGER]}>
+               <StudentsList />
             </RoleGuard>
          )
       },

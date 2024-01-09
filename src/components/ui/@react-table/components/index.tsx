@@ -23,7 +23,7 @@ import TableToolbar from './table-toolbar'
 export interface DataTableProps<TData, TValue> {
    data: Array<TData>
    columns: Array<ColumnDef<TData, TValue>>
-   loading: boolean
+   loading?: boolean
    manualPagination?: boolean
    manualFilter?: boolean
    paginationState?: Omit<Pagination<TData>, 'docs'>
@@ -45,10 +45,10 @@ export function DataTable<TData, TValue>({ data, columns, loading, manualPaginat
          globalFilter
       },
       manualPagination,
+      globalFilterFn: fuzzyFilter,
       onSortingChange: setSorting,
       onColumnFiltersChange: setColumnFilters,
       onGlobalFilterChange: setGlobalFilter,
-      globalFilterFn: fuzzyFilter,
       getCoreRowModel: getCoreRowModel(),
       getPaginationRowModel: getPaginationRowModel(),
       getSortedRowModel: getSortedRowModel(),
@@ -68,7 +68,7 @@ export function DataTable<TData, TValue>({ data, columns, loading, manualPaginat
          <Box className='flex h-full flex-col items-stretch gap-y-4'>
             <TableToolbar
                table={table}
-               isFiltered={globalFilter.length === 0 && columnFilters.length === 0}
+               isFiltered={globalFilter.length !== 0 || columnFilters.length !== 0}
                globalFilter={globalFilter}
                onGlobalFilterChange={setGlobalFilter}
                onClearAllFilters={clearAllFilter}

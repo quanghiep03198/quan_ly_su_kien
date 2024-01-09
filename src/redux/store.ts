@@ -4,7 +4,7 @@ import storage from 'redux-persist/lib/storage'
 import rootReducer from './root.reducer'
 import { authApi } from './apis/auth.api'
 import { eventApi } from './apis/event.api'
-import { participantApi } from './apis/participant.api'
+import { userApi } from './apis/user.api'
 import { statisticApi } from './apis/statistics.api'
 import { feedbackApi } from './apis/feedback.api'
 import { attendanceApi } from './apis/attendance.api'
@@ -23,7 +23,7 @@ const store = configureStore({
          serializableCheck: {
             ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
          }
-      }).concat([authApi.middleware, eventApi.middleware, participantApi.middleware, attendanceApi.middleware, statisticApi.middleware, feedbackApi.middleware])
+      }).concat([authApi.middleware, eventApi.middleware, userApi.middleware, attendanceApi.middleware, statisticApi.middleware, feedbackApi.middleware])
 })
 
 const persistor = persistStore(store)

@@ -1,10 +1,12 @@
 import { UserRoleValues } from '@/common/constants/constants'
+import { UserRoleEnum } from '@/common/constants/enums'
+import { UserType } from '@/common/types/entities'
 import ErrorBoundary from '@/components/exceptions/error-boundary'
 import { Box, Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, Form, InputFieldControl, SelectFieldControl } from '@/components/ui'
-import { useAddParticipantMutation } from '@/redux/apis/participant.api'
+import { useUpdateUserMutation } from '@/redux/apis/user.api'
 import { UserSchema } from '@/schemas/user.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -12,26 +14,36 @@ import { z } from 'zod'
 
 type FormValue = z.infer<typeof UserSchema>
 
-export type Props = {
+type Props = {
    openState: boolean
+   defaultValue: Partial<UserType>
    onOpenStateChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const CreateFormModal: React.FC<Props> = (props) => {
+const UpdateUserFormModal: React.FC<Props> = (props) => {
    const form = useForm<FormValue>({
       resolver: zodResolver(UserSchema)
    })
-   const [addParticipant, { isLoading }] = useAddParticipantMutation()
-   const handleCreateEvent = async (data: FormValue) => {
+   const [updateParticipant, { isLoading }] = useUpdateUserMutation()
+
+   useEffect(() => {
+      form.reset(props.defaultValue)
+   }, [props.defaultValue])
+
+   const handleUpdateParticipant = async (data: FormValue) => {
       try {
-         const response = await addParticipant(data).unwrap()
+         await updateParticipant({ id: props.defaultValue?.id!, payload: data }).unwrap()
          form.reset()
          props.onOpenStateChange(!props.openState)
-         toast.success(response?.message)
+         toast.success('Dã cập nhật thông tin người dùng')
       } catch (error) {
-         toast.error('Thêm cộng tác viên thất bại')
+         toast.error('Cập nhật thông tin cộng tác viên thất bại')
       }
    }
+
+   const roleOptions = Array.from(UserRoleValues, ([value, label]) => {
+      if (value !== UserRoleEnum.STUDENT) return { value: value.toString(), label }
+   }) as Record<'label' | 'value', string>[]
 
    return (
       <Dialog open={props.openState} onOpenChange={props.onOpenStateChange}>
@@ -41,25 +53,18 @@ const CreateFormModal: React.FC<Props> = (props) => {
                <DialogDescription>Nhập các thông tin dưới đây để invite thêm cộng tác viên</DialogDescription>
                <ErrorBoundary>
                   <Form {...form}>
-                     <DialogForm onSubmit={form.handleSubmit(handleCreateEvent)} encType='multipart/form-data'>
+                     <DialogForm onSubmit={form.handleSubmit(handleUpdateParticipant)} encType='multipart/form-data'>
                         <InputFieldControl name='name' control={form.control} label='Họ tên' />
                         <InputFieldControl name='email' control={form.control} label='Email' />
-                        <InputFieldControl name='password' control={form.control} label='Mật khẩu' type='password' />
                         <InputFieldControl name='phone' control={form.control} label='Số điện thoại' />
-                        <SelectFieldControl
-                           name='role'
-                           control={form.control}
-                           options={Array.from(UserRoleValues, ([value, label]) => ({ value: value.toString(), label }))}
-                           label='Vai trò'
-                           placeholder='Vai trò'
-                        />
+                        <SelectFieldControl name='role' control={form.control} options={roleOptions} label='Trạng thái' placeholder='Trạng thái' />
 
                         <DialogFooter className='mt-6 flex flex-row items-center justify-end space-x-2'>
                            <Button type='button' variant='outline' onClick={() => props.onOpenStateChange(!props.openState)}>
                               Hủy
                            </Button>
                            <Button type='submit' disabled={isLoading}>
-                              Tạo mới
+                              Cập nhật
                            </Button>
                         </DialogFooter>
                      </DialogForm>
@@ -73,4 +78,4 @@ const CreateFormModal: React.FC<Props> = (props) => {
 
 const DialogForm = tw.form`flex flex-col gap-4 py-4`
 
-export default CreateFormModal
+export default UpdateUserFormModal

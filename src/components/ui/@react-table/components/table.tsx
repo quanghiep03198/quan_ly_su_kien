@@ -17,9 +17,9 @@ export default function TableDataGrid<TData, TValue>({ table, columns, loading, 
 
    return (
       <TableWrapper className='group w-full shadow'>
-         <ScrollArea className={cn({ 'h-[60vh]': table.getRowModel().rows.length > 0 })} onWheel={handleScroll}>
+         <ScrollArea className={cn({ 'h-[60vh]': table.getRowModel().rows.length >= 10 })} onWheel={handleScroll}>
             <Table {...props}>
-               <TableHeader className='!sticky top-0 z-10'>
+               <TableHeader className='!sticky top-0 z-10 border-b'>
                   {table.getHeaderGroups().map((headerGroup) => (
                      <TableRow key={headerGroup.id} className='sticky top-0 hover:bg-background'>
                         {headerGroup.headers.map((header) => (

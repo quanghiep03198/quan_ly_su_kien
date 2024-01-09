@@ -2,7 +2,7 @@ import { UserRoleValues } from '@/common/constants/constants'
 import { UserType } from '@/common/types/entities'
 import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Form, Icon, InputFieldControl, SelectFieldControl } from '@/components/ui'
 import { useUpdateAttendeeInfoMutation } from '@/redux/apis/attendance.api'
-import { UpdateAttendeeSchema } from '@/schemas/user.schema'
+import { UpdateUserSchema } from '@/schemas/user.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -16,10 +16,10 @@ type AddAttendeeFormModalProps = {
    onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type FormValue = z.infer<typeof UpdateAttendeeSchema>
+type FormValue = z.infer<typeof UpdateUserSchema>
 
 const UpdateAttendeeFormModal: React.FC<AddAttendeeFormModalProps> = (props) => {
-   const form = useForm<FormValue>({ resolver: zodResolver(UpdateAttendeeSchema) })
+   const form = useForm<FormValue>({ resolver: zodResolver(UpdateUserSchema) })
    const [updateAttendeeInfo, { isLoading }] = useUpdateAttendeeInfoMutation()
 
    useEffect(() => {

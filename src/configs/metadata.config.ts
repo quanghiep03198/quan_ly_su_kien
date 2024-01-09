@@ -15,8 +15,9 @@ export const metadata = {
    [Paths.EVENTS_LIST]: 'Sự kiện',
    [Paths.EVENTS_CREATE]: 'Thêm sự kiện',
    [Paths.EVENTS_UPDATE]: 'Cập nhật sự kiện',
-   [Paths.PARTICIPANTS_LIST]: 'Cộng tác viên',
-   [Paths.STUDENTS_LIST]: '',
+   [Paths.STAFFS_LIST]: 'Cộng tác viên',
+   [Paths.STUDENTS_LIST]: 'Sinh viên',
+   [Paths.NOTIFICATION_SETTINGS]: 'Cài đặt thông báo',
 
    /* NAVIGATION */
    [Paths.REDIRECT]: 'Đang chuyển hướng ...'

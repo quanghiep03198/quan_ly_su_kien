@@ -1,6 +1,6 @@
+import { UserRoleEnum } from '@/common/constants/enums'
 import { UserType } from '@/common/types/entities'
-import { convertBase64 } from '@/common/utils/convert-base64'
-import { createFormData } from '@/common/utils/formdata'
+import { Cloudinary } from '@/services/cloudinary.service'
 import {
    Box,
    Button,
@@ -17,8 +17,8 @@ import {
    Typography
 } from '@/components/ui'
 import { useGetEventDetailsQuery, useUpdateEventMutation } from '@/redux/apis/event.api'
-import { useGetParticipantsQuery } from '@/redux/apis/participant.api'
-import { EventSchema } from '@/schemas/event.schema'
+import { useGetUsersQuery } from '@/redux/apis/user.api'
+import { CreateEventSchema, UpdateEventSchema } from '@/schemas/event.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format } from 'date-fns'
 import { useEffect, useMemo, useState } from 'react'
@@ -27,16 +27,16 @@ import { useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-type FormValue = z.infer<typeof EventSchema>
+type FormValue = z.infer<typeof CreateEventSchema>
 type HelderOptions = Array<Record<string, any>>
 
 const UpdateEvent = () => {
    const { id } = useParams()
    const { data } = useGetEventDetailsQuery(id!, { refetchOnMountOrArgChange: true })
-   const { data: participants } = useGetParticipantsQuery({ pagination: false })
+   const { data: users } = useGetUsersQuery({ pagination: false, role: UserRoleEnum.STAFF })
    const [editorState, setEditorState] = useState<{ value: string; isEmpty: boolean }>({ value: '', isEmpty: true })
    const form = useForm<FormValue>({
-      resolver: zodResolver(EventSchema)
+      resolver: zodResolver(UpdateEventSchema)
    })
 
    const [updateEvent] = useUpdateEventMutation()
@@ -58,9 +58,9 @@ const UpdateEvent = () => {
    }, [data])
 
    const heldersList = useMemo<HelderOptions>(() => {
-      const helders = (participants as Array<UserType>) ?? []
+      const helders = (users as Array<UserType>) ?? []
       return helders.map((helder) => ({ value: helder?.id, label: helder?.name }))
-   }, [participants])
+   }, [users])
 
    useEffect(() => {
       if (editorState.isEmpty) {
@@ -68,34 +68,39 @@ const UpdateEvent = () => {
       } else {
          form.clearErrors('content')
       }
-      if (form.formState.isSubmitting) form.setValue('content', editorState.value)
-   }, [editorState])
+   }, [editorState, form.formState.isSubmitting])
 
-   const handleUpdateEvent = async (data: FormValue) => {
+   const handleUpdateEvent = async (payload: FormValue) => {
       if (form.formState.errors.content) {
          form.setError('content', { type: 'required', message: 'Vui lòng nhập nội dung' })
          return
       }
-      console.log('data', { ...data, content: editorState.value })
 
-      const banner = await convertBase64(data.banner[0])
-      const formData = createFormData({
-         ...data,
-         banner,
-         content: editorState.value,
-         start_time: format(data.start_time, 'yyyy/MM/dd HH:mm:ss'),
-         end_time: format(data.end_time, 'yyyy/MM/dd HH:mm:ss')
-      })
-      toast.promise(updateEvent({ id: id, payload: formData }), {
-         loading: 'Đang cập nhật sự kiện ...',
-         success: 'Sự kiện đã được cập nhật thành công',
-         error: 'Cập nhật sự kiện thất bại'
-      })
+      if (payload.banner) payload.banner = await Cloudinary.upload(payload.banner?.[0])
+      console.log('data', payload)
+      toast.promise(
+         updateEvent({
+            id: id,
+            payload: {
+               ...payload,
+               content: editorState.value,
+               status: 1,
+               banner: data?.banner,
+               start_time: format(payload.start_time, 'yyyy/MM/dd HH:mm:ss'),
+               end_time: format(payload.end_time, 'yyyy/MM/dd HH:mm:ss')
+            }
+         }).unwrap(),
+         {
+            loading: 'Đang cập nhật sự kiện ...',
+            success: 'Sự kiện đã được cập nhật thành công',
+            error: 'Cập nhật sự kiện thất bại'
+         }
+      )
    }
 
    return (
       <Form {...form}>
-         <form className='flex flex-col gap-y-14' onSubmit={form.handleSubmit(handleUpdateEvent)}>
+         <form className='flex max-w-5xl flex-col gap-y-14' onSubmit={form.handleSubmit(handleUpdateEvent)}>
             <Box className='flex items-center justify-between border-b py-4'>
                <Box className='space-y-2'>
                   <Typography variant='heading6'>Cập nhật sự kiện</Typography>
@@ -108,7 +113,7 @@ const UpdateEvent = () => {
             </Box>
 
             <Box className='flex flex-col items-stretch gap-10'>
-               <Box className='grid max-w-5xl grid-cols-6 gap-x-6 gap-y-10 sm:grid-cols-1'>
+               <Box className='grid grid-cols-6 gap-x-6 gap-y-10 sm:grid-cols-1'>
                   <Box className='col-span-3'>
                      <InputFieldControl name='name' control={form.control} label='Tên sự kiện' />
                   </Box>

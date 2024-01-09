@@ -1,3 +1,4 @@
+import { EventStatusValues } from '@/common/constants/constants'
 import { EventStatus } from '@/common/constants/enums'
 import { Paths } from '@/common/constants/pathnames'
 import { EventType } from '@/common/types/entities'
@@ -82,9 +83,8 @@ const EventList: React.FunctionComponent = () => {
          filterFn: 'equals',
          cell: ({ getValue }) => {
             const value = getValue()
-            console.log(value)
             return (
-               <Badge className='whitespace-nowrap' variant={value === EventStatus.ACTIVE ? 'success' : 'destructive'}>
+               <Badge className='whitespace-nowrap' variant={value === EventStatusValues.get(EventStatus.ACTIVE) ? 'success' : 'destructive'}>
                   {value}
                </Badge>
             )

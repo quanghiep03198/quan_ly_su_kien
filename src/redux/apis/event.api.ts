@@ -68,19 +68,15 @@ export const eventApi = createApi({
             providesTags: (result, _error, _arg) => (result ? [{ type: 'Event' as const, id: result?.id }] : tagTypes)
          }),
          createEvent: build.mutation({
-            query: (payload) => ({ url: '/event', method: 'POST', data: payload }),
+            query: (payload) => ({ url: `/event`, method: 'POST', data: payload }),
             invalidatesTags: (_result, error, _arg) => (error ? [] : tagTypes)
          }),
          updateEvent: build.mutation({
-            query: ({ id, payload }) => ({ url: '/event/' + id, method: 'PUT', data: payload }),
+            query: ({ id, payload }) => ({ url: `/event/${id}`, method: 'PATCH', data: payload }),
             invalidatesTags: (_result, error, _arg) => (error ? [] : tagTypes)
          }),
-         getEventStatistics: build.query({
-            query: () => ({ url: '/eventStatistics', method: 'GET' }),
-            providesTags: tagTypes
-         }),
          deleteEvent: build.mutation({
-            query: (id) => ({ url: '/event/' + id, method: 'DELETE' }),
+            query: (id) => ({ url: `/event/${id}`, method: 'DELETE' }),
             invalidatesTags: (_result, error) => (error ? [] : tagTypes)
          })
       }
@@ -92,7 +88,6 @@ export const {
    useGetEventsQuery,
    useGetUpcomingEventsQuery,
    useCreateEventMutation,
-   useGetEventStatisticsQuery,
    useUpdateEventMutation,
    useGetEventDetailsQuery,
    useDeleteEventMutation,

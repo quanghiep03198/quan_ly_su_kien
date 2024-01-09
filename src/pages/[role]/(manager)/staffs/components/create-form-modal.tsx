@@ -1,11 +1,10 @@
 import { UserRoleValues } from '@/common/constants/constants'
-import { UserType } from '@/common/types/entities'
 import ErrorBoundary from '@/components/exceptions/error-boundary'
 import { Box, Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, Form, InputFieldControl, SelectFieldControl } from '@/components/ui'
-import { useUpdatePariticipantMutation } from '@/redux/apis/participant.api'
+import { useAddUserMutation } from '@/redux/apis/user.api'
 import { UserSchema } from '@/schemas/user.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
@@ -13,30 +12,24 @@ import { z } from 'zod'
 
 type FormValue = z.infer<typeof UserSchema>
 
-type Props = {
+export type Props = {
    openState: boolean
-   defaultValue: Partial<UserType>
    onOpenStateChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const UpdateFormModal: React.FC<Props> = (props) => {
+const CreateFormModal: React.FC<Props> = (props) => {
    const form = useForm<FormValue>({
       resolver: zodResolver(UserSchema)
    })
-   const [updateParticipant, { isLoading }] = useUpdatePariticipantMutation()
-
-   useEffect(() => {
-      form.reset(props.defaultValue)
-   }, [props.defaultValue])
-
-   const handleUpdateParticipant = async (data: FormValue) => {
+   const [addUser, { isLoading }] = useAddUserMutation()
+   const handleCreateEvent = async (data: FormValue) => {
       try {
-         await updateParticipant({ id: props.defaultValue?.id!, payload: data }).unwrap()
+         const response = await addUser(data).unwrap()
          form.reset()
          props.onOpenStateChange(!props.openState)
-         toast.success('Dã cập nhật thông tin người dùng')
+         toast.success(response?.message)
       } catch (error) {
-         toast.error('Cập nhật thông tin cộng tác viên thất bại')
+         toast.error('Thêm cộng tác viên thất bại')
       }
    }
 
@@ -48,7 +41,7 @@ const UpdateFormModal: React.FC<Props> = (props) => {
                <DialogDescription>Nhập các thông tin dưới đây để invite thêm cộng tác viên</DialogDescription>
                <ErrorBoundary>
                   <Form {...form}>
-                     <DialogForm onSubmit={form.handleSubmit(handleUpdateParticipant)} encType='multipart/form-data'>
+                     <DialogForm onSubmit={form.handleSubmit(handleCreateEvent)} encType='multipart/form-data'>
                         <InputFieldControl name='name' control={form.control} label='Họ tên' />
                         <InputFieldControl name='email' control={form.control} label='Email' />
                         <InputFieldControl name='password' control={form.control} label='Mật khẩu' type='password' />
@@ -57,8 +50,8 @@ const UpdateFormModal: React.FC<Props> = (props) => {
                            name='role'
                            control={form.control}
                            options={Array.from(UserRoleValues, ([value, label]) => ({ value: value.toString(), label }))}
-                           label='Trạng thái'
-                           placeholder='Trạng thái'
+                           label='Vai trò'
+                           placeholder='Vai trò'
                         />
 
                         <DialogFooter className='mt-6 flex flex-row items-center justify-end space-x-2'>
@@ -66,7 +59,7 @@ const UpdateFormModal: React.FC<Props> = (props) => {
                               Hủy
                            </Button>
                            <Button type='submit' disabled={isLoading}>
-                              Cập nhật
+                              Tạo mới
                            </Button>
                         </DialogFooter>
                      </DialogForm>
@@ -80,4 +73,4 @@ const UpdateFormModal: React.FC<Props> = (props) => {
 
 const DialogForm = tw.form`flex flex-col gap-4 py-4`
 
-export default UpdateFormModal
+export default CreateFormModal

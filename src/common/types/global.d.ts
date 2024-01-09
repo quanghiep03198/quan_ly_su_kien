@@ -38,5 +38,7 @@ declare global {
       // pagingCounter: number
    }
 
+   export type PaginationPayload = Record<'page' | 'limit', number>
+
    declare type OptionalPagination<T> = Pagination<T> | Array<T>
 }

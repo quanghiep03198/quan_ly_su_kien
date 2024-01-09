@@ -22,7 +22,7 @@ export const Editor: React.FC<EditorProps> = memo(({ content, id, disabled, name
          extensions,
          editorProps: {
             attributes: {
-               class: 'p-4 rounded-lg max-w-full max-h-full overflow-auto border-none outline-none focus:outline-none focus:border-none min-h-[50vh] text-foreground bg-background prose prose-li:p-0'
+               class: 'p-4 rounded-lg max-w-full max-h-full overflow-auto scrollbar-none border-none outline-none focus:outline-none focus:border-none min-h-[50vh] text-foreground bg-background prose prose-li:p-0'
             }
          },
          enableCoreExtensions: true,
@@ -39,13 +39,12 @@ export const Editor: React.FC<EditorProps> = memo(({ content, id, disabled, name
    }
 
    return (
-      <Box className='flex w-full max-w-full flex-col items-stretch divide-y divide-border rounded-lg border shadow'>
+      <Box className='flex w-full max-w-full flex-col items-stretch divide-y divide-border overflow-x-clip rounded-lg border shadow'>
          <Toolbar editor={editor} />
-         <ScrollArea className='h-[75vh] w-full max-w-full overflow-auto'>
+         <ScrollArea className='[content: h-[75vh] w-full max-w-full overflow-auto'>
             <EditorContent id={id} editor={editor} name={name} controls={true} content={content} />
          </ScrollArea>
          <BubbleMenu editor={editor} />
-         {/* <FloatingMenu editor={editor}>This is the floating menu</FloatingMenu> */}
       </Box>
    )
 })

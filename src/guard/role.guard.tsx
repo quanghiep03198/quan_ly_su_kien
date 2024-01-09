@@ -4,7 +4,7 @@ import { useAppSelector } from '@/redux/hook'
 import { UserType } from '@/common/types/entities'
 import { Navigate } from 'react-router-dom'
 
-declare type RoleGuardProps = {
+type RoleGuardProps = {
    roles: Array<UserRoleEnum>
 } & React.PropsWithChildren
 

@@ -11,7 +11,7 @@ import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 import Breadcrumbs from './components/breadcrumbs'
 import RelatedEvents from './components/related-events'
-import { JoinEventStatus } from '@/common/constants/enums'
+import { EventStatus, JoinEventStatus } from '@/common/constants/enums'
 import FeedbackFormModal from '../../components/shared/feedback-form-modal'
 import { useState } from 'react'
 import { UserType } from '@/common/types/entities'
@@ -47,7 +47,12 @@ const EventDetails: React.FunctionComponent = () => {
                <Breadcrumbs name={eventDetails?.name!} currentPath={Paths.HOME + '/' + eventDetails?.id} />
                <Box className='flex items-center gap-x-2'>
                   {eventDetails?.status_join === JoinEventStatus.ALREADY && (
-                     <Button variant='outline' className='gap-x-2' onClick={() => setOpenFeedbackFormState(true)}>
+                     <Button
+                        variant='outline'
+                        className='gap-x-2'
+                        disabled={eventDetails.status === EventStatus.INACTIVE}
+                        onClick={() => setOpenFeedbackFormState(true)}
+                     >
                         <Icon name='Reply' /> Feedback
                      </Button>
                   )}

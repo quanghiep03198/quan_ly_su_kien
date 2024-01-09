@@ -5,7 +5,9 @@ import React from 'react'
 import { NavLink, matchPath, useLocation } from 'react-router-dom'
 import tw from 'tailwind-styled-components'
 
-const SidebarMenu: React.FC<{ navigation: Array<MenuNavigationItem> }> = ({ navigation }) => {
+type SidebarMenuProps = { navigation: Array<MenuNavigationItem>; onOpenStateChange: React.Dispatch<React.SetStateAction<boolean>> }
+
+const SidebarMenu: React.FC<SidebarMenuProps> = ({ navigation, onOpenStateChange }) => {
    const { pathname } = useLocation()
    return (
       <Menu className='mt-10'>
@@ -13,7 +15,7 @@ const SidebarMenu: React.FC<{ navigation: Array<MenuNavigationItem> }> = ({ navi
             {navigation.map((item) => {
                const isAlsoActive = !!breadcrumbs[matchPath(item.path, pathname) as unknown as keyof typeof breadcrumbs]
                return (
-                  <MenuItem key={item.id}>
+                  <MenuItem key={item.id} onClick={() => onOpenStateChange(false)}>
                      <NavLink
                         to={item.path}
                         className={({ isActive }) =>

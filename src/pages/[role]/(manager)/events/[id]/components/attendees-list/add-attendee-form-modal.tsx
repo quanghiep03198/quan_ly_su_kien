@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Form, Icon, InputFieldControl } from '@/components/ui'
 
 import { useAddAttendanceMutation } from '@/redux/apis/attendance.api'
-import { AddAttendeeSchema } from '@/schemas/user.schema'
+import { AddUserSchema } from '@/schemas/user.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
@@ -14,10 +14,10 @@ type AddAttendeeFormModalProps = {
    onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type FormValue = z.infer<typeof AddAttendeeSchema>
+type FormValue = z.infer<typeof AddUserSchema>
 
 const AddAttendeeFormModal: React.FC<AddAttendeeFormModalProps> = (props) => {
-   const form = useForm<FormValue>({ resolver: zodResolver(AddAttendeeSchema) })
+   const form = useForm<FormValue>({ resolver: zodResolver(AddUserSchema) })
    const { id } = useParams()
    const [addAttendee, { isLoading }] = useAddAttendanceMutation()
 

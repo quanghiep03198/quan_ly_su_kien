@@ -7,10 +7,11 @@ import Pagination from '@/components/ui/@custom/pagination'
 import { useGetEventsQuery, usePrefetch } from '@/redux/apis/event.api'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
-import { EmptySection, EventList } from '../components/shared/list-sections'
+import { EmptySection } from '../components/shared/empty-section'
+import { EventHorizontalCard } from '../components/shared/event-card'
 import Loading from '../components/shared/loading'
 
-const MyEvents = () => {
+const MyEvents: React.FunctionComponent = () => {
    const [searchValue] = useState<string>('')
    const [sortValue] = useState<string>('')
    const params = useQueryParams('page')
@@ -29,17 +30,21 @@ const MyEvents = () => {
    }, [prefetchNextPage, params])
 
    return (
-      <Box className='mx-auto max-w-7xl space-y-10 py-20 sm:p-2 md:p-2'>
+      <Box className='mx-auto max-w-7xl space-y-10 py-20 sm:px-4 md:px-4'>
          <Box className='space-y-4'>
             <Typography variant='heading6' className='inline-flex items-center gap-x-2 text-primary'>
-               <Icon name='Newspaper' /> Tin tức sự kiện
+               <Icon name='Newspaper' /> Sự kiện của tôi
             </Typography>
             {isLoading ? (
                <Loading />
             ) : Array.isArray(eventsList?.docs) && eventsList?.docs.length === 0 ? (
                <EmptySection />
             ) : (
-               <EventList data={eventsList?.docs} />
+               <Box className='grid grid-cols-2 gap-x-10 gap-y-4 sm:grid-cols-1 md:grid-cols-1'>
+                  {eventsList.docs.map((item) => (
+                     <EventHorizontalCard key={item.id} data={item} />
+                  ))}
+               </Box>
             )}
          </Box>
 

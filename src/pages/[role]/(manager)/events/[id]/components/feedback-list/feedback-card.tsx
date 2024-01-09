@@ -8,13 +8,14 @@ import {
    Button,
    Card,
    CardContent,
+   CardDescription,
    CardHeader,
    HoverCard,
    HoverCardContent,
    HoverCardTrigger,
    Typography
 } from '@/components/ui'
-import { formatDistanceToNow } from 'date-fns'
+import { format, formatDistanceToNow } from 'date-fns'
 import { vi } from 'date-fns/locale'
 import { CalendarIcon } from 'lucide-react'
 import * as qs from 'qs'
@@ -33,20 +34,23 @@ const Feedback: React.FC<{ data: FeedbackType }> = ({ data }) => {
                   <HoverCard>
                      <HoverCardTrigger asChild>
                         <Button variant='link' className='h-fit gap-x-2 p-0 text-foreground'>
-                           {data?.user?.name} {!data?.read && <Box className='h-2 w-2 rounded-full bg-blue-500' />}
+                           {data?.user?.name}
                         </Button>
                      </HoverCardTrigger>
-                     <HoverCardContent className='w-64' align='start'>
+                     <HoverCardContent align='start' className='w-fit'>
                         <Box className='flex justify-between space-x-4'>
                            <Avatar>
                               <AvatarImage src={data?.user?.avatar} />
                               <AvatarFallback>VC</AvatarFallback>
                            </Avatar>
                            <Box>
-                              <Typography className='text-sm font-semibold'>{data?.user?.name}</Typography>
+                              <Typography className='whitespace-nowrap text-sm font-semibold'>{data?.user?.name}</Typography>
                               <p className='text-sm'>{data?.user?.email}</p>
                               <Box className='flex items-center pt-2'>
-                                 <CalendarIcon className='mr-2 h-4 w-4 opacity-70' /> <span className='text-xs text-muted-foreground'>Tham gia ngày </span>
+                                 <CalendarIcon className='mr-2 h-4 w-4 opacity-70' />{' '}
+                                 <span className='text-xs text-muted-foreground'>
+                                    Tham gia ngày {format(data?.user?.created_at ?? new Date(), 'dd/MM/yyyy')}
+                                 </span>
                               </Box>
                            </Box>
                         </Box>
@@ -54,7 +58,7 @@ const Feedback: React.FC<{ data: FeedbackType }> = ({ data }) => {
                   </HoverCard>
                   <Time>{formatDistanceToNow(new Date(data?.created_at), { locale: vi, addSuffix: true })}</Time>
                </Box>
-               {/* <StarRating /> */}
+               <CardDescription className='text-xs text-foreground'>{data?.user?.email}</CardDescription>
             </CardHeader>
             <CardContent className='spacy-y-0 py-0'>
                <Paragraph>{data.content}</Paragraph>{' '}

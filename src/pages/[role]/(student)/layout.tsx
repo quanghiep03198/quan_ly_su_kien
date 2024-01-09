@@ -1,10 +1,9 @@
 import { Box } from '@/components/ui'
 import React, { Suspense } from 'react'
-
-import { Outlet } from 'react-router-dom'
 import LoadingProgressBar from '@/components/shared/loading-progress-bar'
-import Header from './components/header'
+import { Outlet } from 'react-router-dom'
 import Footer from './components/footer'
+import Header from './components/header'
 
 const Layout: React.FunctionComponent = () => {
    return (

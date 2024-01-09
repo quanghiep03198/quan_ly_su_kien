@@ -16,6 +16,7 @@ export const breadcrumbs = {
       { path: Paths.EVENTS_LIST, name: 'Sự kiện' },
       { path: Paths.EVENT_STATISTICS_DETAILS, name: 'Thống kê chi tiết' }
    ],
-   [Paths.PARTICIPANTS_LIST]: [{ path: Paths.PARTICIPANTS_LIST, name: 'Công tác viên' }],
-   [Paths.STUDENTS_LIST]: [{ path: Paths.STUDENTS_LIST, name: 'Sinh viên' }]
+   [Paths.STAFFS_LIST]: [{ path: Paths.STAFFS_LIST, name: 'Công tác viên' }],
+   [Paths.STUDENTS_LIST]: [{ path: Paths.STUDENTS_LIST, name: 'Sinh viên' }],
+   [Paths.NOTIFICATION_SETTINGS]: [{ path: Paths.NOTIFICATION_SETTINGS, name: 'Cài đặt thông báo' }]
 }

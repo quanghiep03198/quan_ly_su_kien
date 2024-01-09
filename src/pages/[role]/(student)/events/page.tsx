@@ -7,7 +7,8 @@ import Pagination from '@/components/ui/@custom/pagination'
 import { useGetEventsQuery, usePrefetch } from '@/redux/apis/event.api'
 import _ from 'lodash'
 import { useCallback, useMemo, useState } from 'react'
-import { EmptySection, EventList } from '../components/shared/list-sections'
+import { EventVerticalCard } from '../components/shared/event-card'
+import { EmptySection } from '../components/shared/empty-section'
 import Loading from '../components/shared/loading'
 import SearchBox from '../components/shared/search-box'
 
@@ -24,7 +25,6 @@ const EventsBoard: React.FunctionComponent = () => {
    })
    const prefetchNextPage = usePrefetch('getEvents')
    const eventsList = useMemo(() => data as Pagination<EventType>, [data])
-   console.log('eventsList', eventsList)
    const handlePrefetchNextPage = useCallback(() => {
       if (eventsList.hasNextPage) prefetchNextPage({ page: currentPage + 1 })
    }, [prefetchNextPage, params])
@@ -32,7 +32,6 @@ const EventsBoard: React.FunctionComponent = () => {
    return (
       <Box className='mx-auto max-w-7xl space-y-20 px-4 py-10 xl:px-0'>
          <SearchBox onSearchValueChange={setSearchValue} onSortChange={setSortValue} />
-         {/* <UpcomingEvents /> */}
          <Box className='space-y-4'>
             <Typography variant='heading6' className='inline-flex items-center gap-x-2 text-primary'>
                <Icon name='Newspaper' /> Tin tức sự kiện
@@ -42,7 +41,9 @@ const EventsBoard: React.FunctionComponent = () => {
             ) : Array.isArray(eventsList?.docs) && eventsList?.docs.length === 0 ? (
                <EmptySection />
             ) : (
-               <EventList data={eventsList?.docs} />
+               <Box className='grid grid-cols-4 gap-x-4 gap-y-6 sm:grid-cols-2 md:md:grid-cols-3 xl:gap-x-6'>
+                  {eventsList?.docs?.map((item) => <EventVerticalCard key={item.id} data={item} />)}
+               </Box>
             )}
          </Box>
          <Pagination {..._.pick(eventsList, ['page', 'totalPages', 'hasNextPage', 'hasPrevPage'])} onPrefetch={handlePrefetchNextPage} />

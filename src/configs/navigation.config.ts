@@ -18,7 +18,7 @@ export const ManagerNavigation: Array<MenuNavigationItem> = [
       id: '3',
       icon: 'Users',
       name: 'Cộng tác viên',
-      path: Paths.PARTICIPANTS_LIST
+      path: Paths.STAFFS_LIST
    },
    { id: '4', icon: 'UsersRound', name: 'Sinh viên', path: Paths.STUDENTS_LIST },
 

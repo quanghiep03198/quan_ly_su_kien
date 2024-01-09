@@ -29,10 +29,10 @@ type ColorPickerProps = {
 
 const ColorPicker: React.FC<ColorPickerProps> = ({ editor, label, icon, type }) => {
    const [open, setOpen] = useState<boolean>(false)
-   const [currentColor, setCurrentColor] = useState<string>()
+   const [currentColor, setCurrentColor] = useState<string | undefined>()
 
    useEffect(() => {
-      setCurrentColor(editor.getAttributes(type).color ?? 'transparent')
+      setCurrentColor(editor.getAttributes(type).color)
    }, [editor.getAttributes('textStyle')])
 
    const handleSelectColor = (value: string) => {
@@ -48,7 +48,13 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ editor, label, icon, type }) 
                <DropdownMenuTrigger asChild>
                   <Button variant='outline' className='aspect-square h-8 w-8 flex-col gap-x-1.5' size='icon'>
                      <Icon name={icon} />
-                     {currentColor && <Box className='h-[4px] w-4/5 self-center' style={{ backgroundColor: currentColor }} />}
+                     <Box
+                        className={cn('h-[4px] w-4/5 self-center', {
+                           '!bg-foreground': !currentColor && type === 'textStyle',
+                           'bg-transparent': !currentColor && type === 'highlight'
+                        })}
+                        style={{ backgroundColor: currentColor }}
+                     />
                   </Button>
                </DropdownMenuTrigger>
             </Tooltip>
@@ -56,11 +62,17 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ editor, label, icon, type }) 
                <DropdownMenuGroup>
                   <Box className='flex items-center justify-between'>
                      <DropdownMenuLabel className='flex items-center justify-between'>Preset colors</DropdownMenuLabel>
-                     {type === 'highlight' && (
-                        <Button variant='ghost' size='sm' className='gap-x-2' onClick={() => editor.commands.unsetHighlight()}>
-                           <Icon name='Eraser' /> Không
-                        </Button>
-                     )}
+                     <Button
+                        variant='ghost'
+                        size='sm'
+                        className='gap-x-2'
+                        onClick={() => {
+                           if (type === 'highlight') editor.commands.unsetHighlight()
+                           if (type === 'textStyle') editor.commands.unsetColor()
+                        }}
+                     >
+                        <Icon name='Eraser' /> Không
+                     </Button>
                   </Box>
                   <DropdownMenuSeparator />
                   <Box className='grid grid-cols-10 gap-2 p-2'>

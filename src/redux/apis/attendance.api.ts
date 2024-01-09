@@ -14,13 +14,11 @@ export const attendanceApi = createApi({
    baseQuery: axiosBaseQuery(),
    endpoints: (build) => {
       return {
-         getAttendeesByEvent: build.query<Pagination<UserType>, { id: string; params: AxiosRequestConfig['params'] }>({
-            query: ({ id, params }) => ({ url: `/attendances/join/${id}`, method: 'GET', params }),
-            transformResponse: (response: HttpResponse<Pagination<{ user: UserType } & Record<string, any>>>) => {
-               return { ...response.metadata, docs: response.metadata?.docs?.map((doc) => doc.user) } as Pagination<UserType>
-            },
+         getAttendeesByEvent: build.query<UserType[], { eventId: string; params?: AxiosRequestConfig['params'] }>({
+            query: ({ eventId, params }) => ({ url: `/attendances/join/${eventId}`, method: 'GET', params }),
+            transformResponse: (response: HttpResponse<UserType[]>, _meta, _args) => response.metadata as UserType[],
             providesTags: (result, _error, _arg) => {
-               return result ? [...result.docs?.map(({ id }) => ({ type: 'Attendance' as const, id }))] : tagTypes
+               return Array.isArray(result) ? [...result?.map(({ id }) => ({ type: 'Attendance' as const, id })), ...tagTypes] : tagTypes
             }
          }),
          addAttendance: build.mutation<unknown, { email: string; event_id: string | number }>({

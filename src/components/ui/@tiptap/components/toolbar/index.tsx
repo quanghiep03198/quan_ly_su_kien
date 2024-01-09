@@ -1,4 +1,4 @@
-import ColorPicker from '@/components/ui/@tiptap/components/color-picker/color-picker'
+import ColorPicker from '@/components/ui/@tiptap/components/toolbar/toolbar-color-picker'
 import { Editor } from '@tiptap/react'
 import { Box, Button, Icon, Toggle } from '../../..'
 import Tooltip from '../../../@override/tooltip'
@@ -7,6 +7,7 @@ import FontSizeInput from './toolbar-font-size-input'
 import ImageDropdown from './toolbar-image-dropdown'
 import { LinkPopover } from './toolbar-link-popover'
 import { StyleDropdownMenu } from './toolbar-style-dropdown'
+import TableDropdownMenu from './toolbar-table-dropdown'
 
 type ToolbarPluginProps = {
    editor: Editor
@@ -16,9 +17,9 @@ const Toolbar: React.FC<ToolbarPluginProps> = ({ editor }) => {
    if (!editor) return null
 
    return (
-      <Box className='p-4'>
+      <Box className='p-1'>
          <Box className='overflow-x-auto scrollbar-none'>
-            <Box className='flex h-full items-center gap-x-1'>
+            <Box className='flex h-full items-center justify-start gap-x-1 p-1'>
                {/* Undo */}
                <Tooltip content='Hoàn tác'>
                   <Button className='aspect-square h-8 w-8' type='button' size='icon' variant='outline' onClick={() => editor.chain().focus().undo().run()}>
@@ -74,6 +75,13 @@ const Toolbar: React.FC<ToolbarPluginProps> = ({ editor }) => {
                   </Toggle>
                </Tooltip>
 
+               {/* Toggle underline */}
+               <Tooltip content='Code'>
+                  <Toggle size='sm' variant='outline' pressed={editor.isActive('underline')} onPressedChange={() => editor.commands.toggleCodeBlock()}>
+                     <Icon name='Code' />
+                  </Toggle>
+               </Tooltip>
+
                <ColorPicker label='Màu văn bản' icon='Baseline' editor={editor} type='textStyle' />
                <ColorPicker label='Highlight' icon='Highlighter' editor={editor} type='highlight' />
 
@@ -111,6 +119,7 @@ const Toolbar: React.FC<ToolbarPluginProps> = ({ editor }) => {
                <AlignmentDropdownMenu editor={editor} />
                <LinkPopover editor={editor} />
                <ImageDropdown editor={editor} />
+               <TableDropdownMenu editor={editor} />
             </Box>
          </Box>
       </Box>

@@ -22,7 +22,7 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
    )
 
    if (!column.columnDef.enableColumnFilter)
-      return <Box className='flex h-9 select-none items-center justify-start bg-muted px-2 text-xs font-medium text-muted-foreground/50'></Box>
+      return <Box className='flex h-9 select-none items-center justify-start bg-muted/50 px-2 text-xs font-medium text-muted-foreground/50'></Box>
 
    switch (filterType) {
       case 'inNumberRange':

@@ -12,6 +12,7 @@ import Table from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
+import Gapcursor from '@tiptap/extension-gapcursor'
 
 export const extensions = [
    StarterKit.configure({
@@ -44,18 +45,31 @@ export const extensions = [
       }
    }),
    Placeholder.configure({
-      placeholder: 'Nhập gì đó ...'
+      placeholder: 'Nhập gì đó ...',
+      emptyEditorClass: 'top-0 text-muted-foreground/50 before:pointer-event-none before:content-[attr(data-placeholder)]'
    }),
    Underline.configure(),
    TextAlign.configure({
       types: ['heading', 'paragraph']
    }),
+   Gapcursor.configure(),
    Table.configure({
-      resizable: true
+      resizable: true,
+      HTMLAttributes: {
+         class: 'm-0 w-full table-fixed overflow-hidden border rounded border-collapse [& .resize-cursor]:cursor-col-resize'
+      }
    }),
    TableRow.configure(),
-   TableHeader.configure(),
-   TableCell.configure(),
+   TableHeader.configure({
+      HTMLAttributes: {
+         class: 'border p-3 relative'
+      }
+   }),
+   TableCell.configure({
+      HTMLAttributes: {
+         class: 'p-3 border'
+      }
+   }),
    Highlight.configure({ multicolor: true }),
    Link.configure({
       openOnClick: false,
