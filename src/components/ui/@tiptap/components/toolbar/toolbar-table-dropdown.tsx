@@ -12,27 +12,15 @@ import {
    DropdownMenuSubContent,
    DropdownMenuSubTrigger,
    DropdownMenuTrigger,
-   Form,
    FormItem,
    Icon,
    Input,
-   InputFieldControl,
-   Label,
-   Typography
+   Label
 } from '@/components/ui'
 import Tooltip from '@/components/ui/@override/tooltip'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Editor } from '@tiptap/react'
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import { z } from 'zod'
-
-const TablePresetSchema = z.object({
-   rows: z.number({ required_error: 'Nhập số hàng' }).min(1),
-   cols: z.number({ required_error: 'Nhập số cột' }).min(1)
-})
 
 const TableDropdownMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
    const [rows, setRows] = useState<number>(2)
@@ -143,6 +131,5 @@ const TableDropdownMenu: React.FC<{ editor: Editor }> = ({ editor }) => {
 }
 
 const StyledDropdownMenuItem = tw(DropdownMenuItem)`gap-x-2`
-const StyledForm = tw.form`flex flex-col items-stretch gap-6`
 
 export default TableDropdownMenu

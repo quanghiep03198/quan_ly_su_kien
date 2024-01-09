@@ -1,17 +1,15 @@
 import { UserType } from '@/common/types/entities'
+import { cn } from '@/common/utils/cn'
 import { Avatar, AvatarFallback, AvatarImage, Box, Button, DataTable, DataTableRowActions, Icon } from '@/components/ui'
+import Tooltip from '@/components/ui/@override/tooltip'
+import { useGetAttendeesByEventQuery, useRemoveAttendanceFromEventMutation } from '@/redux/apis/attendance.api'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
+import { format } from 'date-fns'
 import React, { useCallback, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import AddAttendeeFormModal from './add-attendee-form-modal'
-import { format } from 'date-fns'
-import { useGetAttendeesByEventQuery, useRemoveAttendanceFromEventMutation } from '@/redux/apis/attendance.api'
 import UpdateAttendeeFormModal from './update-attendee-form-modal'
-import useMediaQuery from '@/common/hooks/use-media-query'
-import { BreakPoints } from '@/common/constants/enums'
-import { cn } from '@/common/utils/cn'
-import Tooltip from '@/components/ui/@override/tooltip'
-import { useParams } from 'react-router-dom'
 
 type Atteendees = {
    id: number
@@ -27,12 +25,9 @@ const ParticipantsList: React.FunctionComponent = () => {
    const { id: eventId } = useParams()
    const { data: attendees } = useGetAttendeesByEventQuery({ eventId: eventId!, params: { pagination: false } })
    const [attendeeToUpdate, setAttendeeToUpdate] = useState<Partial<UserType> | null>(null)
-
    const columnHelper = createColumnHelper<Atteendees>()
-
    const handleOpenAddFormModal = useCallback(setAddFormOpenState, [])
    const handleOpenUpdateFormModal = useCallback(setUpdateFormOpenState, [])
-
    const [removeAttendee] = useRemoveAttendanceFromEventMutation()
 
    const handleRemoveAttendeeFromEvent = useCallback(

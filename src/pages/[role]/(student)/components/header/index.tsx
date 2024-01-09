@@ -6,14 +6,11 @@ import ThemeSelect from '@/components/shared/theme-select'
 import { Box, Icon, buttonVariants } from '@/components/ui'
 import Tooltip from '@/components/ui/@override/tooltip'
 import UserActions from '@/pages/components/user-actions'
-import { useAppSelector } from '@/redux/hook'
 import { Link } from 'react-router-dom'
 import tw from 'tailwind-styled-components'
-import { SearchPopover } from './search-box'
 
 const Header: React.FunctionComponent = () => {
    const { theme } = useTheme()
-   const { authenticated } = useAppSelector((state) => state.auth)
 
    return (
       <Box as='header' className='sticky top-0 z-50 max-h-24 border-b bg-background/50 backdrop-blur'>
