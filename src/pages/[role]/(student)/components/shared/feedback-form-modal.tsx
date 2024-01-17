@@ -65,7 +65,7 @@ const FeedbackFormModal: React.FC<FeedbackFormModalProps> = (props) => {
                      <Label>Email</Label>
                      <Input defaultValue={props.sender.email} />
                   </FormItem>
-                  <TextareaFieldControl name='content' control={form.control} label='Nội dung' />
+                  <TextareaFieldControl name='content' control={form.control} label='Nội dung' rows={5} />
                   <Box className='flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2'>
                      <Button type='submit' className='gap-x-2'>
                         <Icon name='Send' /> Gửi

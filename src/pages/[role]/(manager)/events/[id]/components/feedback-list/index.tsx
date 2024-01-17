@@ -6,31 +6,31 @@ import { useParams } from 'react-router-dom'
 import Feedback from './feedback-card'
 import FeedbackDetails from './feedback-details'
 import SimplePagination from '../../../../components/shared/simple-pagination'
+import useQueryParams from '@/common/hooks/use-query-params'
 
 const FeedbackList: React.FunctionComponent = () => {
    const { id } = useParams()
-   const { data } = useGetAllFeedbackByEventQuery({ eventId: id!, params: { pagination: true } })
-
+   const { data } = useGetAllFeedbackByEventQuery({ eventId: id! })
    const [currentFeedback, setCurrentFeedback] = useState<FeedbackInterface>()
+   const [params, setParam, removeParam] = useQueryParams('feedback')
 
    useEffect(() => {
-      setCurrentFeedback(data?.docs?.[0])
-   }, [data])
+      if (data?.totalDocs > 0 && !params.feedback) setParam('feedback', data?.docs[0]?.id)
+      if (data?.totalDocs === 0 && params.feedback) removeParam('feedback')
+   }, [data, params])
 
    return (
       <Box className='grid grid-cols-[1.5fr_1fr] items-stretch divide-x divide-border rounded-lg border sm:grid-cols-1 md:grid-cols-1'>
          <Box className='flex flex-col items-stretch divide-y divide-border'>
-            <Box className='m-0 basis-[4rem] p-3'>
-               <SimplePagination hasNextPage={false} hasPrevPage={false} totalDocs={0} totalPages={1} />
+            <Box className='m-0 max-h-[4rem] basis-[4rem] p-4'>
+               <SimplePagination hasNextPage={false} hasPrevPage={false} totalDocs={data?.totalDocs} totalPages={data?.totalPages} />
             </Box>
-            <Box className='p-3'>
-               <ScrollArea className='h-[calc(90vh-4.75rem)]'>
-                  {Array.isArray(data) && data.length > 0 ? (
+            <Box className='py-4'>
+               <ScrollArea className='h-[calc(90vh-4.75rem)] px-4'>
+                  {Array.isArray(data?.docs) && data.totalDocs > 0 ? (
                      <Box className='flex flex-col gap-y-4'>
-                        {data.map((item: FeedbackInterface) => (
-                           <Box onClick={() => setCurrentFeedback(item)}>
-                              <Feedback key={item.id} data={item} />
-                           </Box>
+                        {data.docs.map((item: FeedbackInterface) => (
+                           <Feedback key={item.id} data={item} />
                         ))}
                      </Box>
                   ) : (
@@ -40,7 +40,7 @@ const FeedbackList: React.FunctionComponent = () => {
             </Box>
          </Box>
 
-         <FeedbackDetails data={currentFeedback!} />
+         <FeedbackDetails />
       </Box>
    )
 }

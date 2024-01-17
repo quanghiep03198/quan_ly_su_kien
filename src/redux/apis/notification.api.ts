@@ -9,6 +9,7 @@ const tagTypes = ['Notification'] as const
 export const notificationApi = createApi({
    reducerPath,
    tagTypes,
+   keepUnusedDataFor: 15 * 60,
    baseQuery: axiosBaseQuery(),
    endpoints: (build) => ({
       getAllNotificationToUser: build.query<Pagination<NotificationInterface>, { userId: number; params: AxiosRequestConfig['params'] }>({
@@ -30,15 +31,15 @@ export const notificationApi = createApi({
       }),
       createNotification: build.mutation<unknown, Omit<NotificationInterface, 'id'>>({
          query: (payload) => ({ url: '/notification', method: 'POST', data: payload }),
-         invalidatesTags: (_result, error, _args) => (Boolean(error) ? [] : tagTypes)
+         invalidatesTags: (_result, error, _args) => (error ? [] : tagTypes)
       }),
       editNotification: build.mutation<unknown, { id: string; payload: Partial<NotificationInterface> }>({
          query: ({ id, payload }) => ({ url: `/notification/${id}`, method: 'PATCH', data: payload }),
-         invalidatesTags: (_result, error, _args) => (Boolean(error) ? [] : tagTypes)
+         invalidatesTags: (_result, error, _args) => (error ? [] : tagTypes)
       }),
       deleteNotification: build.mutation<unknown, { id: number; params?: { softDel: boolean } }>({
          query: ({ id, params }) => ({ url: `/notification/${id}`, method: 'DELETE', params }),
-         invalidatesTags: (_result, error, _args) => (Boolean(error) ? [] : tagTypes)
+         invalidatesTags: (_result, error, _args) => (error ? [] : tagTypes)
       })
    })
 })

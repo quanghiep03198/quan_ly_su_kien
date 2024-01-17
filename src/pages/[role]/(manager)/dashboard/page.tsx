@@ -2,7 +2,6 @@ import { Box, Typography } from '@/components/ui'
 import { Overview } from './components/overview'
 import { RecentEvents } from './components/recent-events'
 import Statistics from './components/statistics'
-import FallbackPage from '@/components/shared/fallback'
 
 const DashboardPage: React.FunctionComponent = () => {
    return (

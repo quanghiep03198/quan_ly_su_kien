@@ -3,13 +3,16 @@ import React, { Suspense } from 'react'
 import { Outlet } from 'react-router-dom'
 import Footer from './components/footer'
 import Header from './components/header'
+import Fallback from '@/pages/fallback'
 
-import Fallback from '@/components/shared/fallback'
 const Layout: React.FunctionComponent = () => {
    return (
-      <Box className='item-stretch flex min-h-screen flex-col' as='main'>
+      <Box
+         className='flex min-h-screen flex-col items-stretch overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/25'
+         as='main'
+      >
          <Header />
-         <Box className='h-full flex-1'>
+         <Box className='h-full min-h-[calc(100vh-240px)] flex-1'>
             <Suspense fallback={<Fallback />}>
                <Outlet />
             </Suspense>

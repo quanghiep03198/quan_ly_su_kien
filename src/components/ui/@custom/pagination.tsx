@@ -1,6 +1,8 @@
+import useQueryParams from '@/common/hooks/use-query-params'
 import { calculatePaginationRange } from '@/common/utils/calculate-pagination-range'
 import { cn } from '@/common/utils/cn'
 import { Box, Button, Icon, buttonVariants } from '@/components/ui'
+import _ from 'lodash'
 import * as qs from 'qs'
 import React from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
@@ -11,8 +13,8 @@ type PaginationProps = Pick<Pagination<unknown>, 'page' | 'totalPages' | 'hasNex
 const Pagination: React.FC<PaginationProps> = (props) => {
    const { page, totalPages, hasNextPage, hasPrevPage, onPrefetch: handlePrefetch } = props
    const navigate = useNavigate()
-   const [params] = useSearchParams()
-   const currentPage = params.get('page') ? Number(params.get('page')) : 1
+   const [params] = useQueryParams()
+   const currentPage = params.page ? Number(params.page) : 1
    const paginationRange = calculatePaginationRange(page, totalPages)
 
    return (
@@ -26,7 +28,7 @@ const Pagination: React.FC<PaginationProps> = (props) => {
                <Link
                   key={pageIndex}
                   to={{ search: qs.stringify({ page: pageIndex }) }}
-                  className={cn(buttonVariants({ variant: page == currentPage ? 'outline' : 'ghost', size: 'icon' }))}
+                  className={cn(buttonVariants({ variant: page == pageIndex ? 'outline' : 'ghost', size: 'icon' }))}
                >
                   {pageIndex}
                </Link>

@@ -1,7 +1,7 @@
 import { UserRoleValues } from '@/common/constants/constants'
 import { UserRoleEnum } from '@/common/constants/enums'
 import { UserInterface } from '@/common/types/entities'
-import ErrorBoundary from '@/components/exceptions/error-boundary'
+import ErrorBoundary from '@/components/shared/error-boundary'
 import { Box, Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, Form, InputFieldControl, SelectFieldControl } from '@/components/ui'
 import { useUpdateUserMutation } from '@/redux/apis/user.api'
 import { UpdateUserSchema, UserSchema } from '@/schemas/user.schema'
@@ -27,10 +27,12 @@ const UpdateUserFormModal: React.FC<UpdateUserFormModalProps> = (props) => {
    const [updateParticipant, { isLoading }] = useUpdateUserMutation()
 
    useEffect(() => {
-      form.reset({ ...props.defaultValue, role: String(props.defaultValue?.role) as unknown as UserRoleEnum })
+      form.reset(props.defaultValue)
    }, [props.defaultValue])
 
-   const handleUpdateParticipant = async (data: FormValue) => {
+   console.log(form.formState.errors)
+
+   const handleUpdateParticipant = async (data: Required<FormValue>) => {
       toast.promise(updateParticipant({ id: props.defaultValue?.id!, payload: data }).unwrap(), {
          loading: 'Đang cập nhật thông tin người dùng',
          success: () => {

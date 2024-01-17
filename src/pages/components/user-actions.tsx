@@ -32,16 +32,16 @@ const UserActions: React.FunctionComponent = () => {
    return (
       <DropdownMenu>
          <DropdownMenuTrigger className='flex items-center space-x-2 focus:border-none focus:outline-none sm:space-x-1'>
-            <Avatar className='h-8 w-8 gap-0'>
-               <AvatarImage src={user?.avatar} className='aspect-square h-8 w-8 rounded-full object-cover object-center' width={32} height={32} />
+            <Avatar className='h-9 w-9'>
+               <AvatarImage src={user?.avatar} className='rounded-full object-cover object-center' width={32} height={32} />
                <AvatarFallback>A</AvatarFallback>
             </Avatar>
             <Tooltip content={user?.name!}>
-               <Typography variant='small' className='line-clamp-1 max-w-[128px] pl-1 pr-2 text-left text-sm font-normal capitalize'>
+               <Typography variant='small' className='line-clamp-1 max-w-[128px] pl-1 pr-2 text-left text-sm font-normal capitalize sm:hidden'>
                   {user?.name}
                </Typography>
             </Tooltip>
-            <Icon name='ChevronDown' />
+            <Icon name='ChevronDown' className='sm:hidden' />
          </DropdownMenuTrigger>
          <DropdownMenuContent className='w-56'>
             <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>

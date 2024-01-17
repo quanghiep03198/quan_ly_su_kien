@@ -9,7 +9,7 @@ const tagTypes = ['Statistics'] as const
 export const statisticApi = createApi({
    reducerPath,
    tagTypes,
-   keepUnusedDataFor: 5 * 60,
+   keepUnusedDataFor: 15 * 60,
    baseQuery: axiosBaseQuery(),
    endpoints: (build) => ({
       getStatistics: build.query<StatisticsInterface, void>({

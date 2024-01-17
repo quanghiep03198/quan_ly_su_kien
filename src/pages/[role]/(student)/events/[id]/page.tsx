@@ -41,7 +41,7 @@ const EventDetailsPage: React.FunctionComponent = () => {
       <>
          <Box className='mx-auto flex w-full max-w-7xl flex-col gap-y-10 py-10 sm:px-4 md:px-4'>
             {/* Top-bar */}
-            <Box className='flex items-center justify-between'>
+            <Box className='flex items-center justify-between sm:flex-col sm:items-start sm:gap-y-4'>
                <Breadcrumbs name={eventDetails?.name!} currentPath={Paths.HOME + '/' + eventDetails?.id} />
                <Box className='flex items-center gap-x-2'>
                   {eventDetails?.status_join === JoinEventStatus.ALREADY && (

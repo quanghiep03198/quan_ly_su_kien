@@ -18,7 +18,7 @@ const tagTypes = ['Event'] as const
 export const eventApi = createApi({
    reducerPath,
    tagTypes,
-   keepUnusedDataFor: 5 * 60,
+   keepUnusedDataFor: 15 * 60,
    refetchOnReconnect: true,
    baseQuery: axiosBaseQuery(),
    endpoints: (build) => {

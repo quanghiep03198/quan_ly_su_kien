@@ -1,6 +1,7 @@
 import { UserRoleValues } from '@/common/constants/constants'
 import { UserRoleEnum } from '@/common/constants/enums'
-import ErrorBoundary from '@/components/exceptions/error-boundary'
+import { UserInterface } from '@/common/types/entities'
+import ErrorBoundary from '@/components/shared/error-boundary'
 import { Box, Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, Form, InputFieldControl, SelectFieldControl } from '@/components/ui'
 import { useAddUserMutation } from '@/redux/apis/user.api'
 import { UserSchema } from '@/schemas/user.schema'
@@ -29,7 +30,7 @@ const CreateUserFormModal: React.FC<CreateFormModalProps> = (props) => {
       form.reset({ role: props.createForRole })
    }, [props.createForRole])
 
-   const handleCreateEvent = (data: FormValue) => {
+   const handleCreateEvent = (data: Required<FormValue>) => {
       toast.promise(addUser(data).unwrap(), {
          loading: 'Đang thêm người dùng vào hệ thống ...',
          success: () => {

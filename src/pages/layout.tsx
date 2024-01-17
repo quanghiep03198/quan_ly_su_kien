@@ -1,10 +1,9 @@
 import { Paths } from '@/common/constants/pathnames'
-
 import { metadata } from '@/configs/metadata.config'
 import { useAppSelector } from '@/redux/hook'
 import React, { Suspense, useLayoutEffect } from 'react'
 import { Outlet, matchPath, useLocation, useNavigate } from 'react-router-dom'
-import Fallback from '../components/shared/fallback'
+import Fallback from './fallback'
 
 const RootLayout: React.FunctionComponent = () => {
    const { pathname } = useLocation()

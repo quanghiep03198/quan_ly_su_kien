@@ -7,12 +7,10 @@ import {
    Avatar,
    AvatarFallback,
    AvatarImage,
-   Badge,
    Box,
    Button,
    Card,
    CardContent,
-   CardFooter,
    CardHeader,
    HoverCard,
    HoverCardContent,
@@ -20,18 +18,13 @@ import {
    Icon,
    Typography
 } from '@/components/ui'
-import { useGetNotificationDetailsQuery, usePrefetch } from '@/redux/apis/notification.api'
 import { format, formatDistanceToNow } from 'date-fns'
 import { vi } from 'date-fns/locale'
-import * as qs from 'qs'
 import { useContext } from 'react'
-import { Link } from 'react-router-dom'
 import { NotificationContext } from '../context/notification-context'
 
 const NotificationCard: React.FC<{ data: NotificationInterface }> = ({ data }) => {
-   const [params] = useQueryParams()
    const { selectedNotification, setSelectedNotification } = useContext(NotificationContext)
-   // const prefetch = usePrefetch('getNotificationDetails')
 
    return (
       <Card

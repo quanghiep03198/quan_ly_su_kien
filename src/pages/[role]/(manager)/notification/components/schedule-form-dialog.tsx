@@ -2,7 +2,7 @@ import { Box, Button, Calendar, Dialog, DialogContent, DialogFooter, Form, FormF
 import TimePicker from '@/components/ui/@custom/time-picker'
 import { TimeSendSchema } from '@/schemas/notification.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { compareDesc, format } from 'date-fns'
+import { compareDesc, format, isAfter, isBefore } from 'date-fns'
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -10,15 +10,16 @@ import { z } from 'zod'
 type ScheduleFormDialogProps = {
    openState: boolean
    defaultValue?: string
+   timeEnd?: string
    onOpenStateChange: React.Dispatch<React.SetStateAction<boolean>>
    onValueChange: (value: string | null) => void
 }
 
-type FormValue = z.infer<typeof TimeSendSchema>
+type FormValue = z.infer<ReturnType<typeof TimeSendSchema>>
 
 const ScheduleFormDialog: React.FC<ScheduleFormDialogProps> = (props) => {
    const form = useForm<FormValue>({
-      resolver: zodResolver(TimeSendSchema)
+      resolver: zodResolver(TimeSendSchema({ timeEnd: props.timeEnd }))
    })
 
    useEffect(() => {
@@ -62,7 +63,7 @@ const ScheduleFormDialog: React.FC<ScheduleFormDialogProps> = (props) => {
                                  selected={new Date(field.value)}
                                  className='w-fit py-0'
                                  onSelect={field.onChange}
-                                 disabled={(date) => compareDesc(date, new Date()) === 0}
+                                 disabled={(date) => isBefore(date, new Date()) || isAfter(date, new Date(props.timeEnd))}
                               />
                               <FormMessage />
                            </FormItem>

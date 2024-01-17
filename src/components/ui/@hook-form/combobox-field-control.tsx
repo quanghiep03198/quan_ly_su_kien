@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import { Control, FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
+import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
 import {
    Button,
    Command,
@@ -30,7 +30,7 @@ type ComboboxFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & {
 }
 
 export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxFieldControlProps<T>) {
-   const { form, name, control, options, label, description, placeholder, defaultValue, layout, hidden, onInput } = props
+   const { form, name, control, options, label, description, placeholder, layout, hidden, onInput } = props
 
    return (
       <FormField

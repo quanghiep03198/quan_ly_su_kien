@@ -13,7 +13,7 @@ export function EditorFieldControl<T extends FieldValues>({ form, label, name, d
 
    useEffect(() => {
       if (state.isEmpty && form.formState.isSubmitted) {
-         form.setError(name, { type: 'required', message: 'Vui lòng nhập nội dung' })
+         form.setError(name, { type: 'required', message: form.getFieldState(name).error?.message })
       } else {
          form.clearErrors(name)
       }
@@ -22,7 +22,7 @@ export function EditorFieldControl<T extends FieldValues>({ form, label, name, d
    }, [state, form.formState.isSubmitted])
 
    useLayoutEffect(() => {
-      if (defaultValue) setState((prev) => ({ ...prev, isEmpty: false }))
+      if (defaultValue) setState({ value: defaultValue, isEmpty: false })
    }, [defaultValue])
 
    return (

@@ -1,6 +1,6 @@
 import { Box, Button, Icon, buttonVariants } from '@/components/ui'
 import React from 'react'
-import ThemeSelect from '../../../../../components/shared/theme-select'
+import ThemeSelect from '../../../../components/theme-select'
 import NavbarBreadscrumb from './breadcrumbs'
 import Notification from './notification'
 import UserActions from '../../../../components/user-actions'

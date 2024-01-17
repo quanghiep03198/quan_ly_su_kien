@@ -11,7 +11,7 @@ import {
    Icon
 } from '@/components/ui'
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
-import Tooltip from '../ui/@override/tooltip'
+import Tooltip from '../../components/ui/@override/tooltip'
 
 const ThemeSelect: React.FunctionComponent = () => {
    const { theme, setTheme } = useTheme()

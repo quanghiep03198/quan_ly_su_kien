@@ -1,16 +1,21 @@
+import useQueryParams from '@/common/hooks/use-query-params'
 import { FeedbackInterface } from '@/common/types/entities'
 import { Avatar, AvatarFallback, AvatarImage, Box, Button, Icon, ScrollArea, Separator, Textarea, Toggle } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import Tooltip from '@/components/ui/@override/tooltip'
-import { useDeleteFeedbackMutation } from '@/redux/apis/feedback.api'
+import { useDeleteFeedbackMutation, useGetFeedbackDetailsQuery } from '@/redux/apis/feedback.api'
 import { format } from 'date-fns'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 
-const FeedbackDetails: React.FC<{ data: FeedbackInterface }> = ({ data }) => {
+const FeedbackDetails: React.FunctionComponent = () => {
    const [deleteFeedback] = useDeleteFeedbackMutation()
    const [open, setOpen] = useState<boolean>(false)
+   const [params] = useQueryParams('feedback')
+
+   const { data } = useGetFeedbackDetailsQuery(params.feedback)
+   console.log(data)
 
    const handleDeleteFeedback = () => {
       toast.promise(deleteFeedback(data?.id).unwrap, {
@@ -23,7 +28,7 @@ const FeedbackDetails: React.FC<{ data: FeedbackInterface }> = ({ data }) => {
    return (
       <>
          <Box className='flex w-full flex-col items-stretch divide-y divide-border sm:hidden md:hidden'>
-            <Box className='flex w-full basis-[4rem] items-center justify-end gap-x-1 p-3'>
+            <Box className='flex w-full basis-[4rem] items-center justify-end gap-x-1 p-4'>
                <Tooltip content='Đánh dấu là đã đọc'>
                   <Toggle size='sm'>
                      <Icon name='MailCheck' />
@@ -55,7 +60,7 @@ const FeedbackDetails: React.FC<{ data: FeedbackInterface }> = ({ data }) => {
             </Box>
 
             {data && (
-               <Box className='flex w-full items-start justify-between p-3'>
+               <Box className='flex w-full items-start justify-between p-4'>
                   <Box className='flex basis-1/2 space-x-4'>
                      <Avatar>
                         <AvatarImage src={data?.user?.avatar} />

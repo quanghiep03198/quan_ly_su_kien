@@ -1,5 +1,6 @@
 import useQueryParams from '@/common/hooks/use-query-params'
 import { FeedbackInterface } from '@/common/types/entities'
+import { cn } from '@/common/utils/cn'
 import {
    Avatar,
    AvatarFallback,
@@ -15,6 +16,7 @@ import {
    HoverCardTrigger,
    Typography
 } from '@/components/ui'
+import { useGetFeedbackDetailsQuery, usePrefetch } from '@/redux/apis/feedback.api'
 import { format, formatDistanceToNow } from 'date-fns'
 import { vi } from 'date-fns/locale'
 import { CalendarIcon } from 'lucide-react'
@@ -25,10 +27,11 @@ import tw from 'tailwind-styled-components'
 
 const Feedback: React.FC<{ data: FeedbackInterface }> = ({ data }) => {
    const [params] = useQueryParams()
+   const prefetch = usePrefetch('getFeedbackDetails')
 
    return (
-      <Link to={{ search: qs.stringify({ ...params, feedback: data.id }) }}>
-         <Card className='duration-200 ease-in-out hover:bg-accent/50'>
+      <Link to={{ search: qs.stringify({ ...params, feedback: data.id }) }} onMouseEnter={() => prefetch(data.id)}>
+         <Card className={cn('duration-200 ease-in-out hover:bg-accent/50', { 'bg-accent/50': params.feedback === String(data.id) })}>
             <CardHeader className='pb-6 pt-4'>
                <Box className='flex flex-row items-center justify-between'>
                   <HoverCard>

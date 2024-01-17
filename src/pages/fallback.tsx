@@ -1,6 +1,7 @@
+import '@/styles/nprogress.css'
+
 import { useEffect } from 'react'
 import nProgress from 'nprogress'
-import '@/styles/nprogress.css'
 
 const Fallback: React.FunctionComponent = () => {
    nProgress.configure({

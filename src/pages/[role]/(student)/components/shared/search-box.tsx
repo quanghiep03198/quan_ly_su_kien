@@ -1,4 +1,5 @@
-import { Badge, Box, DropdownSelect, Icon, Input, Typography } from '@/components/ui'
+import useQueryParams from '@/common/hooks/use-query-params'
+import { Badge, Box, DropdownSelect, Icon, Input, Toggle, Typography } from '@/components/ui'
 import { debounce } from 'lodash'
 import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -30,14 +31,11 @@ const postedTimeOptions: Record<'label' | 'value', string>[] = [
 const keywords = ['Happy Bee', 'Hackathon', 'Poly Microsoft Office', 'Poly Running']
 
 const SearchBox: React.FC<SearchBoxProps> = ({ onSearchValueChange, onSortChange }) => {
-   const [_, setSearchParams] = useSearchParams()
+   const [_, setSearchParam, removeParam] = useQueryParams()
 
    const handleSearch = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
       onSearchValueChange(e.target.value)
-      setSearchParams((params) => {
-         params.delete('page')
-         return params
-      })
+      removeParam('page')
    }, 500)
 
    return (
@@ -49,14 +47,6 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onSearchValueChange, onSortChange
             </Box>
             <DropdownSelect
                selectTriggerProps={{ className: 'sm:col-span-2' }}
-               options={locationOptions}
-               placeholder='Địa điểm'
-               onValueChange={() => {
-                  toast.info('Chức năng hiện đang được cập nhật')
-               }}
-            />
-            <DropdownSelect
-               selectTriggerProps={{ className: 'sm:col-span-2' }}
                options={postedTimeOptions}
                placeholder='Ngày đăng'
                onValueChange={(value) => {
@@ -64,20 +54,46 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onSearchValueChange, onSortChange
                }}
             />
          </Box>
-         <Box className='flex items-center gap-4 sm:flex-col sm:items-start md:flex-col md:items-start'>
-            <Typography variant='h6' className='text-base'>
-               Đề xuất cho bạn
-            </Typography>
-            <Box className='space-x-1'>
-               {keywords.map((item) => (
-                  <Badge variant='secondary' key={item} className='cursor-pointer'>
-                     {item}
-                  </Badge>
-               ))}
-            </Box>
-         </Box>
       </Box>
    )
 }
 
 export default SearchBox
+
+{
+   /* <Box className='flex items-center gap-4 sm:flex-col sm:items-start md:flex-col md:items-start'>
+   <Typography variant='h6' className='text-base'>
+      Đề xuất cho bạn
+   </Typography>
+   <Box className='space-x-1'>
+      {keywords.map((item) => (
+         <Toggle
+            key={item}
+            size='sm'
+            className='cursor-pointer text-xs'
+            onPressedChange={(pressed) => {
+               if (pressed) {
+                  onSearchValueChange(item)
+                  removeParam('page')
+               } else {
+                  onSearchValueChange('')
+               }
+            }}
+         >
+            {item}
+         </Toggle>
+      ))}
+   </Box>
+</Box> */
+}
+
+{
+   /* <DropdownSelect
+   selectTriggerProps={{ className: 'sm:col-span-2' }}
+   options={locationOptions}
+   placeholder='Địa điểm'
+   onValueChange={() => {
+      toast.info('Chức năng hiện đang được cập nhật')
+   }}
+/> */
+}

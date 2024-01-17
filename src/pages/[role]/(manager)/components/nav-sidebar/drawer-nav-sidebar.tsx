@@ -1,5 +1,5 @@
 import { cn } from '@/common/utils/cn'
-import PrivateComponent from '@/components/private/private-component'
+import PrivateComponent from '@/components/shared/private-component'
 import { Icon, Sheet, SheetContent, buttonVariants } from '@/components/ui'
 import { breadcrumbs } from '@/configs/breadcrumbs.config'
 import React from 'react'

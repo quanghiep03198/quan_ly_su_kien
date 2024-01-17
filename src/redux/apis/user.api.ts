@@ -14,7 +14,7 @@ const tagTypes = ['Users'] as const
 export const userApi = createApi({
    reducerPath,
    tagTypes,
-   keepUnusedDataFor: 5 * 60,
+   keepUnusedDataFor: 15 * 60,
    baseQuery: axiosBaseQuery(),
    endpoints: (build) => ({
       getUsers: build.query<OptionalPagination<UserInterface>, RequestParams>({
@@ -33,7 +33,7 @@ export const userApi = createApi({
             return response?.metadata as Array<UserInterface>
          }
       }),
-      addUser: build.mutation<SuccessResponse<UserInterface>, Partial<UserInterface>>({
+      addUser: build.mutation<SuccessResponse<UserInterface>, Pick<UserInterface, 'name' | 'email' | 'phone' | 'role'>>({
          query: (payload) => ({ url: '/participants', method: 'POST', data: payload }),
          invalidatesTags: (_result, error, _args) => (error ? [] : tagTypes)
       }),

@@ -4,7 +4,6 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import * as _ from 'lodash'
 import { authApi } from '../apis/auth.api'
-import { userApi } from '../apis/user.api'
 
 type AuthSliceState = {
    user: Omit<UserInterface, 'password'> | null
@@ -15,7 +14,7 @@ type SigninResponseData = SuccessResponse<{ user: Omit<UserInterface, 'password'
 /**
  * Async thunk actions
  */
-export const signinWithGoogle = createAsyncThunk('auth/google', async (oauth2Token: string, { rejectWithValue, signal }) => {
+export const signinWithGoogle = createAsyncThunk<SigninResponseData, string>('auth/google', async (oauth2Token: string, { rejectWithValue, signal }) => {
    try {
       const BASE_URL = import.meta.env.VITE_API_URL
       const response = await axios.get(BASE_URL + '/auth/google', { headers: { Authorization: oauth2Token }, signal })

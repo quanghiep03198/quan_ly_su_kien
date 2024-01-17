@@ -31,7 +31,7 @@ export const extensions = [
          }
       },
       blockquote: {
-         HTMLAttributes: { class: 'text-foreground border-none p-0' }
+         HTMLAttributes: { class: 'text-foreground border-none' }
       },
       bulletList: {
          HTMLAttributes: {
@@ -41,6 +41,11 @@ export const extensions = [
       orderedList: {
          HTMLAttributes: {
             class: 'list-decimal text-foreground'
+         }
+      },
+      listItem: {
+         HTMLAttributes: {
+            class: 'list-decimal text-foreground p-0'
          }
       },
       horizontalRule: {

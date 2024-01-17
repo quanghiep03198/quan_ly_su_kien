@@ -3,7 +3,7 @@ import { Paths } from '@/common/constants/pathnames'
 import { useLocalStorage } from '@/common/hooks/use-storage'
 import useTheme from '@/common/hooks/use-theme'
 import { parseJSON } from '@/common/utils/json'
-import ThemeSelect from '@/components/shared/theme-select'
+import ThemeSelect from '@/pages/components/theme-select'
 import { Box, Button, Checkbox, Form, FormLabel, Icon, InputFieldControl, Typography } from '@/components/ui'
 import { GoogleIcon } from '@/components/ui/@custom/icons'
 import { useSigninMutation } from '@/redux/apis/auth.api'
@@ -19,7 +19,7 @@ import { toast } from 'sonner'
 import { z } from 'zod'
 import { Divider } from '../../../components/ui/@custom/divider'
 import { Image, StyledForm } from './components/styled'
-import { AnyAction } from '@reduxjs/toolkit'
+import { AnyAction, AsyncThunkAction } from '@reduxjs/toolkit'
 
 type FormValue = z.infer<typeof SigninSchema>
 
@@ -37,7 +37,7 @@ const Signin: React.FunctionComponent = () => {
       onSuccess: async (response) => {
          try {
             const data = (await dispatch(
-               signinWithGoogle(`${response.token_type} ${response.access_token}`) as any
+               signinWithGoogle(`${response.token_type} ${response.access_token}`) as unknown as AnyAction
             ).unwrap()) as unknown as SuccessResponse<any>
             window.localStorage.setItem('access_token', `Bearer ${data?.metadata?.access_token}`)
             toast.success('Đăng nhập thành công')

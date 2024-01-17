@@ -10,6 +10,7 @@ import { format } from 'date-fns'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import FeedbackFormModal from './feedback-form-modal'
+import Tooltip from '@/components/ui/@override/tooltip'
 
 export const EventVerticalCard: React.FC<{
    data: EventInterface
@@ -21,17 +22,18 @@ export const EventVerticalCard: React.FC<{
          <Card className='w-full overflow-clip transition-transform duration-200 ease-in-out'>
             <CardHeader className='group relative h-52 space-y-0 p-2'>
                <Image src={data?.banner} height={208} width='100%' className='aspect-[16/9] h-full max-w-full rounded-lg object-cover' />
-               {data?.status_join === JoinEventStatus.ALREADY && (
-                  <Badge variant='success' className='absolute bottom-4 right-4 gap-x-2'>
-                     <Icon name='CheckCircle' /> Đã tham gia
-                  </Badge>
-               )}
             </CardHeader>
             <CardContent className='grid gap-y-2 px-3 py-2'>
-               <Link className='line-clamp-1 font-medium' to='#'>
-                  {data?.name}
-               </Link>
-
+               <Box className='flex items-center justify-between'>
+                  <Link className='line-clamp-1 font-medium' to='#'>
+                     {data?.name}
+                  </Link>
+                  {data?.status_join === JoinEventStatus.ALREADY && (
+                     <Tooltip content='Đã tham gia'>
+                        <Icon name='CheckCircle' className='text-success' />
+                     </Tooltip>
+                  )}
+               </Box>
                <CardDescription className='mb-2 inline-flex items-center space-x-2'>
                   <Icon name='Calendar' />
                   <time>

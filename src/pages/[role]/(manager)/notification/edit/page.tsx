@@ -1,3 +1,12 @@
+import { useEffect, useMemo, useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { formatRelative, isEqual } from 'date-fns'
+import { vi } from 'date-fns/locale'
+import _ from 'lodash'
+import { Path, PathValue, useForm } from 'react-hook-form'
+import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
+import { z } from 'zod'
 import { Paths } from '@/common/constants/pathnames'
 import { EventInterface } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
@@ -7,15 +16,6 @@ import Tooltip from '@/components/ui/@override/tooltip'
 import { useGetEventsQuery } from '@/redux/apis/event.api'
 import { useEditNotificationMutation, useGetNotificationDetailsQuery } from '@/redux/apis/notification.api'
 import { NotificationSchema } from '@/schemas/notification.schema'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { addMinutes, format, formatRelative } from 'date-fns'
-import { vi } from 'date-fns/locale'
-import _ from 'lodash'
-import React, { useEffect, useMemo, useState } from 'react'
-import { Path, PathValue, useForm } from 'react-hook-form'
-import { useNavigate, useParams } from 'react-router-dom'
-import { toast } from 'sonner'
-import { z } from 'zod'
 import ScheduleFormDialog from '../components/schedule-form-dialog'
 
 type FormValue = z.infer<typeof NotificationSchema>
@@ -31,7 +31,7 @@ const EditNotificationPage: React.FunctionComponent = () => {
    // Fetching data
    const { data: events } = useGetEventsQuery({ pagination: false, limit: 5, search: eventSearchTerm })
    const [editNotification, { isLoading }] = useEditNotificationMutation()
-   const { data } = useGetNotificationDetailsQuery(notificationId!)
+   const { data: notificationDetails } = useGetNotificationDetailsQuery(notificationId!)
 
    const defaultEventOptions = useMemo(() => {
       const data = events as EventInterface[]
@@ -39,25 +39,24 @@ const EditNotificationPage: React.FunctionComponent = () => {
    }, [events])
 
    useEffect(() => {
-      if (data) {
+      if (notificationDetails) {
          form.reset({
-            title: data.title,
-            content: data.content,
-            event_id: data.event_id
+            title: notificationDetails.title,
+            content: notificationDetails.content,
+            event_id: notificationDetails.event_id
          })
-         setTimeSend(data?.time_send as string)
+         setTimeSend(notificationDetails?.time_send as string)
       }
-   }, [data])
+   }, [notificationDetails])
 
    const handleEditNotification = (data: FormValue) => {
-      console.log('data', data)
+      // If time to send notification already existed, does not update it, otherwise, update new time to send notification
+      data.time_send = isEqual(new Date(timeSend), new Date(notificationDetails?.time_send)) ? undefined : timeSend
+
       toast.promise(
          editNotification({
             id: notificationId!,
-            payload: {
-               ...data,
-               time_send: timeSend ?? format(addMinutes(new Date(), 5), 'yyyy-MM-dd HH:mm:ss')
-            }
+            payload: data
          }).unwrap(),
          {
             loading: 'Đang cập nhật thông báo ...',
@@ -66,7 +65,7 @@ const EditNotificationPage: React.FunctionComponent = () => {
                return 'Cập nhật thông báo thành công'
             },
             error: (error) => {
-               console.log(error)
+               console.error(error)
                return 'Cập nhật thất bại'
             }
          }
@@ -137,7 +136,7 @@ const EditNotificationPage: React.FunctionComponent = () => {
                   </Box>
                   {/* Content */}
                   <Box className='col-span-full'>
-                     <EditorFieldControl defaultValue={data?.content} form={form} name='content' label='Nội dung' />
+                     <EditorFieldControl defaultValue={notificationDetails?.content} form={form} name='content' label='Nội dung' />
                   </Box>
                   <Button id='submit' type='submit' disabled={isLoading} className='hidden w-fit gap-x-2 sm:inline-flex sm:w-full'>
                      <Icon name='BellPlus' /> Tạo thông báo
@@ -146,7 +145,12 @@ const EditNotificationPage: React.FunctionComponent = () => {
             </Form>
          </Box>
          {/* Schedule form dialog */}
-         <ScheduleFormDialog openState={scheduleDialogOpen} onOpenStateChange={setScheduleDialogOpen} onValueChange={setTimeSend} />
+         <ScheduleFormDialog
+            openState={scheduleDialogOpen}
+            onOpenStateChange={setScheduleDialogOpen}
+            onValueChange={setTimeSend}
+            timeEnd={notificationDetails?.event?.end_time as string}
+         />
       </>
    )
 }

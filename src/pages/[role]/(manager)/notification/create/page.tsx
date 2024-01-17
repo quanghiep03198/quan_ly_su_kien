@@ -46,7 +46,7 @@ const CreateNotificationPage: React.FunctionComponent = () => {
    const [eventSearchTerm, setEventSearchTerm] = useState<string>('')
 
    const [createNotification, { isLoading }] = useCreateNotificationMutation()
-   const { data: events } = useGetEventsQuery({ pagination: false, limit: 5, search: eventSearchTerm })
+   const { data: events } = useGetEventsQuery({ pagination: false, limit: 10, search: eventSearchTerm })
 
    const defaultEventOptions = useMemo(() => {
       const data = events as EventInterface[]
