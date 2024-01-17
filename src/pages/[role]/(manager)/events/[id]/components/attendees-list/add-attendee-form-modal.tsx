@@ -1,8 +1,22 @@
-import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Form, Icon, InputFieldControl } from '@/components/ui'
+import {
+   Button,
+   ComboboxFieldControl,
+   Dialog,
+   DialogContent,
+   DialogDescription,
+   DialogHeader,
+   DialogTitle,
+   Form,
+   Icon,
+   InputFieldControl
+} from '@/components/ui'
 
 import { useAddAttendanceMutation } from '@/redux/apis/attendance.api'
+import { useGetUsersQuery } from '@/redux/apis/user.api'
 import { AddUserSchema } from '@/schemas/user.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import _ from 'lodash'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -19,6 +33,8 @@ type FormValue = z.infer<typeof AddUserSchema>
 const AddAttendeeFormModal: React.FC<AddAttendeeFormModalProps> = (props) => {
    const form = useForm<FormValue>({ resolver: zodResolver(AddUserSchema) })
    const { id } = useParams()
+   const [searchTerm, setSearchTerm] = useState<string>('')
+   const { data: users } = useGetUsersQuery({ pagination: false, search: searchTerm })
    const [addAttendee, { isLoading }] = useAddAttendanceMutation()
 
    const handleAddAttendee = async (data: Required<FormValue>) => {
@@ -41,11 +57,14 @@ const AddAttendeeFormModal: React.FC<AddAttendeeFormModalProps> = (props) => {
             <Form {...form}>
                <DialogForm onSubmit={form.handleSubmit(handleAddAttendee)}>
                   {/* <InputFieldControl type='text' name='event_id' control={form.control} value={id!} /> */}
-                  <InputFieldControl
-                     name='email'
-                     type='email'
+                  <ComboboxFieldControl
+                     form={form}
                      control={form.control}
-                     label='Email'
+                     name='email'
+                     placeholder='Chọn người tham gia'
+                     onInput={_.debounce((value) => setSearchTerm(value), 200)}
+                     options={Array.isArray(users) ? users.map((item) => ({ label: item.name, value: String(item.id) })) : []}
+                     label='Người tham gia'
                      description='Email này là email của sinh viên bạn muốn mời tham gia'
                   />
                   <Button type='submit' className='gap-x-2'>

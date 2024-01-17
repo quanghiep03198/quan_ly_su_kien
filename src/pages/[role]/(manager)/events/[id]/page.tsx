@@ -6,37 +6,35 @@ import { useParams, useSearchParams } from 'react-router-dom'
 import tw from 'tailwind-styled-components'
 import ParticipantsList from './components/attendees-list'
 import FeedbackList from './components/feedback-list'
+import { useGetAllFeedbackByEventQuery } from '@/redux/apis/feedback.api'
+import useQueryParams from '@/common/hooks/use-query-params'
+import { useGetAttendeesByEventQuery } from '@/redux/apis/attendance.api'
 
 const EventDetailsPage: React.FunctionComponent = () => {
    const { id } = useParams()
-   const { data } = useGetEventDetailsQuery(id!)
-   const [params, setParams] = useSearchParams()
+   const { data: eventDetails } = useGetEventDetailsQuery(id!, { skip: !id })
+   const { data: attendeesList } = useGetAttendeesByEventQuery({ eventId: id!, params: { pagination: false } }, { skip: !id })
+   const { data: feedback } = useGetAllFeedbackByEventQuery({ eventId: id! }, { skip: !id })
+   const [params, setParams] = useQueryParams()
 
    useEffect(() => {
-      if (!params.get('tab'))
-         setParams((params) => {
-            params.set('tab', 'preview')
-            return params
-         })
+      if (!params.tab) setParams('tab', 'preview')
    }, [])
 
    const handleTabChange = useCallback((value: string) => {
-      setParams((params) => {
-         params.set('tab', value)
-         return params
-      })
+      setParams('tab', value)
    }, [])
 
    return (
-      <Tabs defaultValue={params.get('tab') ?? 'participants'} onValueChange={handleTabChange}>
+      <Tabs defaultValue={params.tab ?? 'participants'} onValueChange={handleTabChange}>
          <Box className='flex items-start justify-between gap-10 border-b pb-4 sm:flex-col md:flex-col'>
             <Box className='space-y-2'>
                <Typography variant='h6' className='capitalize'>
-                  {data?.name}
+                  {eventDetails?.name}
                </Typography>
                <Time>
                   <Icon name='Clock' className='text-foreground' />
-                  {format(data?.start_time ?? new Date(), 'dd/MM/yyyy')} - {format(data?.end_time! ?? new Date(), 'dd/MM/yyyy')}
+                  {format(eventDetails?.start_time ?? new Date(), 'dd/MM/yyyy')} - {format(eventDetails?.end_time! ?? new Date(), 'dd/MM/yyyy')}
                </Time>
             </Box>
             <Box className='max-w-full sm:rounded-lg sm:bg-accent sm:px-2'>
@@ -48,7 +46,7 @@ const EventDetailsPage: React.FunctionComponent = () => {
                            Thành viên
                         </Box>
                         <Badge variant='secondary' className='aspect-square h-5 w-5 justify-center text-xs'>
-                           {data?.attendances?.length ?? 0}
+                           {attendeesList?.length ?? 0}
                         </Badge>
                      </TabsTrigger>
                      <TabsTrigger value='feedback' className='min-w-fit gap-x-4'>
@@ -57,7 +55,7 @@ const EventDetailsPage: React.FunctionComponent = () => {
                            Feedback
                         </Box>
                         <Badge variant='secondary' className='aspect-square h-5 w-5 justify-center text-xs'>
-                           {data?.feedback?.length ?? 0}
+                           {feedback?.totalDocs ?? 0}
                         </Badge>
                      </TabsTrigger>
                   </TabsList>

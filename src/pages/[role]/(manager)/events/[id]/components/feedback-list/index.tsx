@@ -10,9 +10,8 @@ import useQueryParams from '@/common/hooks/use-query-params'
 
 const FeedbackList: React.FunctionComponent = () => {
    const { id } = useParams()
-   const { data } = useGetAllFeedbackByEventQuery({ eventId: id! })
-   const [currentFeedback, setCurrentFeedback] = useState<FeedbackInterface>()
-   const [params, setParam, removeParam] = useQueryParams('feedback')
+   const [params, setParam, removeParam] = useQueryParams()
+   const { data } = useGetAllFeedbackByEventQuery({ eventId: id!, params: { limit: 10, page: params.page } })
 
    useEffect(() => {
       if (data?.totalDocs > 0 && !params.feedback) setParam('feedback', data?.docs[0]?.id)
@@ -23,7 +22,7 @@ const FeedbackList: React.FunctionComponent = () => {
       <Box className='grid grid-cols-[1.5fr_1fr] items-stretch divide-x divide-border rounded-lg border sm:grid-cols-1 md:grid-cols-1'>
          <Box className='flex flex-col items-stretch divide-y divide-border'>
             <Box className='m-0 max-h-[4rem] basis-[4rem] p-4'>
-               <SimplePagination hasNextPage={false} hasPrevPage={false} totalDocs={data?.totalDocs} totalPages={data?.totalPages} />
+               <SimplePagination hasNextPage={data?.hasNextPage} hasPrevPage={data?.hasPrevPage} totalDocs={data?.totalDocs} totalPages={data?.totalPages} />
             </Box>
             <Box className='py-4'>
                <ScrollArea className='h-[calc(90vh-4.75rem)] px-4'>

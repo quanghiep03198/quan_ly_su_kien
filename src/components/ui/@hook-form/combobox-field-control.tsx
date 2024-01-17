@@ -23,6 +23,7 @@ import {
 type ComboboxFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & {
    form: UseFormReturn<T>
    onInput?: (value: string) => unknown
+   onSelect?: (value: string) => unknown
    options: Array<{
       label: string
       value: PathValue<T, Path<T>>
@@ -30,7 +31,7 @@ type ComboboxFieldControlProps<T extends FieldValues> = BaseFieldControl<T> & {
 }
 
 export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxFieldControlProps<T>) {
-   const { form, name, control, options, label, description, placeholder, layout, hidden, onInput } = props
+   const { form, name, control, options, label, description, placeholder, layout, hidden, onInput, onSelect } = props
 
    return (
       <FormField
@@ -68,6 +69,7 @@ export function ComboboxFieldControl<T extends FieldValues>(props: ComboboxField
                                           key={option.value}
                                           onSelect={() => {
                                              form.setValue(name, option.value)
+                                             if (onSelect) onSelect(option.value)
                                           }}
                                        >
                                           {option.label}

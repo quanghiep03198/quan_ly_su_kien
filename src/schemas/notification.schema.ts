@@ -9,7 +9,7 @@ export const NotificationSchema = z.object({
       .transform((value) => +value),
    time_send: z.string().default(format(new Date(), 'yyyy-MM-dd HH:mm:ss')),
    status: z.number().default(1),
-   content: z.string({ required_error: 'Vui lòng nhập nội dung' })
+   content: z.string()
 })
 
 export const TimeSendSchema = (context) =>

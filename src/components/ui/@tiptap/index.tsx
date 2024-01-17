@@ -1,15 +1,14 @@
 /* eslint-disable */
 
-import { Editor as EditorType, EditorContent, useEditor } from '@tiptap/react'
-import React, { memo, useLayoutEffect } from 'react'
+import { EditorContent, Editor as EditorType, useEditor } from '@tiptap/react'
+import React, { memo } from 'react'
 import { Box, ScrollArea } from '..'
 import BubbleMenu from './components/bubble-menu'
 import Toolbar from './components/toolbar'
 import { extensions } from './extensions'
 
-type AfterChangeHandler = (arg: string) => unknown
 export interface EditorProps {
-   onUpdate: (state: { value: string; isEmpty: boolean }, instanceEditor?: EditorType) => any
+   onUpdate: (state: { value: string; isEmpty: boolean }) => unknown
    id?: string
    name?: string
    content?: string

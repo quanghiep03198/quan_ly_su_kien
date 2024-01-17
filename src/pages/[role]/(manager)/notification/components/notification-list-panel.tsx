@@ -14,7 +14,7 @@ const NotificationListPanel: React.FunctionComponent = () => {
    const [advancedSearchOptions, setAdvancedSearchOptions] = useState<Record<string, any>>({})
    const { data, isLoading } = useGetAllNotificationToUserQuery({
       userId: user?.id!,
-      params: { limit: 20, page: params.page, type: params.type, ...advancedSearchOptions }
+      params: { limit: 10, page: params.page, type: params.type, ...advancedSearchOptions }
    })
    const { setSelectedNotification } = useContext(NotificationContext)
 
@@ -29,7 +29,7 @@ const NotificationListPanel: React.FunctionComponent = () => {
       <Box className='relative h-[inherit] @container'>
          <Box className='flex h-16 items-center justify-between border-b p-4'>
             <SearchBox onSearchOptionsChange={setAdvancedSearchOptions} />
-            <Box className='absolute bottom-0 left-1/2 z-10 flex w-full -translate-x-1/2 justify-end border-t bg-background @xl:relative @xl:top-0 @xl:!-translate-x-full @xl:justify-end @xl:border-none'>
+            <Box className='absolute bottom-0 left-1/2 z-10 flex w-full -translate-x-1/2 justify-end border-t bg-background px-4 py-2 @xl:relative @xl:top-0 @xl:!-translate-x-full @xl:justify-end @xl:border-none @xl:p-0'>
                <SimplePagination
                   hasNextPage={data?.hasNextPage!}
                   hasPrevPage={data?.hasPrevPage!}

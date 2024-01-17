@@ -25,39 +25,37 @@ import { addHours, addMinutes, format, formatRelative } from 'date-fns'
 import { vi } from 'date-fns/locale'
 import _, { debounce } from 'lodash'
 import React, { useEffect, useId, useMemo, useState } from 'react'
-import { Path, PathValue, useForm } from 'react-hook-form'
+import { Path, PathValue, useForm, useWatch } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import ScheduleFormDialog from '../components/schedule-form-dialog'
 import { useAppSelector } from '@/redux/hook'
-import { EditorFieldControl } from '@/components/ui/@hook-form/edior-field-control'
+import { EditorFieldControl } from '@/components/ui/@hook-form/editor-field-control'
 
 type FormValue = z.infer<typeof NotificationSchema>
 
 const CreateNotificationPage: React.FunctionComponent = () => {
    const form = useForm<FormValue>({ resolver: zodResolver(NotificationSchema) })
-   const user = useAppSelector((state) => state.auth.user)
    const id = useId()
    const navigate = useNavigate()
    // States declaration
    const [scheduleDialogOpen, setScheduleDialogOpen] = useState<boolean>(false)
    const [timeSend, setTimeSend] = useState<string | null>(null)
    const [eventSearchTerm, setEventSearchTerm] = useState<string>('')
-
    const [createNotification, { isLoading }] = useCreateNotificationMutation()
-   const { data: events } = useGetEventsQuery({ pagination: false, limit: 10, search: eventSearchTerm })
+   const selectedEvent = useWatch({ name: 'event_id', control: form.control })
+   const { data: events } = useGetEventsQuery({ page: 1, limit: 10, search: eventSearchTerm }, { refetchOnMountOrArgChange: true })
 
    const defaultEventOptions = useMemo(() => {
-      const data = events as EventInterface[]
-      return Array.isArray(data) ? data.map((item) => ({ label: item.name, value: String(item.id) as PathValue<FormValue, Path<FormValue>> })) : []
+      const data = events as Pagination<EventInterface>
+      return Array.isArray(data?.docs) ? data.docs.map((item) => ({ label: item.name, value: String(item.id) as PathValue<FormValue, Path<FormValue>> })) : []
    }, [events])
 
    const handleCreateNotification = (data: FormValue) => {
       toast.promise(
          createNotification({
             ...data,
-            // user_id: user?.id!,
             time_send: timeSend ?? format(addMinutes(new Date(), 5), 'yyyy-MM-dd HH:mm:ss')
          } as unknown as Omit<NotificationInterface, 'id'>).unwrap(),
          {
@@ -135,7 +133,7 @@ const CreateNotificationPage: React.FunctionComponent = () => {
                   </Box>
                   {/* Content */}
                   <Box className='col-span-full space-y-2'>
-                     <EditorFieldControl form={form} name='content' label='Nội dung' />
+                     <EditorFieldControl form={form} name='content' label='Nội dung' errorMessage='Vui ' />
                   </Box>
                   <Button id={id} type='submit' disabled={isLoading} className='hidden w-fit gap-x-2 sm:inline-flex sm:w-full'>
                      <Icon name='BellPlus' /> Tạo thông báo
@@ -144,7 +142,12 @@ const CreateNotificationPage: React.FunctionComponent = () => {
             </Form>
          </Box>
          {/*  */}
-         <ScheduleFormDialog openState={scheduleDialogOpen} onOpenStateChange={setScheduleDialogOpen} onValueChange={setTimeSend} />
+         <ScheduleFormDialog
+            openState={scheduleDialogOpen}
+            onOpenStateChange={setScheduleDialogOpen}
+            onValueChange={setTimeSend}
+            timeEnd={(events as Pagination<EventInterface>)?.docs?.find(({ id }) => id === +selectedEvent)?.end_time as string}
+         />
       </>
    )
 }

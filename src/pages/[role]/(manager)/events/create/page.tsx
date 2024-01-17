@@ -15,7 +15,7 @@ import {
    Typography,
    buttonVariants
 } from '@/components/ui'
-import { EditorFieldControl } from '@/components/ui/@hook-form/edior-field-control'
+import { EditorFieldControl } from '@/components/ui/@hook-form/editor-field-control'
 import { useCreateEventMutation } from '@/redux/apis/event.api'
 import { useAppSelector } from '@/redux/hook'
 import { CreateEventSchema } from '@/schemas/event.schema'
@@ -114,7 +114,7 @@ const CreateEventPage = () => {
                   </Box>
                </Box>
 
-               <Button type='submit' id='submit' disabled={isLoading} className='lg:hidden xl:hidden'>
+               <Button type='submit' id='submit' disabled={isLoading} className='hidden w-full sm:inline-flex'>
                   Lưu
                </Button>
             </Box>

@@ -14,7 +14,7 @@ import {
    Typography,
    buttonVariants
 } from '@/components/ui'
-import { EditorFieldControl } from '@/components/ui/@hook-form/edior-field-control'
+import { EditorFieldControl } from '@/components/ui/@hook-form/editor-field-control'
 import { useGetEventDetailsQuery, useUpdateEventMutation } from '@/redux/apis/event.api'
 import { useAppSelector } from '@/redux/hook'
 import { UpdateEventSchema } from '@/schemas/event.schema'
@@ -142,7 +142,7 @@ const EditEvent = () => {
                      <EditorFieldControl defaultValue={data?.content} name='content' form={form} label='Nội dung' />
                   </Box>
                </Box>
-               <Button id='submit' type='submit' className='hidden sm:inline-flex'>
+               <Button id='submit' type='submit' className='hidden w-full sm:inline-flex'>
                   Lưu
                </Button>
             </Box>
