@@ -1,33 +1,35 @@
 import HttpStatus from '@/common/constants/http-status'
 import { Icon } from '@/components/ui'
 import { icons } from 'lucide-react'
+import { UserRoleEnum } from '../constants/enums'
+import { Control, FieldValues, Path } from 'react-hook-form'
 
 declare global {
-   declare type HttpResponse<T> = {
+   type SuccessResponse<T> = {
       status: 'success' | 'error'
       message: string
       statusCode: HttpStatus
       metadata?: T
    }
 
-   declare type ErrorResponse = {
-      data: HttpResponse<undefined>
+   type ErrorResponse = {
+      data: SuccessResponse<undefined>
       status: HttpStatus
    }
 
-   declare type MenuNavigationItem = {
-      id: string
+   type MenuNavigationItem = {
+      id: number
       icon?: keyof typeof icons
       name: string
       path: string
-      parentId?: string
+      roles?: Array<UserRoleEnum>
       visible?: boolean
       breadcrunbs?: Array<{ path: string; name: string }>
    }
 
-   declare type AnonymousFunction = (...args: any[]) => any
+   type AnonymousFunction = (...args: any[]) => any
 
-   declare type Pagination<T> = {
+   type Pagination<T> = {
       docs: Array<T>
       hasNextPage: boolean
       hasPrevPage: boolean
@@ -35,10 +37,21 @@ declare global {
       page: number
       totalDocs: number
       totalPages: number
-      // pagingCounter: number
    }
 
-   export type PaginationPayload = Record<'page' | 'limit', number>
+   type PaginationPayload = Record<'page' | 'limit', number>
 
-   declare type OptionalPagination<T> = Pagination<T> | Array<T>
+   type OptionalPagination<T> = Pagination<T> | Array<T>
+
+   interface BaseFieldControl<T extends FieldValues> {
+      name: Path<T>
+      control: Control<T>
+      label?: string
+      description?: string
+      hidden?: boolean
+      placeholder?: string
+      defaultValue?: string
+      className?: string
+      layout?: 'vertical' | 'horizontal'
+   }
 }

@@ -54,13 +54,16 @@ export function ColumnFilter<TData, TValue>({ column }: ColumnFilterProps<TData,
       case 'equals':
          return (
             <DropdownSelect
-               className='h-9 min-w-[8rem] rounded-none border-none text-xs font-medium text-muted-foreground/50 shadow-none hover:text-foreground focus:border-none'
+               selectTriggerProps={{
+                  className:
+                     'h-9 min-w-[8rem] rounded-none border-none text-xs font-medium text-muted-foreground/50 shadow-none hover:text-foreground focus:border-none'
+               }}
                placeholder='Chọn ...'
                options={sortedUniqueValues.map((value: any) => ({
                   label: value,
                   value: value
                }))}
-               onChange={(value) => column.setFilterValue(value)}
+               onValueChange={(value) => column.setFilterValue(value)}
             />
          )
 

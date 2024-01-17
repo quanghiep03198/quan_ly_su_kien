@@ -81,7 +81,6 @@ const Toolbar: React.FC<ToolbarPluginProps> = ({ editor }) => {
                      <Icon name='Code' />
                   </Toggle>
                </Tooltip>
-
                <ColorPicker label='Màu văn bản' icon='Baseline' editor={editor} type='textStyle' />
                <ColorPicker label='Highlight' icon='Highlighter' editor={editor} type='highlight' />
 
@@ -114,6 +113,13 @@ const Toolbar: React.FC<ToolbarPluginProps> = ({ editor }) => {
                   >
                      <Icon name='List' />
                   </Toggle>
+               </Tooltip>
+
+               {/* Horizontal ruler */}
+               <Tooltip content='Đường kẻ ngang'>
+                  <Button variant='outline' type='button' size='icon' className='h-8 w-8' onClick={() => editor.commands.setHorizontalRule()}>
+                     <Icon name='PencilLine' />
+                  </Button>
                </Tooltip>
 
                <AlignmentDropdownMenu editor={editor} />

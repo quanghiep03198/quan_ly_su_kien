@@ -1,5 +1,5 @@
 import useQueryParams from '@/common/hooks/use-query-params'
-import { FeedbackType } from '@/common/types/entities'
+import { FeedbackInterface } from '@/common/types/entities'
 import {
    Avatar,
    AvatarFallback,
@@ -23,8 +23,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import tw from 'tailwind-styled-components'
 
-const Feedback: React.FC<{ data: FeedbackType }> = ({ data }) => {
-   const params = useQueryParams()
+const Feedback: React.FC<{ data: FeedbackInterface }> = ({ data }) => {
+   const [params] = useQueryParams()
 
    return (
       <Link to={{ search: qs.stringify({ ...params, feedback: data.id }) }}>

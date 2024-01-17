@@ -1,33 +1,35 @@
-import { useEffect, useId, useState } from 'react'
-import { Control, FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
+import { cn } from '@/common/utils/cn'
+import { useEffect, useLayoutEffect, useState } from 'react'
+import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form'
 import { Editor, FormItem, FormMessage, Label } from '..'
+import { isEmpty } from 'lodash'
 
-type EditorFieldControlProps<T extends FieldValues> = {
+type EditorFieldControlProps<T extends FieldValues> = Omit<BaseFieldControl<T>, 'control'> & {
    form: UseFormReturn<T>
-   defaultValue?: string
-   name: Path<T>
-   control?: Control<T>
-   label?: string
-   description?: string
 }
 
-export function EditorFieldControl<T extends FieldValues>({ form, label, name }: EditorFieldControlProps<T>) {
-   const id = useId()
-   const [state, setState] = useState<{ value: string; isEmpty: boolean }>(() => ({ value: form.getValues(name), isEmpty: true }))
-
-   // const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+export function EditorFieldControl<T extends FieldValues>({ form, label, name, defaultValue }: EditorFieldControlProps<T>) {
+   const [state, setState] = useState<{ value: string; isEmpty: boolean }>(() => ({ value: defaultValue ?? '', isEmpty: isEmpty(defaultValue) }))
 
    useEffect(() => {
-      if (state.isEmpty) form.setError(name, { message: 'Vui lòng nhập nội dung' })
-      else form.clearErrors(name)
-      if (form.formState.isSubmitting) form.setValue(name, state.value as PathValue<T, Path<T>>)
-   }, [state, form])
+      if (state.isEmpty && form.formState.isSubmitted) {
+         form.setError(name, { type: 'required', message: 'Vui lòng nhập nội dung' })
+      } else {
+         form.clearErrors(name)
+      }
+
+      form.setValue(name, state.value as PathValue<T, Path<T>>)
+   }, [state, form.formState.isSubmitted])
+
+   useLayoutEffect(() => {
+      if (defaultValue) setState((prev) => ({ ...prev, isEmpty: false }))
+   }, [defaultValue])
 
    return (
       <FormItem>
-         {label && <Label htmlFor={id}>{label}</Label>}
-         <Editor id={id} content={form.getValues(name)} onUpdate={setState} />
-         {form.getFieldState(name).error && <FormMessage>{form.getFieldState(name)?.error?.message}</FormMessage>}
+         <Label className={cn({ 'text-destructive': form.getFieldState(name).error })}>{label}</Label>
+         <Editor content={defaultValue} onUpdate={setState} />
+         {form.getFieldState(name).error && <FormMessage>{form.getFieldState(name).error?.message}</FormMessage>}
       </FormItem>
    )
 }

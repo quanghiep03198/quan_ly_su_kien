@@ -1,8 +1,8 @@
-import { UserType } from '@/common/types/entities'
+import { UserInterface } from '@/common/types/entities'
 import { cn } from '@/common/utils/cn'
-import { Avatar, AvatarFallback, AvatarImage, Box, Button, DataTable, DataTableRowActions, Icon } from '@/components/ui'
+import { Avatar, AvatarFallback, AvatarImage, Badge, Box, Button, DataTable, DataTableRowActions, Icon, Label, buttonVariants } from '@/components/ui'
 import Tooltip from '@/components/ui/@override/tooltip'
-import { useGetAttendeesByEventQuery, useRemoveAttendanceFromEventMutation } from '@/redux/apis/attendance.api'
+import { type Atteendees, useGetAttendeesByEventQuery, useRemoveAttendanceFromEventMutation } from '@/redux/apis/attendance.api'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
 import React, { useCallback, useState } from 'react'
@@ -11,20 +11,12 @@ import { toast } from 'sonner'
 import AddAttendeeFormModal from './add-attendee-form-modal'
 import UpdateAttendeeFormModal from './update-attendee-form-modal'
 
-type Atteendees = {
-   id: number
-   event_id: number
-   user: Partial<UserType>
-   created_at: Date
-   updated_at: Date
-}
-
 const ParticipantsList: React.FunctionComponent = () => {
    const [addFormOpenState, setAddFormOpenState] = useState<boolean>(false)
    const [updateFormOpenState, setUpdateFormOpenState] = useState<boolean>(false)
    const { id: eventId } = useParams()
    const { data: attendees } = useGetAttendeesByEventQuery({ eventId: eventId!, params: { pagination: false } })
-   const [attendeeToUpdate, setAttendeeToUpdate] = useState<Partial<UserType> | null>(null)
+   const [attendeeToUpdate, setAttendeeToUpdate] = useState<Partial<UserInterface> | null>(null)
    const columnHelper = createColumnHelper<Atteendees>()
    const handleOpenAddFormModal = useCallback(setAddFormOpenState, [])
    const handleOpenUpdateFormModal = useCallback(setUpdateFormOpenState, [])
@@ -70,6 +62,14 @@ const ParticipantsList: React.FunctionComponent = () => {
 
          cell: ({ getValue }) => getValue() ?? <span className='italic text-muted-foreground'>Chưa cập nhật</span>
       }),
+      columnHelper.accessor('user.role', {
+         header: 'Vai trò',
+         enableColumnFilter: true,
+         cell: ({ getValue }) => {
+            const value = getValue()
+            return <Badge variant='outline'>{value}</Badge>
+         }
+      }),
       columnHelper.accessor('created_at', {
          header: 'Ngày tham gia',
          enableColumnFilter: true,
@@ -96,7 +96,7 @@ const ParticipantsList: React.FunctionComponent = () => {
             )
          }
       })
-   ] as ColumnDef<Partial<UserType>>[]
+   ] as ColumnDef<Atteendees>[]
 
    return (
       <Box className='flex flex-col gap-y-6'>

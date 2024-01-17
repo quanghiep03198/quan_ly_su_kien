@@ -1,4 +1,3 @@
-import { cn } from '@/common/utils/cn'
 import { Table } from '@tanstack/react-table'
 import React, { useContext } from 'react'
 import { Box, Button, Icon, Toggle } from '../..'
@@ -26,8 +25,8 @@ export function TableToolbar<TData>(props: TableToolbarProps<TData>) {
          <Box className='flex items-center gap-x-2'>
             {isFiltered && (
                <Tooltip content='Xóa lọc'>
-                  <Button variant='destructive' size='icon' onClick={onClearAllFilters} className={cn('h-8 w-8')}>
-                     <Icon name='FilterX' />
+                  <Button variant='destructive' size='icon' onClick={onClearAllFilters} className='h-8 w-8'>
+                     <Icon name='XCircle' />
                   </Button>
                </Tooltip>
             )}
@@ -40,7 +39,7 @@ export function TableToolbar<TData>(props: TableToolbarProps<TData>) {
                   disabled={!table.getAllColumns().some(({ columnDef }) => columnDef.enableColumnFilter)}
                   size='sm'
                >
-                  <Icon name={isFilterOpened ? 'FoldVertical' : 'UnfoldVertical'} />
+                  <Icon name={isFilterOpened ? 'FilterX' : 'Filter'} />
                </Toggle>
             </Tooltip>
             <TableViewOptions table={table} />

@@ -21,7 +21,7 @@ const AddAttendeeFormModal: React.FC<AddAttendeeFormModalProps> = (props) => {
    const { id } = useParams()
    const [addAttendee, { isLoading }] = useAddAttendanceMutation()
 
-   const handleAddAttendee = async (data: FormValue) => {
+   const handleAddAttendee = async (data: Required<FormValue>) => {
       try {
          await addAttendee({ ...data, event_id: id! }).unwrap()
          toast.success('Add sinh viên tham gia thành công')

@@ -1,5 +1,5 @@
 import { UserRoleValues } from '@/common/constants/constants'
-import { UserType } from '@/common/types/entities'
+import { UserInterface } from '@/common/types/entities'
 import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Form, Icon, InputFieldControl, SelectFieldControl } from '@/components/ui'
 import { useUpdateAttendeeInfoMutation } from '@/redux/apis/attendance.api'
 import { UpdateUserSchema } from '@/schemas/user.schema'
@@ -11,7 +11,7 @@ import tw from 'tailwind-styled-components'
 import { z } from 'zod'
 
 type AddAttendeeFormModalProps = {
-   defaultValue: Partial<UserType>
+   defaultValue: Partial<UserInterface>
    open: boolean
    onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -26,7 +26,7 @@ const UpdateAttendeeFormModal: React.FC<AddAttendeeFormModalProps> = (props) => 
       form.reset(props.defaultValue)
    }, [props.defaultValue])
 
-   const handleAddAttendee = async (data: FormValue) => {
+   const handleAddAttendee = async (data: Required<FormValue>) => {
       try {
          await updateAttendeeInfo({ id: props.defaultValue?.id!, payload: data }).unwrap()
          toast.success('Add sinh viên tham gia thành công')

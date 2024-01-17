@@ -1,3 +1,4 @@
+import { convertBase64 } from '@/common/utils/convert-base64'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Editor } from '@tiptap/react'
 import React, { useId, useState } from 'react'
@@ -18,7 +19,6 @@ import {
    InputFieldControl
 } from '../../..'
 import Tooltip from '../../../@override/tooltip'
-import { convertBase64 } from '@/common/utils/convert-base64'
 
 const UploadSchema = z.object({
    url: z.string().url('URL ảnh không hợp lệ').optional()
@@ -32,6 +32,7 @@ const ImageDropdown: React.FC<{ editor: Editor }> = ({ editor }) => {
       resolver: zodResolver(UploadSchema)
    })
    const id = useId()
+
    const handleInsertImageURL = ({ url }: FormValue) => {
       if (url) editor.commands.setImage({ src: url, alt: 'Image' })
       form.reset()
@@ -74,7 +75,12 @@ const ImageDropdown: React.FC<{ editor: Editor }> = ({ editor }) => {
             <DialogContent className='items-stretch'>
                <DialogHeader className='text-left'>Chèn hình ảnh</DialogHeader>
                <Form {...form}>
-                  <FormDialog onSubmit={form.handleSubmit(handleInsertImageURL)}>
+                  <FormDialog
+                     onSubmit={(e) => {
+                        e.stopPropagation()
+                        form.handleSubmit(handleInsertImageURL)(e)
+                     }}
+                  >
                      <InputFieldControl
                         control={form.control}
                         type='url'

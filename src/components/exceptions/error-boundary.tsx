@@ -33,7 +33,7 @@ class ErrorBoundary extends Component<React.PropsWithChildren, State> {
             <Box className='flex h-full items-start space-x-6'>
                <Icon name='AlertTriangle' size={48} className='text-destructive' />
                <Box>
-                  <Typography variant='heading6' className='mb-2'>
+                  <Typography variant='h6' className='mb-2'>
                      Something went wrong
                   </Typography>
                   <details className='whitespace-pre-wrap'>

@@ -19,7 +19,7 @@ const Header: React.FunctionComponent = () => {
                <Image src={theme === Theme.LIGHT ? '/logo.png' : '/logo.webp'} />
             </Link>
 
-            <Box className='flex items-center justify-end gap-x-3'>
+            <Box className='flex items-center justify-end gap-x-2'>
                <Tooltip content='Trang chủ'>
                   <Link to={Paths.EVENTS_BOARD} className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'rounded-full')}>
                      <Icon name='Home' />

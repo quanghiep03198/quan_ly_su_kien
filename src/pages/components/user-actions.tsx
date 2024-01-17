@@ -1,3 +1,4 @@
+import { Paths } from '@/common/constants/pathnames'
 import {
    Avatar,
    AvatarFallback,
@@ -9,11 +10,13 @@ import {
    DropdownMenuSeparator,
    DropdownMenuShortcut,
    DropdownMenuTrigger,
-   Icon
+   Icon,
+   Typography
 } from '@/components/ui'
 import Tooltip from '@/components/ui/@override/tooltip'
 import { useAppDispatch, useAppSelector } from '@/redux/hook'
 import { signout } from '@/redux/slices/auth.slice'
+import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 
 const UserActions: React.FunctionComponent = () => {
@@ -30,22 +33,26 @@ const UserActions: React.FunctionComponent = () => {
       <DropdownMenu>
          <DropdownMenuTrigger className='flex items-center space-x-2 focus:border-none focus:outline-none sm:space-x-1'>
             <Avatar className='h-8 w-8 gap-0'>
-               <AvatarImage src={user?.avatar} className='aspect-square h-8 w-8 rounded-full' width={32} height={32} />
+               <AvatarImage src={user?.avatar} className='aspect-square h-8 w-8 rounded-full object-cover object-center' width={32} height={32} />
                <AvatarFallback>A</AvatarFallback>
             </Avatar>
             <Tooltip content={user?.name!}>
-               <span className='max-w-[128px] pl-1 pr-2 text-left text-sm font-normal sm:hidden'>{user?.name}</span>
+               <Typography variant='small' className='line-clamp-1 max-w-[128px] pl-1 pr-2 text-left text-sm font-normal capitalize'>
+                  {user?.name}
+               </Typography>
             </Tooltip>
-            <Icon name='ChevronDown' className='sm:hidden' />
+            <Icon name='ChevronDown' />
          </DropdownMenuTrigger>
          <DropdownMenuContent className='w-56'>
             <DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-               Tài khoản của tôi
-               <DropdownMenuShortcut>
-                  <Icon name='User' />
-               </DropdownMenuShortcut>
+            <DropdownMenuItem asChild>
+               <Link to={Paths.ACCOUNT_SETTINGS}>
+                  Tài khoản của tôi
+                  <DropdownMenuShortcut>
+                     <Icon name='User' />
+                  </DropdownMenuShortcut>
+               </Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem onClick={handleSignout}>

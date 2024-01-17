@@ -1,8 +1,8 @@
-import { EventType } from '@/common/types/entities'
+import { EventInterface } from '@/common/types/entities'
 import { Badge, Card, CardContent, CardHeader, CardTitle } from '@/components/ui'
 import { useGetRecentEventsQuery } from '@/redux/apis/event.api'
 
-const EventItem: React.FC<{ data: EventType }> = ({ data }) => {
+const EventItem: React.FC<{ data: EventInterface }> = ({ data }) => {
    return (
       <div className='flex items-center'>
          <div className='space-y-1'>

@@ -1,4 +1,4 @@
-import { FeedbackType } from '@/common/types/entities'
+import { FeedbackInterface } from '@/common/types/entities'
 import { Avatar, AvatarFallback, AvatarImage, Box, Button, Icon, ScrollArea, Separator, Textarea, Toggle } from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
 import Tooltip from '@/components/ui/@override/tooltip'
@@ -8,7 +8,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
 
-const FeedbackDetails: React.FC<{ data: FeedbackType }> = ({ data }) => {
+const FeedbackDetails: React.FC<{ data: FeedbackInterface }> = ({ data }) => {
    const [deleteFeedback] = useDeleteFeedbackMutation()
    const [open, setOpen] = useState<boolean>(false)
 

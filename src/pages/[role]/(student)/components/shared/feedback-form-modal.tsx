@@ -1,4 +1,4 @@
-import { UserType } from '@/common/types/entities'
+import { UserInterface } from '@/common/types/entities'
 import {
    Box,
    Button,
@@ -24,8 +24,8 @@ import tw from 'tailwind-styled-components'
 import { z } from 'zod'
 
 type FeedbackFormModalProps = {
-   sender: Partial<UserType>
-   eventId: string | number
+   sender: Partial<UserInterface>
+   eventId: string
    open: boolean
    onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
 }

@@ -42,6 +42,11 @@ export const extensions = [
          HTMLAttributes: {
             class: 'list-decimal text-foreground'
          }
+      },
+      horizontalRule: {
+         HTMLAttributes: {
+            class: 'border-t dark:border-t-border'
+         }
       }
    }),
    Placeholder.configure({
@@ -74,7 +79,7 @@ export const extensions = [
    Link.configure({
       openOnClick: false,
       HTMLAttributes: {
-         class: 'text-sky-400 font-normal'
+         class: 'text-blue-500 font-normal'
       }
    }),
    FontSize.configure(),
@@ -82,24 +87,8 @@ export const extensions = [
    Color.configure(),
    Image.configure({
       HTMLAttributes: {
-         class: 'object-center object-cover max-w-full aspect-[16/9]'
+         class: 'object-center object-contain max-w-full'
       },
       allowBase64: true
-   }).extend({
-      src: {
-         default: null
-      },
-      alt: {
-         default: null
-      },
-      title: {
-         default: null
-      },
-      'data-base64': {
-         default: null
-      },
-      'data-label': {
-         default: null
-      }
    })
 ]

@@ -11,6 +11,8 @@ import { Theme } from './common/constants/enums'
 import { ThemeProvider } from './components/providers/theme-provider'
 import { persistor, store } from './redux/store'
 import Router from './routes'
+import { FallbackProvider } from './components/providers/fallback-provider'
+import { BrowserRouter } from 'react-router-dom'
 
 const theme = (localStorage.getItem('theme') ?? 'system') as Theme
 
@@ -19,6 +21,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <PersistGate persistor={persistor}>
          <ThemeProvider>
             <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+               <BrowserRouter>
+                  <FallbackProvider>
+                     <Router />
+                  </FallbackProvider>
+               </BrowserRouter>
                <Toaster
                   theme={theme}
                   expand={true}
@@ -36,7 +43,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                      duration: 2000
                   }}
                />
-               <Router />
             </GoogleOAuthProvider>
          </ThemeProvider>
       </PersistGate>

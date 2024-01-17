@@ -1,27 +1,25 @@
 /* eslint-disable */
 
+import { EventStatus, JoinEventStatus } from '@/common/constants/enums'
 import { Paths } from '@/common/constants/pathnames'
+import { UserInterface } from '@/common/types/entities'
 import { Badge, Box, Button, Icon } from '@/components/ui'
-import { useGetAttendeeInfoQuery } from '@/redux/apis/attendance.api'
 import { useGetEventDetailsQuery, useParticipateInEventMutation } from '@/redux/apis/event.api'
 import { useAppSelector } from '@/redux/hook'
 import { format } from 'date-fns'
+import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import tw from 'tailwind-styled-components'
-import Breadcrumbs from './components/breadcrumbs'
-import RelatedEvents from './components/related-events'
-import { EventStatus, JoinEventStatus } from '@/common/constants/enums'
 import FeedbackFormModal from '../../components/shared/feedback-form-modal'
-import { useState } from 'react'
-import { UserType } from '@/common/types/entities'
+import Breadcrumbs from './components/breadcrumbs'
 
-const EventDetails: React.FunctionComponent = () => {
+const EventDetailsPage: React.FunctionComponent = () => {
    const { id } = useParams()
    const { data: eventDetails } = useGetEventDetailsQuery(id!)
    const { user, authenticated } = useAppSelector((state) => state.auth)
    const [participateInEvent] = useParticipateInEventMutation()
-   const { data: attendeeInfo } = useGetAttendeeInfoQuery(id!, { skip: !authenticated })
+   // const { data: attendeeInfo } = useGetAttendeeInfoQuery(id!, { skip: !authenticated })
    const [openFeedbackFormState, setOpenFeedbackFormState] = useState<boolean>(false)
 
    const navigate = useNavigate()
@@ -56,7 +54,7 @@ const EventDetails: React.FunctionComponent = () => {
                         <Icon name='Reply' /> Feedback
                      </Button>
                   )}
-                  {attendeeInfo ? (
+                  {eventDetails?.status_join === JoinEventStatus.ALREADY ? (
                      <Badge variant='success' className='h-9 gap-x-2'>
                         <Icon name='CheckCircle' /> Đã đăng ký
                      </Badge>
@@ -64,12 +62,12 @@ const EventDetails: React.FunctionComponent = () => {
                      <Button
                         size='sm'
                         className='gap-x-2'
-                        variant={eventDetails?.status_join === JoinEventStatus.ALREADY ? 'outline' : 'default'}
+                        variant={'default'}
                         onClick={handleJoinInEvent}
-                        disabled={eventDetails?.status_join === JoinEventStatus.ALREADY}
+                        disabled={eventDetails?.status === EventStatus.INACTIVE}
                      >
                         <Icon name='PlusCircle' />
-                        {eventDetails?.status_join === JoinEventStatus.ALREADY ? 'Đã đăng ký' : 'Đăng ký tham gia'}
+                        Đăng ký tham gia
                      </Button>
                   )}
                </Box>
@@ -94,14 +92,13 @@ const EventDetails: React.FunctionComponent = () => {
                   className='sm: prose w-full max-w-3xl basis-3/4 text-foreground sm:mx-auto sm:max-w-full md:mx-auto md:max-w-full'
                   dangerouslySetInnerHTML={{ __html: eventDetails?.content! }}
                />
-               <RelatedEvents />
             </Box>
          </Box>
-         <FeedbackFormModal open={openFeedbackFormState} onOpenChange={setOpenFeedbackFormState} eventId={id!} sender={user as Partial<UserType>} />
+         <FeedbackFormModal open={openFeedbackFormState} onOpenChange={setOpenFeedbackFormState} eventId={id!} sender={user as Partial<UserInterface>} />
       </>
    )
 }
 
 const Time = tw.time`italic`
 
-export default EventDetails
+export default EventDetailsPage

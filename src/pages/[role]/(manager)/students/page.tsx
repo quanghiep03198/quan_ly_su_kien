@@ -1,30 +1,69 @@
 import { UserRoleValues } from '@/common/constants/constants'
 import { UserRoleEnum } from '@/common/constants/enums'
-import { UserType } from '@/common/types/entities'
-import { Avatar, AvatarFallback, AvatarImage, Badge, Box, DataTable, DataTableRowActions, Typography } from '@/components/ui'
+import { Excel } from '@/common/libs/xlsx'
+import { UserInterface } from '@/common/types/entities'
+import {
+   Avatar,
+   AvatarFallback,
+   AvatarImage,
+   Badge,
+   Box,
+   Button,
+   DataTable,
+   DataTableRowActions,
+   DropdownMenu,
+   DropdownMenuContent,
+   DropdownMenuItem,
+   DropdownMenuTrigger,
+   Icon,
+   Label,
+   Typography
+} from '@/components/ui'
 import ConfirmDialog from '@/components/ui/@override/confirm-dialog'
-import { useDeleteUserMutation, useGetUsersQuery } from '@/redux/apis/user.api'
+import Tooltip from '@/components/ui/@override/tooltip'
+import { useDeleteUserMutation, useGetUsersQuery, useImportUsersListMutation } from '@/redux/apis/user.api'
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import { format } from 'date-fns'
-import { useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { toast } from 'sonner'
-import UpdateUserFormModal from '../components/shared/update-form-modal'
+import CreateUserFormModal from '../components/shared/create-user-form-modal'
+import UpdateUserFormModal from '../components/shared/update-user-form-modal'
+import { sampleData } from './data/sample-data'
+import { createFormData } from '@/common/utils/form-data'
 
-type TableDataType = UserType & { index: number }
+type TableDataType = UserInterface & { index: number }
 
-const StudentsList: React.FunctionComponent = () => {
+const excelHandler = new Excel<Pick<UserInterface, 'name' | 'code' | 'email' | 'phone'> & { index: string }>({
+   index: 'STT',
+   name: 'Họ tên',
+   code: 'Mã sinh viên',
+   email: 'Email',
+   phone: 'Số điện thoại'
+})
+
+const data = [
+   {
+      STT: 1,
+      'Mã sinh viên': 'PH19231',
+      'Họ tên': 'Trương Quang Hiệp',
+      Email: 'test@gmail.com',
+      'Số điện thoại': '0336089988'
+   }
+]
+
+const StudentsListPage: React.FunctionComponent = () => {
    const { data, isLoading } = useGetUsersQuery({ role: UserRoleEnum.STUDENT, pagination: false })
-   const studentsList = useMemo(() => (Array.isArray(data) ? data.map((student: UserType, index: number) => ({ index: index + 1, ...student })) : []), [data])
    const [openConfirmState, setOpenConfirmState] = useState<boolean>(false)
+   const [createFormOpenState, setCreateFormOpenState] = useState<boolean>(false)
    const [updateFormOpenState, setUpdateFormOpenState] = useState<boolean>(false)
-   const [userToUpdate, setUserToUpdate] = useState<Partial<UserType>>({})
+   const [userToUpdate, setUserToUpdate] = useState<Partial<UserInterface>>({})
    const [selectedRowId, setSelectedRowId] = useState<number | null>(null)
-
    const [deleteUser] = useDeleteUserMutation()
+   const [importUsersList] = useImportUsersListMutation()
 
    const columnHelper = createColumnHelper<TableDataType>()
 
-   const handleDeleteUser = async () => {
+   const handleDeleteUser = useCallback(async () => {
       try {
          if (selectedRowId) {
             await deleteUser(selectedRowId).unwrap()
@@ -35,6 +74,27 @@ const StudentsList: React.FunctionComponent = () => {
       } finally {
          setOpenConfirmState(false)
          setSelectedRowId(null)
+      }
+   }, [selectedRowId])
+
+   const handleImportStudents: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+      if (e.target.files instanceof FileList) {
+         const payload = createFormData({ listUser: e.target.files[0] })
+         toast.promise(importUsersList(payload).unwrap(), {
+            loading: 'Đang import từ danh sách',
+            success: () => {
+               e.target.files = null
+               return 'Tải lên danh sách thành công'
+            },
+            error: () => {
+               e.target.files = null
+               return 'Tải lên danh sách thất bại'
+            }
+         })
+         // excelHandler.importFile(e.target.files[0], (data) => {
+         //    console.log(data)
+         //    const payload = data as unknown as Partial<UserInterface>[]
+         // })
       }
    }
 
@@ -50,7 +110,7 @@ const StudentsList: React.FunctionComponent = () => {
                      <AvatarImage src={row.original.avatar} />
                      <AvatarFallback>{row.original?.name?.charAt(0) ?? 'A'}</AvatarFallback>
                   </Avatar>
-                  <span className='whitespace-nowrap'>{row.original.name}</span>
+                  <span className='whitespace-nowrap capitalize'>{row.original.name}</span>
                </Box>
             )
          }
@@ -96,6 +156,7 @@ const StudentsList: React.FunctionComponent = () => {
                   canDelete
                   onEdit={() => {
                      setUserToUpdate(row.original)
+                     setUpdateFormOpenState(true)
                   }}
                   onDelete={() => {
                      setSelectedRowId(id)
@@ -105,13 +166,52 @@ const StudentsList: React.FunctionComponent = () => {
             )
          }
       })
-   ] as ColumnDef<TableDataType>[]
+   ]
 
    return (
       <>
-         <Box className='space-y-6'>
-            <Typography variant='heading6'>Danh sách sinh viên</Typography>
-            <DataTable columns={columns} data={studentsList} loading={isLoading} />
+         <Box className='space-y-10'>
+            <Box className='space-y-1'>
+               <Typography variant='h6'>Danh sách sinh viên</Typography>
+               <Typography variant='small' color='muted'>
+                  Danh sách hiển thị người dùng với vai trò là sinh viên
+               </Typography>
+            </Box>
+            <DataTable
+               columns={columns as ColumnDef<TableDataType>[]}
+               data={data as Array<UserInterface>}
+               loading={isLoading}
+               slot={
+                  <>
+                     <Tooltip content='Tải file mẫu'>
+                        <Button size='icon' variant='outline' className='h-8 w-8' onClick={() => excelHandler.exportData(sampleData)}>
+                           <Icon name='Download' />
+                        </Button>
+                     </Tooltip>
+                     <DropdownMenu>
+                        <Tooltip content='Thêm mới'>
+                           <DropdownMenuTrigger asChild>
+                              <Button variant='outline' className='h-8 w-8' size='icon'>
+                                 <Icon name='Plus' />
+                              </Button>
+                           </DropdownMenuTrigger>
+                        </Tooltip>
+                        <DropdownMenuContent align='end'>
+                           <DropdownMenuItem asChild className='gap-x-2'>
+                              <Label htmlFor='file'>
+                                 <Icon name='FileUp' />
+                                 Tải lên file Excel
+                              </Label>
+                           </DropdownMenuItem>
+                           <DropdownMenuItem className='gap-x-2' onClick={() => setCreateFormOpenState(true)}>
+                              <Icon name='FormInput' />
+                              Nhập form
+                           </DropdownMenuItem>
+                        </DropdownMenuContent>
+                     </DropdownMenu>
+                  </>
+               }
+            />
          </Box>
          <ConfirmDialog
             open={openConfirmState}
@@ -120,9 +220,11 @@ const StudentsList: React.FunctionComponent = () => {
             description='Hành động này không thể khôi phục. Người dùng này sẽ bị xóa vĩnh viễn khỏi hệ thống.'
             onConfirm={handleDeleteUser}
          />
+         <input type='file' className='hidden' id='file' onChange={handleImportStudents} />
+         <CreateUserFormModal openState={createFormOpenState} onOpenStateChange={setCreateFormOpenState} createForRole={UserRoleEnum.STUDENT} />
          <UpdateUserFormModal openState={updateFormOpenState} onOpenStateChange={setUpdateFormOpenState} defaultValue={userToUpdate} />
       </>
    )
 }
 
-export default StudentsList
+export default StudentsListPage

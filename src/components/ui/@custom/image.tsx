@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { Icon, Skeleton } from '..'
 import { cn } from '@/common/utils/cn'
+import React, { useEffect, useState } from 'react'
+import { Icon, Skeleton } from '..'
 
 type ImageProps = { fallback?: string } & React.ImgHTMLAttributes<HTMLImageElement>
 
@@ -8,23 +8,24 @@ export const Image: React.FC<ImageProps> = (props) => {
    const [error, setError] = useState<boolean>(false)
    const [loading, setLoading] = useState<boolean>(false)
 
-   const handleLoad = () => {
+   const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+      if (props.fallback) e.currentTarget.src = props.fallback
+      setError(true)
       setLoading(false)
    }
 
-   const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-      setError(true)
-      if (props.fallback) e.currentTarget.src = props.fallback
-   }
+   useEffect(() => {
+      setError(!props.src)
+   }, [props.src])
 
    return (
       <>
-         <Skeleton style={{ width: props.width, height: props.height, display: loading ? 'block' : 'none' }} />
+         {loading && <Skeleton style={{ width: props.width, height: props.height }} />}
          <img
             loading='lazy'
             className={cn(props.className, { hidden: loading || error })}
             src={props.src}
-            onLoad={handleLoad}
+            onLoad={() => setLoading(false)}
             onError={handleError}
             width={props.width}
             height={props.height}

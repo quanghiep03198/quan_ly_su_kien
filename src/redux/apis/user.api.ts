@@ -1,15 +1,15 @@
-import { UserType } from '@/common/types/entities'
+import { UserInterface } from '@/common/types/entities'
 import { createApi } from '@reduxjs/toolkit/query/react'
 import _ from 'lodash'
 import axiosBaseQuery from '../helper'
 import { UserRoleEnum } from '@/common/constants/enums'
 import { AxiosRequestConfig } from 'axios'
 
-type UserListWithPagination = Exclude<OptionalPagination<UserType>, Array<UserType>>
+type UserListWithPagination = Exclude<OptionalPagination<UserInterface>, Array<UserInterface>>
 type RequestParams = Partial<PaginationPayload> & { role?: UserRoleEnum; pagination?: boolean } & AxiosRequestConfig['params']
 
-const reducerPath = 'UserType/api' as const
-const tagTypes = ['UserType'] as const
+const reducerPath = 'users/api' as const
+const tagTypes = ['Users'] as const
 
 export const userApi = createApi({
    reducerPath,
@@ -17,41 +17,45 @@ export const userApi = createApi({
    keepUnusedDataFor: 5 * 60,
    baseQuery: axiosBaseQuery(),
    endpoints: (build) => ({
-      getUsers: build.query<OptionalPagination<UserType>, RequestParams>({
+      getUsers: build.query<OptionalPagination<UserInterface>, RequestParams>({
          query: (params) => ({ url: '/participants', method: 'GET', params }),
          providesTags: tagTypes,
-         transformResponse: (response: HttpResponse<OptionalPagination<UserType>>, _meta, args) => {
+         transformResponse: (response: SuccessResponse<OptionalPagination<UserInterface>>, _meta, args) => {
             // With pagination
             if (typeof args.pagination === 'undefined') {
                const data = response?.metadata as UserListWithPagination
                return {
                   ...data,
                   docs: data?.docs
-               } as Pagination<UserType>
+               } as Pagination<UserInterface>
             }
             // Without pagination
-            return response?.metadata as Array<UserType>
+            return response?.metadata as Array<UserInterface>
          }
       }),
-      addUser: build.mutation<HttpResponse<UserType>, Partial<UserType>>({
+      addUser: build.mutation<SuccessResponse<UserInterface>, Partial<UserInterface>>({
          query: (payload) => ({ url: '/participants', method: 'POST', data: payload }),
          invalidatesTags: (_result, error, _args) => (error ? [] : tagTypes)
       }),
+      importUsersList: build.mutation<unknown, any>({
+         query: (payload) => ({ url: '/importUser', method: 'POST', data: payload }),
+         invalidatesTags: (_result, error, _args) => (error ? [] : tagTypes)
+      }),
       updateUser: build.mutation<
-         HttpResponse<UserType>,
+         SuccessResponse<UserInterface>,
          {
             id: Required<number>
-            payload: Partial<UserType>
+            payload: Partial<UserInterface>
          }
       >({
          query: ({ id, payload }) => ({ url: `/participants/${id}`, method: 'PUT', data: payload }),
          invalidatesTags: (_result, error, _args) => (error ? [] : tagTypes)
       }),
-      deleteUser: build.mutation<HttpResponse<undefined>, number>({
+      deleteUser: build.mutation<SuccessResponse<undefined>, number>({
          query: (id) => ({ url: `/participants/${id}`, method: 'DELETE' }),
          invalidatesTags: (_result, error, _args) => (error ? [] : tagTypes)
       })
    })
 })
 
-export const { useGetUsersQuery, useAddUserMutation, useUpdateUserMutation, useDeleteUserMutation } = userApi
+export const { useGetUsersQuery, useAddUserMutation, useUpdateUserMutation, useDeleteUserMutation, useImportUsersListMutation } = userApi

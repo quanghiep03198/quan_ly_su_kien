@@ -1,5 +1,6 @@
 import { Badge, Box, DropdownSelect, Icon, Input, Typography } from '@/components/ui'
 import { debounce } from 'lodash'
+import { useSearchParams } from 'react-router-dom'
 import { toast } from 'sonner'
 
 type SearchBoxProps = {
@@ -29,7 +30,15 @@ const postedTimeOptions: Record<'label' | 'value', string>[] = [
 const keywords = ['Happy Bee', 'Hackathon', 'Poly Microsoft Office', 'Poly Running']
 
 const SearchBox: React.FC<SearchBoxProps> = ({ onSearchValueChange, onSortChange }) => {
-   const handleSearch = debounce((e: React.ChangeEvent<HTMLInputElement>) => onSearchValueChange(e.target.value), 500)
+   const [_, setSearchParams] = useSearchParams()
+
+   const handleSearch = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+      onSearchValueChange(e.target.value)
+      setSearchParams((params) => {
+         params.delete('page')
+         return params
+      })
+   }, 500)
 
    return (
       <Box className='space-y-6'>
@@ -39,24 +48,24 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onSearchValueChange, onSortChange
                <Icon name='Search' className='absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground/50' />
             </Box>
             <DropdownSelect
-               className='sm:col-span-2'
+               selectTriggerProps={{ className: 'sm:col-span-2' }}
                options={locationOptions}
                placeholder='Địa điểm'
-               onChange={() => {
+               onValueChange={() => {
                   toast.info('Chức năng hiện đang được cập nhật')
                }}
             />
             <DropdownSelect
-               className='sm:col-span-2'
+               selectTriggerProps={{ className: 'sm:col-span-2' }}
                options={postedTimeOptions}
                placeholder='Ngày đăng'
-               onChange={(value) => {
+               onValueChange={(value) => {
                   onSortChange(value as string)
                }}
             />
          </Box>
          <Box className='flex items-center gap-4 sm:flex-col sm:items-start md:flex-col md:items-start'>
-            <Typography variant='heading6' className='text-base'>
+            <Typography variant='h6' className='text-base'>
                Đề xuất cho bạn
             </Typography>
             <Box className='space-x-1'>

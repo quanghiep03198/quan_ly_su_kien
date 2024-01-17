@@ -4,10 +4,10 @@ import { format } from 'date-fns'
 import { useCallback, useEffect } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import tw from 'tailwind-styled-components'
-import FeedbacksList from './components/feedback-list'
 import ParticipantsList from './components/attendees-list'
+import FeedbackList from './components/feedback-list'
 
-const EventDetails: React.FunctionComponent = () => {
+const EventDetailsPage: React.FunctionComponent = () => {
    const { id } = useParams()
    const { data } = useGetEventDetailsQuery(id!)
    const [params, setParams] = useSearchParams()
@@ -15,7 +15,7 @@ const EventDetails: React.FunctionComponent = () => {
    useEffect(() => {
       if (!params.get('tab'))
          setParams((params) => {
-            params.set('tab', 'participants')
+            params.set('tab', 'preview')
             return params
          })
    }, [])
@@ -31,7 +31,7 @@ const EventDetails: React.FunctionComponent = () => {
       <Tabs defaultValue={params.get('tab') ?? 'participants'} onValueChange={handleTabChange}>
          <Box className='flex items-start justify-between gap-10 border-b pb-4 sm:flex-col md:flex-col'>
             <Box className='space-y-2'>
-               <Typography variant='heading6' className='capitalize'>
+               <Typography variant='h6' className='capitalize'>
                   {data?.name}
                </Typography>
                <Time>
@@ -39,26 +39,37 @@ const EventDetails: React.FunctionComponent = () => {
                   {format(data?.start_time ?? new Date(), 'dd/MM/yyyy')} - {format(data?.end_time! ?? new Date(), 'dd/MM/yyyy')}
                </Time>
             </Box>
-            <TabsList className='grid grid-cols-2'>
-               <TabsTrigger value='participants' className='gap-x-6'>
-                  Sinh viên
-                  <Badge variant='secondary' className='aspect-square h-5 w-5 justify-center text-xs'>
-                     {data?.attendances?.length ?? 0}
-                  </Badge>
-               </TabsTrigger>
-               <TabsTrigger value='feedback' className='gap-x-4'>
-                  Feedback
-                  <Badge variant='secondary' className='aspect-square h-5 w-5 justify-center text-xs'>
-                     {data?.feedback?.length ?? 0}
-                  </Badge>
-               </TabsTrigger>
-            </TabsList>
+            <Box className='max-w-full sm:rounded-lg sm:bg-accent sm:px-2'>
+               <Box className='max-w-full overflow-x-auto scrollbar-none'>
+                  <TabsList className='flex w-fit items-center sm:justify-start'>
+                     <TabsTrigger value='participants' className='min-w-fit gap-x-6'>
+                        <Box className='flex w-full flex-1 items-center gap-x-2'>
+                           <Icon name='Users' />
+                           Thành viên
+                        </Box>
+                        <Badge variant='secondary' className='aspect-square h-5 w-5 justify-center text-xs'>
+                           {data?.attendances?.length ?? 0}
+                        </Badge>
+                     </TabsTrigger>
+                     <TabsTrigger value='feedback' className='min-w-fit gap-x-4'>
+                        <Box className='flex w-full flex-1 items-center gap-x-2'>
+                           <Icon name='MessagesSquare' />
+                           Feedback
+                        </Box>
+                        <Badge variant='secondary' className='aspect-square h-5 w-5 justify-center text-xs'>
+                           {data?.feedback?.length ?? 0}
+                        </Badge>
+                     </TabsTrigger>
+                  </TabsList>
+               </Box>
+            </Box>
          </Box>
+
          <TabsContent value='participants' className='mt-6 border-none outline-none ring-0'>
             <ParticipantsList />
          </TabsContent>
          <TabsContent value='feedback' className='mt-6 border-none outline-none ring-0'>
-            <FeedbacksList data={data?.feedback ?? []} />
+            <FeedbackList />
          </TabsContent>
       </Tabs>
    )
@@ -66,4 +77,4 @@ const EventDetails: React.FunctionComponent = () => {
 
 const Time = tw.time`text-sm text-muted-foreground inline-flex items-center gap-x-2`
 
-export default EventDetails
+export default EventDetailsPage

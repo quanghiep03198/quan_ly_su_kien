@@ -11,6 +11,7 @@ import {
    Icon
 } from '@/components/ui'
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
+import Tooltip from '../ui/@override/tooltip'
 
 const ThemeSelect: React.FunctionComponent = () => {
    const { theme, setTheme } = useTheme()
@@ -18,11 +19,13 @@ const ThemeSelect: React.FunctionComponent = () => {
 
    return (
       <DropdownMenu>
-         <DropdownMenuTrigger asChild className='ring-0 focus:border-none focus:outline-none'>
-            <Button variant='ghost' className='rounded-full' size='icon'>
-               <Icon name={currentThemeIcon} />
-            </Button>
-         </DropdownMenuTrigger>
+         <Tooltip content='Theme'>
+            <DropdownMenuTrigger asChild className='ring-0 focus:border-none focus:outline-none'>
+               <Button variant='ghost' className='rounded-full' size='icon'>
+                  <Icon name={currentThemeIcon} />
+               </Button>
+            </DropdownMenuTrigger>
+         </Tooltip>
          <DropdownMenuContent className='w-48'>
             <DropdownMenuLabel>Theme</DropdownMenuLabel>
             <DropdownMenuSeparator />
