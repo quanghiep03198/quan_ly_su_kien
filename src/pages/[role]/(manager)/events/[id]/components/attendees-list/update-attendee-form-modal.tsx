@@ -1,7 +1,5 @@
-import { UserRoleValues } from '@/common/constants/constants'
 import { UserInterface } from '@/common/types/entities'
-import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Form, Icon, InputFieldControl, SelectFieldControl } from '@/components/ui'
-import { useUpdateAttendeeInfoMutation } from '@/redux/apis/attendance.api'
+import { Button, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Form, Icon, InputFieldControl } from '@/components/ui'
 import { useUpdateUserMutation } from '@/redux/apis/user.api'
 import { UpdateUserSchema } from '@/schemas/user.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
