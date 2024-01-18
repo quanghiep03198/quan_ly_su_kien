@@ -44,7 +44,11 @@ export const EventVerticalCard: React.FC<{
                   <Icon name='User' className='basis-4' />
                   <span className='line-clamp-1'>{data?.user?.name}</span>
                </CardDescription>
-               <Badge variant={data?.status === EventStatus.ACTIVE ? 'success' : 'destructive'} className='w-fit'>
+
+               <Badge
+                  variant={data?.status === EventStatus.ACTIVE ? 'success' : data?.status === EventStatus.UPCOMING ? 'warning' : 'destructive'}
+                  className='w-fit'
+               >
                   {EventStatusValues.get(data.status)}
                </Badge>
             </CardContent>
@@ -86,7 +90,10 @@ export const EventHorizontalCard: React.FC<{ data: EventInterface }> = ({ data }
                      </time>
                   </p>
                   <p className='line-clamp-2 text-sm leading-tight text-muted-foreground sm:line-clamp-1'>{data?.description}</p>
-                  <Badge variant={data?.status === EventStatus.ACTIVE ? 'success' : 'destructive'} className='w-fit'>
+                  <Badge
+                     variant={data?.status === EventStatus.ACTIVE ? 'success' : data?.status === EventStatus.UPCOMING ? 'warning' : 'destructive'}
+                     className='w-fit'
+                  >
                      {EventStatusValues.get(data.status)}
                   </Badge>
                </Box>
